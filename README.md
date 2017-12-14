@@ -5,8 +5,13 @@
 ### First steps:
 1. Ensure Glassfish 4 is installed. Run the server and open domain admin console. 
 2. Create JDBC connection pool.
+![alt text](https://raw.githubusercontent.com/balibone/very-fun-project/master/Screenshots/CreatingConnectionPool.jpg)
+![alt text](https://raw.githubusercontent.com/balibone/very-fun-project/master/Screenshots/ConnectionPoolSettings.jpg)
+![alt text](https://raw.githubusercontent.com/balibone/very-fun-project/master/Screenshots/ConnectionPoolSuccess.jpg)
 
 3. Create JDBC resource (database) that connects the the application using the above created connection pool. 
+![alt text](https://raw.githubusercontent.com/balibone/very-fun-project/master/Screenshots/CreatingDatabase.jpg)
+![alt text](https://raw.githubusercontent.com/balibone/very-fun-project/master/Screenshots/DatabaseCreated.jpg)
 
 
 ### How To Start using Git:
@@ -16,8 +21,8 @@
 4. Go back to the "practice-repo" in your **_personal account_** (not the group's one). 
 5. Get the clone URL.
 6. Clone this repository on GitKraken. Cloning just means that now you are "downloading" your online files into an offline location. Choose a folder in your PC to store these files. 
-7. Add the group's online repo as a remote repo. Go to GitKraken and click the '+' sign beside 'Remote'. Select the group's repo & and edit the name if you wish for your own clarity (maybe something like 'group repo')
-**8. Now you will have 2 remote repos, 1 personal & 1 group. You will use the personal repo to sync your code between offline & online. The group repo should only be used by the group as a storage for the latest working codebase. It exists here on GitKraken so that you can easily see the current state of the group repo compared to your personal repo on the tree diagram. You can only create a pull request from personal repo to group repo through drag and drop in GitKraken (read below).**
+7. Add the group's online repo as a remote repo. Go to GitKraken and click the '+' sign beside 'Remote'. Select the group's repo and click ok. 
+8. **Now you will have 2 remote repos, 1 personal & 1 group. You will use the personal repo to sync your code between offline & online. The group repo should only be used by the group as a storage for the latest working codebase. It exists here on GitKraken so that you can easily see the current state of the group repo compared to your personal repo on the tree diagram. You can only create a pull request from personal repo to group repo through drag and drop in GitKraken (read below).**
 
 ### What Now? 
 1. This offline location you have selected to download your online files into is called your **_local repo_**. The repo you just cloned from your account on GitHub is your **_remote repo_**. Lastly, the repo which you have forked from in step 2 of "How To Start". is the **_group's remote repo_**. Let's call it **_group repo_** for short. **Group's repo = our source code for the whole project.** 
@@ -39,10 +44,3 @@
 2. After all intended commit(s) have been reverted, perform the same procedure as pushing updates (section 1 above). Push to online repo & make a pull request to the group repo. 
 3. Once admin approves the pull request, the commit(s) will now be undone on the group repo too. 
 #### Note: Think of reverting commits as a set of undo operations. Like if you have pushed a buggy file online, reverting this commit will just delete that buggy file. 
-
-## Running Sample NetBeans Code
-1. Install glassfish server 4 (not 4.1 or 4.1.1) 
-2. Start the server, and open admin console in browser by right clicking server.
-3. Create JDBC connection pool called PickMe (follow textbook instructions).
-4. Create JDBC resource called jdbc/pickme (follow textbook instructions).
-5. Shut down server. Run the app (will open up web app on browser). Run the client (will open up application menu in console). 
