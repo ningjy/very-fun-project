@@ -5,13 +5,13 @@
 ### First steps:
 1. Ensure Glassfish 4 is installed. Run the server and open domain admin console. 
 2. Create JDBC connection pool.
-![alt text](Screenshots/CreatingConnectionPool.jpg)
-![alt text](Screenshots/ConnectionPoolSettings.jpg)
-![alt text](Screenshots/ConnectionPoolSuccess.jpg)
+![Creating Connection Pool](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/CreatingConnectionPool.png)
+![Settings](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/ConnectionPoolSettings.png)
+![Ping Success](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/ConnectionPoolSuccess.png)
 
 3. Create JDBC resource (database) that connects the the application using the above created connection pool. 
-![alt text](Screenshots/CreatingDatabase.jpg)
-![alt text](Screenshots/DatabaseCreated.jpg)
+![Create Database](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/CreatingDatabase.png)
+![Created](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/DatabaseCreated.png)
 
 
 ### How To Start using Git:
