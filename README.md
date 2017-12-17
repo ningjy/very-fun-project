@@ -7,6 +7,7 @@
 2. Create JDBC connection pool.
 ![Creating Connection Pool](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/CreatingConnectionPool.png)
 ![Settings](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/ConnectionPoolSettings.png)
+3. Ping
 ![Ping Success](https://github.com/41capstone03/very-fun-project/blob/master/Screenshots/ConnectionPoolSuccess.png)
 
 3. Create JDBC resource (database) that connects the the application using the above created connection pool. 
