@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>SGMapleStore</servlet-name>
+        <servlet-class>servlet.SGMapleStoreServlet</servlet-class>
+    </servlet>
+    <servlet><servlet-name>WarehouseDashboard</servlet-name><jsp-file>/webapp/warehousetransport/WarehouseDashboard.jsp</jsp-file></servlet>
+    <servlet><servlet-name>WarehouseLogin</servlet-name><jsp-file>/webapp/warehousetransport/WarehouseLogin.jsp</jsp-file></servlet>
+    <servlet><servlet-name>CustomerList</servlet-name><jsp-file>/webapp/commoninfrastructure/CustomerList.jsp</jsp-file></servlet>
+    <servlet><servlet-name>CustomerDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/CustomerDetails.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewCustomer</servlet-name><jsp-file>/webapp/commoninfrastructure/NewCustomer.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewEmployee</servlet-name><jsp-file>/webapp/commoninfrastructure/NewEmployee.jsp</jsp-file></servlet>
+    
+    <servlet-mapping>
+        <servlet-name>SGMapleStore</servlet-name>
+        <url-pattern>/SGMapleStore</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping><servlet-name>WarehouseDashboard</servlet-name><url-pattern>/webapp/warehousetransport/WarehouseDashboard</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>WarehouseLogin</servlet-name><url-pattern>/webapp/warehousetransport/WarehouseLogin</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>CustomerList</servlet-name><url-pattern>/webapp/commoninfrastructure/CustomerList</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>CustomerDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/CustomerDetails</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewCustomer</servlet-name><url-pattern>/webapp/commoninfrastructure/NewCustomer</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewEmployee</servlet-name><url-pattern>/webapp/commoninfrastructure/NewEmployee</url-pattern></servlet-mapping>
+    
+    <session-config><session-timeout>120</session-timeout></session-config>
+    <welcome-file-list><welcome-file>webapp/warehousetransport/WarehouseLogin.jsp</welcome-file></welcome-file-list>
+</web-app>
