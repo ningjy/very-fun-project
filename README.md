@@ -1,7 +1,7 @@
 ## This repo contains the main codebase for our 8MC project.
 ### Ensure you are running NetBeans 8.1/8.2, with JDK 1.8(Java SE 8) and Glasshfish Server 4 installed. We will be using Java EE 6 for the project, but this is configured only once when a NetBeans project is created.
 ### Read below on how to get these files + run them.
-
+### Note: Remember to click "Build Anyway" when running project!
 ### First steps:
 1. Ensure Glassfish 4 is installed. Run the server and open domain admin console. 
 2. Create JDBC connection pool.
