@@ -11,51 +11,59 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import entity.EmployeeEntity;
-import entity.CustomerEntity;
+import entity.ContactEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 @Stateless
-public class SGMapleStoreMgrBean implements SGMapleStoreRemote {
+public class SGMapleStoreMgrBean implements CommonInfrastructureRemote {
     @PersistenceContext
     private EntityManager em;
     
     private EmployeeEntity eEntity;
-    private CustomerEntity cEntity;
+    private ContactEntity cEntity;
     
     @Override
-    public void createCustomer(String custSalutation, String custFirstName, String custLastName, String custEmail, 
-            String custContactNum, String custBillingStreet, String custBillingCity, String custBillingState, 
-            String custBillingZipCode, String custBillingCountry, String custShippingStreet, String custShippingCity, 
-            String custShippingState, String custShippingZipCode, String custShippingCountry, String custNotes) {
-        cEntity = new CustomerEntity();
-        cEntity.createCustomer(custSalutation, custFirstName, custLastName, custEmail, custContactNum, 
-                custBillingStreet, custBillingCity, custBillingState, custBillingZipCode, custBillingCountry, 
-                custShippingStreet, custShippingCity, custShippingState, custShippingZipCode, custShippingCountry, custNotes);
+    public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
+            String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
+            String contactBillingState, String contactBillingZipCode, String contactBillingCountry, String contactBillingFax, 
+            String contactBillingPhone, String contactShippingAttn, String contactShippingAddress, String contactShippingCity, 
+            String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
+            String contactShippingPhone, String contactUsername, String contactPassword, String contactNotes) {
+        String hashedPassword = "";
+        try{ hashedPassword = encodePassword(contactPassword); }
+        catch(NoSuchAlgorithmException ex){ ex.printStackTrace(); }
+        
+        cEntity = new ContactEntity();
+        cEntity.createContact(contactSalutation, contactFirstName, contactLastName, contactEmail, contactPhone, contactType, 
+                contactBillingAttn, contactBillingAddress, contactBillingCity, contactBillingState, contactBillingZipCode, 
+                contactBillingCountry, contactBillingFax, contactBillingPhone, contactShippingAttn, contactShippingAddress, 
+                contactShippingCity, contactShippingState, contactShippingZipCode, contactShippingCountry, contactShippingFax, 
+                contactShippingPhone, contactUsername, hashedPassword, contactNotes);
         em.persist(cEntity);
     }
     
     @Override
-    public List<Vector> viewCustomerList(){
-        Query q = em.createQuery("SELECT c FROM Customer c");
-        List<Vector> customerList = new ArrayList<Vector>();
+    public List<Vector> viewContactList(){
+        Query q = em.createQuery("SELECT c FROM Contact c");
+        List<Vector> contactList = new ArrayList<Vector>();
         
         for(Object o: q.getResultList()){
-            CustomerEntity custE = (CustomerEntity) o;
-            Vector custVec = new Vector();
+            ContactEntity contactE = (ContactEntity) o;
+            Vector contactVec = new Vector();
             
-            custVec.add(custE.getCustSalutation());
-            custVec.add(custE.getCustFirstName());
-            custVec.add(custE.getCustLastName());
-            custVec.add(custE.getCustEmail());
-            custVec.add(custE.getCustContactNum());
-            custVec.add(custE.getCustBillingCity());
-            custVec.add(custE.getCustBillingState());
-            custVec.add(custE.getCustBillingCountry());
-            customerList.add(custVec);
+            contactVec.add(contactE.getContactSalutation());
+            contactVec.add(contactE.getContactFirstName());
+            contactVec.add(contactE.getContactLastName());
+            contactVec.add(contactE.getContactEmail());
+            contactVec.add(contactE.getContactPhone());
+            contactVec.add(contactE.getContactType());
+            contactVec.add(contactE.getContactBillingCity());
+            contactVec.add(contactE.getContactBillingCountry());
+            contactList.add(contactVec);
         }
-        return customerList;
+        return contactList;
     }
     
     @Override

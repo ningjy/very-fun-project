@@ -45,25 +45,3 @@
     border: 5px solid #337AB7;
     float: right;
 }
-
-.tableConfig { width: 100%; }
-.tableConfig tr td { padding: 7px 0 7px 0; }
-.contentHeader {
-    position: fixed; 
-    z-index: 2; 
-    background-color: white;
-}
-.contentBody {
-    font-size: 12px; 
-    background-color: white; 
-    font-family: Helvetica; 
-    margin-top: 70px; 
-    padding: 0px 50px 0 20px;
-}
-.tableContentBody {
-    font-size: 12px; 
-    background-color: white; 
-    font-family: Helvetica; 
-    margin-top: 75px; 
-    padding: 0px 20px 0 20px;
-}

@@ -4,13 +4,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Employee</title>
+        <title>SG MapleStore - New Item Group</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/warehousetransport/weblayout/NewItemGroupCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -18,6 +19,7 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/NewItemGroupJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -109,11 +111,58 @@
             <!-- Content Space -->
             <div id="page-wrapper">
                 <div class="contentFill contentLayout">
-                    <h3>New Employee</h3>
+                    <h3>New Item Group</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        
+                        <div class="txn-creation clearfix">
+                            <div class="row" style="padding: 0 0 0 20px;">
+                                <div class="col-md-8 item-fields">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Type</label>
+                                        <div class="col-md-8">
+                                            <label class="radio-inline cursor-pointer">
+                                                <input type="radio" name="itemGroupType" value="Goods" />&nbsp;Goods
+                                            </label>
+                                            <label class="radio-inline cursor-pointer">
+                                                <input type="radio" name="itemGroupType" value="Service" />&nbsp;Service
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Name</label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="itemGroupName" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label required">Description</label>
+                                        <div class="col-md-9">
+                                            <textarea rows="3" name="itemGroupDescription" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="image-upload">
+                                        <img id="profileImage" src="images/image-upload.png" />
+                                        <span id="upload">
+                                            <input accept="image/gif,image/jpeg,image/png,image/bmp,image/jpg" type="file" onchange="readURL(this);" class="form-control upload" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="bdr-light" />
+                        <div class="txn-creation clearfix">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="col-md-2 control-label required">Unit</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="itemGroupName" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

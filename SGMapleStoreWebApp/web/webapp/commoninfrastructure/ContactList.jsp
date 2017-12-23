@@ -1,15 +1,18 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Employee</title>
+        <title>SG MapleStore - Contact List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/baselayout/iziModal.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
@@ -17,7 +20,9 @@
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/iziModal.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/ContactListJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -109,13 +114,74 @@
             <!-- Content Space -->
             <div id="page-wrapper">
                 <div class="contentFill contentLayout">
-                    <h3>New Employee</h3>
+                    <h3>Contact List</h3>
                 </div>
-                <div class="contentFill scroll-y scrollbox">
-                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        
-                    </form>
-                </div>
+                <table class="table zi-table table-hover" id="contactList">
+                    <thead>
+                        <tr>
+                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Name</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Email</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Contact Number</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Contact Type</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Residential District</div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            ArrayList<Vector> contactList = (ArrayList) request.getAttribute("contactList");
+                            if(contactList.isEmpty()){
+                        %>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">There are no contact records available.</td>
+                        </tr>
+                        <%
+                            }
+                            else {
+                                for(int i = 0; i <= contactList.size()-1; i++){
+                                    Vector v = contactList.get(i);
+                                    String contactSalutation = String.valueOf(v.get(0));
+                                    String contactFirstName = String.valueOf(v.get(1));
+                                    String contactLastName = String.valueOf(v.get(2));
+                                    String contactEmail = String.valueOf(v.get(3));
+                                    String contactPhone = String.valueOf(v.get(4));
+                                    String contactType = String.valueOf(v.get(5));
+                                    String contactBillingCity = String.valueOf(v.get(6));
+                                    String contactBillingCountry = String.valueOf(v.get(7));
+                        %>
+                        <tr tabindex="-1" class="active">
+                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
+                            <td><%= contactSalutation %>&nbsp;<%= contactFirstName %>&nbsp;<%= contactLastName %></td>
+                            <td><%= contactEmail %></td>
+                            <td><%= contactPhone %></td>
+                            <td><%= contactType %></td>
+                            <td><%= contactBillingCity %>&nbsp;(<%= contactBillingCountry %>)</td>
+                            <%      }   %>
+                            <%  }   %>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>

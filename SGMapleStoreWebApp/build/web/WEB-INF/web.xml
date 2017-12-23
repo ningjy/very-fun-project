@@ -4,24 +4,32 @@
         <servlet-name>SGMapleStore</servlet-name>
         <servlet-class>servlet.SGMapleStoreServlet</servlet-class>
     </servlet>
-    <servlet><servlet-name>WarehouseDashboard</servlet-name><jsp-file>/webapp/warehousetransport/WarehouseDashboard.jsp</jsp-file></servlet>
-    <servlet><servlet-name>WarehouseLogin</servlet-name><jsp-file>/webapp/warehousetransport/WarehouseLogin.jsp</jsp-file></servlet>
-    <servlet><servlet-name>CustomerList</servlet-name><jsp-file>/webapp/commoninfrastructure/CustomerList.jsp</jsp-file></servlet>
-    <servlet><servlet-name>CustomerDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/CustomerDetails.jsp</jsp-file></servlet>
-    <servlet><servlet-name>NewCustomer</servlet-name><jsp-file>/webapp/commoninfrastructure/NewCustomer.jsp</jsp-file></servlet>
+    <servlet><servlet-name>WarehouseDashboard</servlet-name><jsp-file>/webapp/commoninfrastructure/WarehouseDashboard.jsp</jsp-file></servlet>
+    <servlet><servlet-name>WarehouseLogin</servlet-name><jsp-file>/webapp/commoninfrastructure/WarehouseLogin.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ContactList</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactList.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ContactDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactDetails.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewContact</servlet-name><jsp-file>/webapp/commoninfrastructure/NewContact.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewEmployee</servlet-name><jsp-file>/webapp/commoninfrastructure/NewEmployee.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewItem</servlet-name><jsp-file>/webapp/warehousetransport/NewItem.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewItemGroup</servlet-name><jsp-file>/webapp/warehousetransport/NewItemGroup.jsp</jsp-file></servlet>
+    <servlet><servlet-name>PriceAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/PriceAdjustment.jsp</jsp-file></servlet>
+    <servlet><servlet-name>QuantityAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/QuantityAdjustment.jsp</jsp-file></servlet>
     
     <servlet-mapping>
         <servlet-name>SGMapleStore</servlet-name>
         <url-pattern>/SGMapleStore</url-pattern>
     </servlet-mapping>
-    <servlet-mapping><servlet-name>WarehouseDashboard</servlet-name><url-pattern>/webapp/warehousetransport/WarehouseDashboard</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>WarehouseLogin</servlet-name><url-pattern>/webapp/warehousetransport/WarehouseLogin</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>CustomerList</servlet-name><url-pattern>/webapp/commoninfrastructure/CustomerList</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>CustomerDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/CustomerDetails</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>NewCustomer</servlet-name><url-pattern>/webapp/commoninfrastructure/NewCustomer</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>WarehouseDashboard</servlet-name><url-pattern>/webapp/commoninfrastructure/WarehouseDashboard</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>WarehouseLogin</servlet-name><url-pattern>/webapp/commoninfrastructure/WarehouseLogin</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ContactList</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactList</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ContactDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactDetails</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewContact</servlet-name><url-pattern>/webapp/commoninfrastructure/NewContact</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewEmployee</servlet-name><url-pattern>/webapp/commoninfrastructure/NewEmployee</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewItem</servlet-name><url-pattern>/webapp/warehousetransport/NewItem</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewItemGroup</servlet-name><url-pattern>/webapp/warehousetransport/NewItemGroup</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>PriceAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/PriceAdjustment</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>QuantityAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/QuantityAdjustment</url-pattern></servlet-mapping>
     
     <session-config><session-timeout>120</session-timeout></session-config>
-    <welcome-file-list><welcome-file>webapp/warehousetransport/WarehouseLogin.jsp</welcome-file></welcome-file-list>
+    <welcome-file-list><welcome-file>webapp/commoninfrastructure/WarehouseLogin.jsp</welcome-file></welcome-file-list>
 </web-app>

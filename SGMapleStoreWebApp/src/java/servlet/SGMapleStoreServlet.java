@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import ejb.SGMapleStoreRemote;
 import java.util.ArrayList;
+import ejb.CommonInfrastructureRemote;
         
 public class SGMapleStoreServlet extends HttpServlet {
     @EJB
-    private SGMapleStoreRemote smsr;
+    private CommonInfrastructureRemote cir;
     String userNRIC = "";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -30,7 +30,7 @@ public class SGMapleStoreServlet extends HttpServlet {
             if(pageAction.equals("loginToSys")) {
                 String empNRIC = request.getParameter("empNRIC");
                 String empPassword = request.getParameter("empPassword");
-                if(smsr.empLogin(empNRIC, empPassword)){
+                if(cir.empLogin(empNRIC, empPassword)){
                     userNRIC = empNRIC;
                     request.setAttribute("employeeNRIC", userNRIC);
                     pageAction = "WarehouseDashboard";
@@ -49,27 +49,43 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "WarehouseDashboard";
             }
-            else if(pageAction.equals("goToNewCustomer")) {
+            else if(pageAction.equals("goToNewContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "NewCustomer";
+                pageAction = "NewContact";
             }
             else if(pageAction.equals("goToNewEmployee")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "NewEmployee";
             }
-            else if(pageAction.equals("goToCustomerList")) {
+            else if(pageAction.equals("goToContactList")) {
                 request.setAttribute("employeeNRIC", userNRIC);
-                request.setAttribute("custList", (ArrayList)smsr.viewCustomerList());
-                pageAction = "CustomerList";
+                request.setAttribute("contactList", (ArrayList)cir.viewContactList());
+                pageAction = "ContactList";
             }
-            else if(pageAction.equals("goToCustomerDetails")) {
-                pageAction = "CustomerDetails";
+            else if(pageAction.equals("goToContactDetails")) {
+                pageAction = "ContactDetails";
             }
-            else if(pageAction.equals("createCustomer")) {
+            else if(pageAction.equals("goToNewItemGroup")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewItemGroup";
+            }
+            else if(pageAction.equals("goToNewItem")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewItem";
+            }
+            else if(pageAction.equals("goToQuantityAdjustment")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "QuantityAdjustment";
+            }
+            else if(pageAction.equals("goToPriceAdjustment")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "PriceAdjustment";
+            }
+            else if(pageAction.equals("createContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 createCustomer(request);
-                request.setAttribute("custList", (ArrayList)smsr.viewCustomerList());
-                pageAction = "CustomerList";
+                request.setAttribute("contactList", (ArrayList)cir.viewContactList());
+                pageAction = "ContactList";
             }
             dispatcher = servletContext.getNamedDispatcher(pageAction);
             dispatcher.forward(request, response);
@@ -96,27 +112,39 @@ public class SGMapleStoreServlet extends HttpServlet {
     public String getServletInfo() { return "SG MapleStore Servlet"; }
     
     private void createCustomer(HttpServletRequest request){
-        String custSalutation = request.getParameter("custSalutation");
-        String custFirstName = request.getParameter("custFirstName");
-        String custLastName = request.getParameter("custLastName");
-        String custEmail = request.getParameter("custEmail");
-        String custContactNum = request.getParameter("custContactNum");
+        String contactSalutation = request.getParameter("contactSalutation");
+        String contactFirstName = request.getParameter("contactFirstName");
+        String contactLastName = request.getParameter("contactLastName");
+        String contactEmail = request.getParameter("contactEmail");
+        String contactPhone = request.getParameter("contactPhone");
+        String contactType = request.getParameter("contactType");
         
-        String custBillingStreet = request.getParameter("custBillingStreet");
-        String custBillingCity = request.getParameter("custBillingCity");
-        String custBillingState = request.getParameter("custBillingState");
-        String custBillingZipCode = request.getParameter("custBillingZipCode");
-        String custBillingCountry = request.getParameter("custBillingCountry");
+        String contactBillingAttn = request.getParameter("contactBillingAttn");
+        String contactBillingAddress = request.getParameter("contactBillingAddress");
+        String contactBillingCity = request.getParameter("contactBillingCity");
+        String contactBillingState = request.getParameter("contactBillingState");
+        String contactBillingZipCode = request.getParameter("contactBillingZipCode");
+        String contactBillingCountry = request.getParameter("contactBillingCountry");
+        String contactBillingFax = request.getParameter("contactBillingFax");
+        String contactBillingPhone = request.getParameter("contactBillingPhone");
         
-        String custShippingStreet = request.getParameter("custShippingStreet");
-        String custShippingCity = request.getParameter("custShippingCity");
-        String custShippingState = request.getParameter("custShippingState");
-        String custShippingZipCode = request.getParameter("custShippingZipCode");
-        String custShippingCountry = request.getParameter("custShippingCountry");
-        String custNotes = request.getParameter("custNotes");
+        String contactShippingAttn = request.getParameter("contactShippingAttn");
+        String contactShippingAddress = request.getParameter("contactShippingAddress");
+        String contactShippingCity = request.getParameter("contactShippingCity");
+        String contactShippingState = request.getParameter("contactShippingState");
+        String contactShippingZipCode = request.getParameter("contactShippingZipCode");
+        String contactShippingCountry = request.getParameter("contactShippingCountry");
+        String contactShippingFax = request.getParameter("contactShippingFax");
+        String contactShippingPhone = request.getParameter("contactShippingPhone");
         
-        smsr.createCustomer(custSalutation, custFirstName, custLastName, custEmail, custContactNum, 
-                custBillingStreet, custBillingCity, custBillingState, custBillingZipCode, custBillingCountry, 
-                custShippingStreet, custShippingCity, custShippingState, custShippingZipCode, custShippingCountry, custNotes);
+        String contactUsername = request.getParameter("contactUsername");
+        String contactPassword = request.getParameter("contactPassword");
+        String contactNotes = request.getParameter("contactNotes");
+        
+        cir.createContact(contactSalutation, contactFirstName, contactLastName, contactEmail, contactPhone, contactType, 
+                contactBillingAttn, contactBillingAddress, contactBillingCity, contactBillingState, contactBillingZipCode, 
+                contactBillingCountry, contactBillingFax, contactBillingPhone, contactShippingAttn, contactShippingAddress, 
+                contactShippingCity, contactShippingState, contactShippingZipCode, contactShippingCountry, contactShippingFax, 
+                contactShippingPhone, contactUsername, contactPassword, contactNotes);
     }
 }

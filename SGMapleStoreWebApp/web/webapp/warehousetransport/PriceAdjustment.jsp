@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Employee</title>
+        <title>SG MapleStore - Price Adjustment</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -109,7 +109,7 @@
             <!-- Content Space -->
             <div id="page-wrapper">
                 <div class="contentFill contentLayout">
-                    <h3>New Employee</h3>
+                    <h3>Price Adjustment</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">

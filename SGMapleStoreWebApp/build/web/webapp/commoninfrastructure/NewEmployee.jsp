@@ -79,12 +79,20 @@
                             <li>
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToCustomerList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Customer List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewCustomer"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Customer</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewContact"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Contact</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
                                 </ul>
                             </li>
-                            <li><a href="SGMapleStore?pageTransit=goToCarComputationHist"><i class="fa fa-tags fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
+                            <li>
+                                <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li><a href="SGMapleStore?pageTransit=goToNewItemGroup"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewItem"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToQuantityAdjustment"><i class="fa fa fa-balance-scale fa-fw"></i>&nbsp;&nbsp;Quantity Adjustments</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToPriceAdjustment"><i class="fa fa fa-usd fa-fw"></i>&nbsp;&nbsp;Price Adjustments</a></li>
+                                </ul>
+                            </li>
                             <li>&nbsp;</li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
@@ -100,16 +108,12 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="col-lg-12 contentHeader">
-                    <h4 class="page-header" style="font-size: 20px; padding-left: 20px;">New Employee</h4>
+                <div class="contentFill contentLayout">
+                    <h3>New Employee</h3>
                 </div>
-                <div class="col-lg-12 contentBody">
-                    <form action="SGMapleStore" method="POST">
-                        <table border="0" class="tableConfig">
-                            <tr>
-                                <td></td>
-                            </tr>
-                        </table>
+                <div class="contentFill scroll-y scrollbox">
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
+                        
                     </form>
                 </div>
             </div>
