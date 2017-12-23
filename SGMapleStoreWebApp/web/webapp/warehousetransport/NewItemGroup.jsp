@@ -161,6 +161,12 @@
                                         <input type="text" name="itemGroupName" class="form-control" />
                                     </div>
                                 </div>
+                                <div class="col-md-8">
+                                    <label class="col-md-2 control-label required">Manufacturer</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="itemGroupManufacturer" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
