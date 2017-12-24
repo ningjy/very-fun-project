@@ -1,10 +1,12 @@
+<%@page import="java.util.Vector"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Dashboard</title>
+        <title>SG MapleStore - Invoice List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -21,9 +23,8 @@
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0;">
                 <a class="navbar-brand" href="SGMapleStore?pageTransit=goToDashboard">
-                    <!-- <img src="images/landing/moneymind_logo.png" /> -->
                     SG MapleStore
                 </a>
                 
@@ -51,7 +52,7 @@
                 </ul>
             
                 <!-- Left Navigation -->
-                <div class="navbar-default sidebar" role="navigation">
+                <div class="navbar-default sidebar">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
                             <li>
@@ -108,10 +109,74 @@
             </nav>
 
             <!-- Content Space -->
-            <div id="page-wrapper">
-                <div class="row">
-                    
+             <div id="page-wrapper">
+                <div class="contentFill contentLayout">
+                    <h3>Invoice List</h3>
                 </div>
+                <table class="table zi-table table-hover" id="contactList">
+                    <thead>
+                        <tr>
+                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Customer Name</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Invoice Date</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Invoice Number</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Order Number</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Total Amount</div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
+                            if(invoiceList.isEmpty()){
+                        %>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">There are no invoice records available.</td>
+                        </tr>
+                        <%
+                            }
+                            else {
+                                for(int i = 0; i <= invoiceList.size()-1; i++){
+                                    Vector v = invoiceList.get(i);
+                                    String invoiceCustomer = String.valueOf(v.get(0));
+                                    String invoiceDate = String.valueOf(v.get(1));
+                                    String invoiceID = String.valueOf(v.get(2));
+                                    String salesOrderID = String.valueOf(v.get(3));
+                                    String totalAmount = String.valueOf(v.get(4));
+                   
+                        %>
+                        <tr tabindex="-1" class="active">
+                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
+                            <td><%= invoiceCustomer %></td>
+                            <td><%= invoiceDate %></td>
+                            <td><%= invoiceID %></td>
+                            <td><%= salesOrderID %></td>
+                            <td><%= "$ "+totalAmount %></td>
+                            <%      }   %>
+                            <%  }   %>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>
