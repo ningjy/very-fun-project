@@ -1,15 +1,23 @@
 /SGMapleStore/build/
 /SGMapleStore/dist/
-/SGMapleStore/nbproject/private/
-
-/SGMapleStoreRemoteInterface/build/
-/SGMapleStoreRemoteInterface/dist/
-/SGMapleStoreRemoteInterface/nbproject/private/
+/SGMapleStore/nbproject/
+!/SGMapleStore/nbproject/project.xml
+!/SGMapleStore/nbproject/project.properties
 
 /SGMapleStore/SGMapleStore-ejb/build/
 /SGMapleStore/SGMapleStore-ejb/dist/
-/SGMapleStore/SGMapleStore-ejb/nbproject/private/
+/SGMapleStore/SGMapleStore-ejb/nbproject/
+!/SGMapleStore/SGMapleStore-ejb/nbproject/project.xml
+!/SGMapleStore/SGMapleStore-ejb/nbproject/project.properties
+
+/SGMapleStoreRemoteInterface/build/
+/SGMapleStoreRemoteInterface/dist/
+/SGMapleStoreRemoteInterface/nbproject/
+!/SGMapleStoreRemoteInterface/nbproject/project.xml
+!/SGMapleStoreRemoteInterface/nbproject/project.properties
 
 /SGMapleStoreWebApp/build/
 /SGMapleStoreWebApp/dist/
-/SGMapleStoreWebApp/nbproject/private/
+/SGMapleStoreWebApp/nbproject/
+!/SGMapleStoreWebApp/nbproject/project.xml
+!/SGMapleStoreWebApp/nbproject/project.properties
