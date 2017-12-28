@@ -6,8 +6,10 @@
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,55 +22,139 @@ import javax.persistence.Id;
 @Entity(name="Invoice")
 public class InvoiceEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private ContactEntity customer;
-    private Long salesOrderID; //to replace with sales order entity
-    private LocalDate date;
-    private String terms;
+    private Long invoiceNum;
+    private String customerNotes;
+    private LocalDateTime dateTime;
+    private String contactUsername;
+    private String billingAddress;
+    private String shippingAddress;
+    private Long contactNum;
+    private String paymentReferenceNum;
+    private String paymentMode;
+    private Double discountAmt;
+    private Double shippingAmt; 
+    private List<Vector> itemList;
+    private String status;
+    private boolean active; 
 
-    public LocalDate getDate() {
-        return date;
+    public Long getInvoiceNum() {
+        return invoiceNum;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setInvoiceNum(Long invoiceNum) {
+        this.invoiceNum = invoiceNum;
     }
-    private String priceList; //to replace with PriceList entity
-    private String warehouse; //to replace with warehouse entity
-    private EmployeeEntity salesperson;
-    private String products; // to replace with ArrayList<ProductEntity>
-    private Long totalAmount;
-    
-    public InvoiceEntity(){}
-    
-    public InvoiceEntity(Long id, ContactEntity customer, Long salesOrderID, LocalDate date, String terms, String priceList, String warehouse, EmployeeEntity salesperson, String products, Long totalAmount) {
-        this.id = id;
-        this.customer = customer;
-        this.salesOrderID = salesOrderID;
-        this.date = date;
-        this.terms = terms;
-        this.priceList = priceList;
-        this.warehouse = warehouse;
-        this.salesperson = salesperson;
-        this.products = products;
-        this.totalAmount = totalAmount;
+
+    public String getCustomerNotes() {
+        return customerNotes;
+    }
+
+    public void setCustomerNotes(String customerNotes) {
+        this.customerNotes = customerNotes;
+    }
+
+    public String getContactUsername() {
+        return contactUsername;
+    }
+
+    public void setContactUsername(String contactUsername) {
+        this.contactUsername = contactUsername;
+    }
+
+    public String getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public Long getContactNum() {
+        return contactNum;
+    }
+
+    public void setContactNum(Long contactNum) {
+        this.contactNum = contactNum;
+    }
+
+    public String getPaymentReferenceNum() {
+        return paymentReferenceNum;
+    }
+
+    public void setPaymentReferenceNum(String paymentReferenceNum) {
+        this.paymentReferenceNum = paymentReferenceNum;
+    }
+
+    public String getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(String paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public Double getDiscountAmt() {
+        return discountAmt;
+    }
+
+    public void setDiscountAmt(Double discountAmt) {
+        this.discountAmt = discountAmt;
+    }
+
+    public Double getShippingAmt() {
+        return shippingAmt;
+    }
+
+    public void setShippingAmt(Double shippingAmt) {
+        this.shippingAmt = shippingAmt;
+    }
+
+    public List<Vector> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<Vector> itemList) {
+        this.itemList = itemList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
     
-    public Long getId() {
-        return id;
+     public LocalDateTime getDateTime() {
+        return dateTime;
     }
-    
-    public void setId(Long id) {
-        this.id = id;
+
+    public void setDate(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (invoiceNum != null ? invoiceNum.hashCode() : 0);
         return hash;
     }
 
@@ -79,7 +165,7 @@ public class InvoiceEntity implements Serializable {
             return false;
         }
         InvoiceEntity other = (InvoiceEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.invoiceNum == null && other.invoiceNum != null) || (this.invoiceNum != null && !this.invoiceNum.equals(other.invoiceNum))) {
             return false;
         }
         return true;
@@ -87,71 +173,6 @@ public class InvoiceEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.InvoiceEntity[ id=" + id + " ]";
+        return "entity.InvoiceEntity[ id=" + invoiceNum + " ]";
     }
-
-    public ContactEntity getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(ContactEntity customer) {
-        this.customer = customer;
-    }
-
-    public Long getSalesOrderID() {
-        return salesOrderID;
-    }
-
-    public void setSalesOrderID(Long salesOrderID) {
-        this.salesOrderID = salesOrderID;
-    }
-
-    public String getTerms() {
-        return terms;
-    }
-
-    public void setTerms(String terms) {
-        this.terms = terms;
-    }
-
-    public String getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(String priceList) {
-        this.priceList = priceList;
-    }
-
-    public String getWarehouse() {
-        return warehouse;
-    }
-
-    public void setWarehouse(String warehouse) {
-        this.warehouse = warehouse;
-    }
-
-    public EmployeeEntity getSalesperson() {
-        return salesperson;
-    }
-
-    public void setSalesperson(EmployeeEntity salesperson) {
-        this.salesperson = salesperson;
-    }
-
-    public String getProducts() {
-        return products;
-    }
-
-    public void setProducts(String products) {
-        this.products = products;
-    }
-
-    public Long getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(Long totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-    
 }
