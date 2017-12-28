@@ -103,7 +103,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         Query q = em.createQuery("SELECT i FROM Invoice i");
         List<Vector> invoiceList = new ArrayList<Vector>();
         
-        for(Object o: q.getResultList()){
+        /*for(Object o: q.getResultList()){
             InvoiceEntity invoiceE = (InvoiceEntity) o;
             Vector invoiceVec = new Vector();
             
@@ -116,7 +116,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             invoiceVec.add(invoiceE.getTotalAmount());
 
             invoiceList.add(invoiceVec);
-        }
+        }*/
         return invoiceList;
     }
     /* MISCELLANEOUS METHOD HELPERS */
@@ -134,6 +134,5 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         }      
         return hashedValue;
     }
-
     
 }
