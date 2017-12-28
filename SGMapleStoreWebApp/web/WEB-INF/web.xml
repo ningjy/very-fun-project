@@ -14,6 +14,8 @@
     <servlet><servlet-name>NewItemGroup</servlet-name><jsp-file>/webapp/warehousetransport/NewItemGroup.jsp</jsp-file></servlet>
     <servlet><servlet-name>PriceAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/PriceAdjustment.jsp</jsp-file></servlet>
     <servlet><servlet-name>QuantityAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/QuantityAdjustment.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewInvoice</servlet-name><jsp-file>/webapp/warehousetransport/NewInvoice.jsp</jsp-file></servlet>
+    <servlet><servlet-name>InvoiceList</servlet-name><jsp-file>/webapp/warehousetransport/InvoiceList.jsp</jsp-file></servlet>
     
     <servlet-mapping>
         <servlet-name>SGMapleStore</servlet-name>
@@ -29,7 +31,9 @@
     <servlet-mapping><servlet-name>NewItemGroup</servlet-name><url-pattern>/webapp/warehousetransport/NewItemGroup</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>PriceAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/PriceAdjustment</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>QuantityAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/QuantityAdjustment</url-pattern></servlet-mapping>
-    
+    <servlet-mapping><servlet-name>NewInvoice</servlet-name><url-pattern>/webapp/warehousetransport/NewInvoice</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>InvoiceList</servlet-name><url-pattern>/webapp/warehousetransport/InvoiceList</url-pattern></servlet-mapping>
+
     <session-config><session-timeout>120</session-timeout></session-config>
     <welcome-file-list><welcome-file>webapp/commoninfrastructure/WarehouseLogin.jsp</welcome-file></welcome-file-list>
 </web-app>
