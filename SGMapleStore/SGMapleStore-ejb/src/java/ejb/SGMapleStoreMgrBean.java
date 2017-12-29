@@ -12,17 +12,19 @@ import javax.persistence.Query;
 
 import entity.EmployeeEntity;
 import entity.ContactEntity;
+import entity.InvoiceEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 @Stateless
-public class SGMapleStoreMgrBean implements CommonInfrastructureRemote {
+public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, WarehouseTransportRemote {
     @PersistenceContext
     private EntityManager em;
     
     private EmployeeEntity eEntity;
     private ContactEntity cEntity;
+    private InvoiceEntity invoice;
     
     @Override
     public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
@@ -95,7 +97,28 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote {
         if(eEntity.getEmpPassword().equals(empPassword)) { return true; }    // TO BE REVERTED
         return false;
     }
-    
+
+    @Override
+    public List<Vector> viewInvoiceList() {
+        Query q = em.createQuery("SELECT i FROM Invoice i");
+        List<Vector> invoiceList = new ArrayList<Vector>();
+        
+        /*for(Object o: q.getResultList()){
+            InvoiceEntity invoiceE = (InvoiceEntity) o;
+            Vector invoiceVec = new Vector();
+            
+            invoiceVec.add(invoiceE.getCustomer().getContactSalutation()
+                    +" "+invoiceE.getCustomer().getContactFirstName()
+                    +" "+invoiceE.getCustomer().getContactLastName());
+            invoiceVec.add(invoiceE.getDate());
+            invoiceVec.add(invoiceE.getId());
+            invoiceVec.add(invoiceE.getSalesOrderID());
+            invoiceVec.add(invoiceE.getTotalAmount());
+
+            invoiceList.add(invoiceVec);
+        }*/
+        return invoiceList;
+    }
     /* MISCELLANEOUS METHOD HELPERS */
     public String encodePassword(String password) throws NoSuchAlgorithmException {
         String hashedValue = "";
@@ -111,4 +134,5 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote {
         }      
         return hashedValue;
     }
+    
 }

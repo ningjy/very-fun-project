@@ -11,10 +11,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import ejb.CommonInfrastructureRemote;
-        
+import ejb.WarehouseTransportRemote;
+
 public class SGMapleStoreServlet extends HttpServlet {
     @EJB
     private CommonInfrastructureRemote cir;
+    @EJB
+    private WarehouseTransportRemote wtr;
     String userNRIC = "";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -86,6 +89,10 @@ public class SGMapleStoreServlet extends HttpServlet {
                 createCustomer(request);
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
+            }
+            else if(pageAction.equals("goToInvoiceList")) {
+                request.setAttribute("invoiceList", (ArrayList)wtr.viewInvoiceList());
+                pageAction = "InvoiceList";
             }
             dispatcher = servletContext.getNamedDispatcher(pageAction);
             dispatcher.forward(request, response);
