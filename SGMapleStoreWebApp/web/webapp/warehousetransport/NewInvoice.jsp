@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Dashboard</title>
+        <title>SG MapleStore - New Invoice</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -21,9 +21,8 @@
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0;">
                 <a class="navbar-brand" href="SGMapleStore?pageTransit=goToDashboard">
-                    <!-- <img src="images/landing/moneymind_logo.png" /> -->
                     SG MapleStore
                 </a>
                 
@@ -51,7 +50,7 @@
                 </ul>
             
                 <!-- Left Navigation -->
-                <div class="navbar-default sidebar" role="navigation">
+                <div class="navbar-default sidebar">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
                             <li>
@@ -109,8 +108,13 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="row">
-                    
+                <div class="contentFill contentLayout">
+                    <h3>New Employee</h3>
+                </div>
+                <div class="contentFill scroll-y scrollbox">
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
+                        
+                    </form>
                 </div>
             </div>
         </div>
