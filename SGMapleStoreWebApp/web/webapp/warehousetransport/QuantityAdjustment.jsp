@@ -10,14 +10,22 @@
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.7.2/combined/css/gijgo.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/warehousetransport/weblayout/QuantityAdjustmentCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/vendorjs/gijgo.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/QuantityAdjustmentJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -80,17 +88,15 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewContact"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Contact</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItemGroup"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItem"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToQuantityAdjustment"><i class="fa fa fa-balance-scale fa-fw"></i>&nbsp;&nbsp;Quantity Adjustments</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToPriceAdjustment"><i class="fa fa fa-usd fa-fw"></i>&nbsp;&nbsp;Price Adjustments</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewCompositeItem"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
                             <li>&nbsp;</li>
@@ -112,8 +118,98 @@
                     <h3>Quantity Adjustment</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
+                    <%
+                        String successMessage = (String)request.getAttribute("successMessage");
+                        if (successMessage != null) {
+                    %>
+                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeSuccess">&times;</button>
+                        <%= successMessage%>
+                    </div>
+                    <%  } %>
+                    <%
+                        String errorMessage = (String)request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeError">&times;</button>
+                        <%= errorMessage%>
+                    </div>
+                    <%  } %>
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        
+                        <div class="zi-txn-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Date</label>
+                                    <div class="col-md-4">
+                                        <input type="text" placeholder="MM/DD/YYYY" class="form-control" id="logDate" name="logDate" />
+                                        <script type="text/javascript">
+                                            $('#logDate').datepicker({
+                                                uiLibrary: 'bootstrap4'
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Reason</label>
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="logReason">
+                                            <option>-- Select the Reason --</option>
+                                            <option value="Stock On Fire">Stock On fire</option>
+                                            <option value="Stolen Goods">Stolen Goods</option>
+                                            <option value="Damaged Goods">Damaged Goods</option>
+                                            <option value="Stocktaking Results">Stocktaking Results</option>
+                                            <option value="Inventory Revaluation">Inventory Revaluation</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Description</label>
+                                    <div class="col-md-4">
+                                        <textarea rows="4" placeholder="Maximum 500 Characters" class="form-control" name="logDescription"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="top-space">
+                                <table class="line-item-table" id="recordTable">
+                                    <thead>
+                                        <tr class="line-item-header zb-txn-form invoice-nodiscount line-item-us">
+                                            <th colspan="2" class="line-item-column over-flow item-details">Item Details</th>
+                                            <th class="line-item-column over-flow item-qty">SKU</th>
+                                            <th class="line-item-column over-flow item-qty">Quantity Available</th>
+                                            <th class="line-item-column over-flow item-qty">Quantity To Adjust</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="line-item-body invoice-nodiscount line-item-us">
+                                        <tr class="line-item new-line-item">
+                                            <td class="line-item-column item-img"></td>
+                                            <td class="line-item-column item-details">
+                                                <input type="text" style="margin-top: 4px;" placeholder="Type to select an item" class="form-control" id="itemName" name="itemName" onclick="javascript: loadFieldID(this);" />
+                                            </td>
+                                            <td class="line-item-column item-qty text-muted">
+                                                <input type="text" readonly="readonly" class="displayField" size="15" id="itemSKU" name="itemSKU" />
+                                            </td>
+                                            <td class="line-item-column item-qty text-muted">
+                                                <input type="text" readonly="readonly" class="displayField" size="15" id="itemQuantityAvail" name="itemQuantityAvail" />
+                                            </td>
+                                            <td class="line-item-column item-qty">
+                                                <input type="text" style="margin-top: 4px;" placeholder="e.g. +10, -10" class="form-control" name="itemQuantityAdjust" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <a href="javascript:addNewRow();" class="line-item-column addRow">Add another item</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-toolbar">
+                            <input type="hidden" name="pageTransit" value="adjustQuantity"/>
+                            <button type="submit" class="btn btn-primary" value="submit">Save</button>
+                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToDashboard'">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>

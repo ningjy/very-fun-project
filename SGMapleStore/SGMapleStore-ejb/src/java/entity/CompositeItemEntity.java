@@ -1,131 +1,67 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-/**
- *
- * @author Derian
- */
-@Entity(name="CompositeItem")
+@Entity(name = "CompositeItem")
 public class CompositeItemEntity implements Serializable {
-    
-    private ArrayList<ItemEntity> items;
-    private String name;
-    private String description;
-    private Long quantity;
-    private Long rebundleLevel;
     @Id
-    private String SKU;
-    private String imgLink;
-    private boolean active;
-    private Double sellingPrice;
+    private String compositeSKU;
+    private String compositeName;
+    private Double compositeSellPrice;
+    private Double compositeQuantity;
+    private Double compositeRebundleLvl;
+    private String compositeDescription;
+    private String compositeImagePath;
+    private ArrayList<Vector> compositeArrList;
     
-    public ArrayList<ItemEntity> getItems() {
-        return items;
-    }
-
-    public void setItems(ArrayList<ItemEntity> items) {
-        this.items = items;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
-
-    public Long getRebundleLevel() {
-        return rebundleLevel;
-    }
-
-    public void setRebundleLevel(Long rebundleLevel) {
-        this.rebundleLevel = rebundleLevel;
-    }
-
-    public String getImgLink() {
-        return imgLink;
-    }
-
-    public void setImgLink(String imgLink) {
-        this.imgLink = imgLink;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Double getSellingPrice() {
-        return sellingPrice;
-    }
-
-    public void setSellingPrice(Double sellingPrice) {
-        this.sellingPrice = sellingPrice;
+    @Temporal(TemporalType.DATE)
+    private Date compositeCreationDate;
+    
+    @PrePersist
+    public void creationDate() {
+        this.compositeCreationDate = new Date();
     }
     
-    public String getSKU() {
-        return SKU;
-    }
-
-    public void setSKU(String id) {
-        this.SKU = SKU;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (SKU != null ? SKU.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CompositeItemEntity)) {
-            return false;
-        }
-        CompositeItemEntity other = (CompositeItemEntity) object;
-        if ((this.SKU == null && other.SKU != null) || (this.SKU != null && !this.SKU.equals(other.SKU))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.CompositeItemEntity[ id=" + SKU + " ]";
+    /* MISCELLANEOUS METHODS */
+    public void createCompositeItem(String compositeName, String compositeSKU, Double compositeSellPrice, 
+            Double compositeRebundleLvl, String compositeDescription, List<Vector> packageItemList) {
+        this.compositeName = compositeName;
+        this.compositeSKU = compositeSKU;
+        this.compositeSellPrice = compositeSellPrice;
+        this.compositeQuantity = 0.0;
+        this.compositeRebundleLvl = compositeRebundleLvl;
+        this.compositeDescription = compositeDescription;
+        this.compositeArrList = (ArrayList)packageItemList;
     }
     
+    /* GETTER METHODS */
+    public String getCompositeSKU() { return compositeSKU; }
+    public String getCompositeName() { return compositeName; }
+    public Double getCompositeSellPrice() { return compositeSellPrice; }
+    public Double getCompositeQuantity() { return compositeQuantity; }
+    public Double getCompositeRebundleLvl() { return compositeRebundleLvl; }
+    public String getCompositeDescription() { return compositeDescription; }
+    public String getCompositeImagePath() { return compositeImagePath; }
+    public ArrayList<Vector> getCompositeArrList() { return compositeArrList; }
+    public Date getCompositeCreationDate() { return compositeCreationDate; }
+    
+    /* SETTER METHODS */
+    public void setCompositeSKU(String compositeSKU) { this.compositeSKU = compositeSKU; }
+    public void setCompositeName(String compositeName) { this.compositeName = compositeName; }
+    public void setCompositeSellPrice(Double compositeSellPrice) { this.compositeSellPrice = compositeSellPrice; }
+    public void setCompositeQuantity(Double compositeQuantity) { this.compositeQuantity = compositeQuantity; }
+    public void setCompositeRebundleLvl(Double compositeRebundleLvl) { this.compositeRebundleLvl = compositeRebundleLvl; }
+    public void setCompositeDescription(String compositeDescription) { this.compositeDescription = compositeDescription; }
+    public void setCompositeImagePath(String compositeImagePath) { this.compositeImagePath = compositeImagePath; }
+    public void setCompositeArrList(ArrayList<Vector> compositeArrList) { this.compositeArrList = compositeArrList; }
+    public void setCompositeCreationDate(Date compositeCreationDate) { this.compositeCreationDate = compositeCreationDate; }
 }

@@ -1,36 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-/**
- *
- * @author Derian
- */
-@Entity(name="Bill")
+@Entity(name = "Bill")
 public class BillEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long billNum;
     private Long poNum;
-    private LocalDateTime creationDateTime;
-    private LocalDateTime dueDateTime;
+    @Temporal(TemporalType.DATE)
+    private Date creationDateTime;
+    @Temporal(TemporalType.DATE)
+    private Date dueDateTime;
     private String paymentReferenceNum;
     private Double discountFactor;
-    private LocalDateTime discountDateTime;
+    @Temporal(TemporalType.DATE)
+    private Date discountDateTime;
     private String paymentMode;
     private String status;
-    private LocalDateTime paymentDateTime;
+    @Temporal(TemporalType.DATE)
+    private Date paymentDateTime;
     private boolean active;
 
     public Long getPoNum() {
@@ -41,19 +37,19 @@ public class BillEntity implements Serializable {
         this.poNum = poNum;
     }
 
-    public LocalDateTime getCreationDateTime() {
+    public Date getCreationDateTime() {
         return creationDateTime;
     }
 
-    public void setCreationDateTime(LocalDateTime creationDateTime) {
+    public void setCreationDateTime(Date creationDateTime) {
         this.creationDateTime = creationDateTime;
     }
 
-    public LocalDateTime getDueDateTime() {
+    public Date getDueDateTime() {
         return dueDateTime;
     }
 
-    public void setDueDateTime(LocalDateTime dueDateTime) {
+    public void setDueDateTime(Date dueDateTime) {
         this.dueDateTime = dueDateTime;
     }
 
@@ -73,11 +69,11 @@ public class BillEntity implements Serializable {
         this.discountFactor = discountFactor;
     }
 
-    public LocalDateTime getDiscountDateTime() {
+    public Date getDiscountDateTime() {
         return discountDateTime;
     }
 
-    public void setDiscountDateTime(LocalDateTime discountDateTime) {
+    public void setDiscountDateTime(Date discountDateTime) {
         this.discountDateTime = discountDateTime;
     }
 
@@ -97,11 +93,11 @@ public class BillEntity implements Serializable {
         this.status = status;
     }
 
-    public LocalDateTime getPaymentDateTime() {
+    public Date getPaymentDateTime() {
         return paymentDateTime;
     }
 
-    public void setPaymentDateTime(LocalDateTime paymentDateTime) {
+    public void setPaymentDateTime(Date paymentDateTime) {
         this.paymentDateTime = paymentDateTime;
     }
 
@@ -127,23 +123,4 @@ public class BillEntity implements Serializable {
         hash += (billNum != null ? billNum.hashCode() : 0);
         return hash;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BillEntity)) {
-            return false;
-        }
-        BillEntity other = (BillEntity) object;
-        if ((this.billNum == null && other.billNum != null) || (this.billNum != null && !this.billNum.equals(other.billNum))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.BillEntity[ id=" + billNum + " ]";
-    }
-    
 }

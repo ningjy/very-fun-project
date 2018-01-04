@@ -10,12 +10,25 @@
     <servlet><servlet-name>ContactDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactDetails.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewContact</servlet-name><jsp-file>/webapp/commoninfrastructure/NewContact.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewEmployee</servlet-name><jsp-file>/webapp/commoninfrastructure/NewEmployee.jsp</jsp-file></servlet>
-    <servlet><servlet-name>NewItem</servlet-name><jsp-file>/webapp/warehousetransport/NewItem.jsp</jsp-file></servlet>
-    <servlet><servlet-name>NewItemGroup</servlet-name><jsp-file>/webapp/warehousetransport/NewItemGroup.jsp</jsp-file></servlet>
-    <servlet><servlet-name>PriceAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/PriceAdjustment.jsp</jsp-file></servlet>
+    <servlet><servlet-name>Item</servlet-name><jsp-file>/webapp/warehousetransport/NewItem.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewCompositeItem</servlet-name><jsp-file>/webapp/warehousetransport/NewCompositeItem.jsp</jsp-file></servlet>
     <servlet><servlet-name>QuantityAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/QuantityAdjustment.jsp</jsp-file></servlet>
+    <servlet><servlet-name>InventoryLogList</servlet-name><jsp-file>/webapp/warehousetransport/InventoryLogList.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewInvoice</servlet-name><jsp-file>/webapp/warehousetransport/NewInvoice.jsp</jsp-file></servlet>
     <servlet><servlet-name>InvoiceList</servlet-name><jsp-file>/webapp/warehousetransport/InvoiceList.jsp</jsp-file></servlet>
+    <servlet><servlet-name>Checkout</servlet-name><jsp-file>/webapp/store/Checkout.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ContactUs</servlet-name><jsp-file>/webapp/store/ContactUs.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ErrorPage</servlet-name><jsp-file>/webapp/store/ErrorPage.jsp</jsp-file></servlet>
+    <servlet><servlet-name>Homepage</servlet-name><jsp-file>/webapp/store/Homepage.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ProductCategory</servlet-name><jsp-file>/webapp/store/ProductCategory.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ProductComparison</servlet-name><jsp-file>/webapp/store/ProductComparison.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ProductDetails</servlet-name><jsp-file>/webapp/store/ProductDetails.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ProductWishlist</servlet-name><jsp-file>/webapp/store/ProductWishlist.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ShoppingCart</servlet-name><jsp-file>/webapp/store/ShoppingCart.jsp</jsp-file></servlet>
+    <servlet><servlet-name>StoreFAQ</servlet-name><jsp-file>/webapp/store/StoreFAQ.jsp</jsp-file></servlet>
+    <servlet><servlet-name>StoreLogin</servlet-name><jsp-file>/webapp/store/StoreLogin.jsp</jsp-file></servlet>
+    <servlet><servlet-name>TermsCondition</servlet-name><jsp-file>/webapp/store/TermsCondition.jsp</jsp-file></servlet>
+    <servlet><servlet-name>TrackOrder</servlet-name><jsp-file>/webapp/store/TrackOrder.jsp</jsp-file></servlet>
     
     <servlet-mapping>
         <servlet-name>SGMapleStore</servlet-name>
@@ -27,13 +40,26 @@
     <servlet-mapping><servlet-name>ContactDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactDetails</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewContact</servlet-name><url-pattern>/webapp/commoninfrastructure/NewContact</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewEmployee</servlet-name><url-pattern>/webapp/commoninfrastructure/NewEmployee</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>NewItem</servlet-name><url-pattern>/webapp/warehousetransport/NewItem</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>NewItemGroup</servlet-name><url-pattern>/webapp/warehousetransport/NewItemGroup</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>PriceAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/PriceAdjustment</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>Item</servlet-name><url-pattern>/webapp/warehousetransport/NewItem</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewCompositeItem</servlet-name><url-pattern>/webapp/warehousetransport/NewCompositeItem</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>QuantityAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/QuantityAdjustment</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>InventoryLogList</servlet-name><url-pattern>/webapp/warehousetransport/InventoryLogList</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewInvoice</servlet-name><url-pattern>/webapp/warehousetransport/NewInvoice</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>InvoiceList</servlet-name><url-pattern>/webapp/warehousetransport/InvoiceList</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>Checkout</servlet-name><url-pattern>/webapp/store/Checkout</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ContactUs</servlet-name><url-pattern>/webapp/store/ContactUs</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ErrorPage</servlet-name><url-pattern>/webapp/store/ErrorPage</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>Homepage</servlet-name><url-pattern>/webapp/store/Homepage</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ProductCategory</servlet-name><url-pattern>/webapp/store/ProductCategory</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ProductComparison</servlet-name><url-pattern>/webapp/store/ProductComparison</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ProductDetails</servlet-name><url-pattern>/webapp/store/ProductDetails</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ProductWishlist</servlet-name><url-pattern>/webapp/store/ProductWishlist</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ShoppingCart</servlet-name><url-pattern>/webapp/store/ShoppingCart</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>StoreFAQ</servlet-name><url-pattern>/webapp/store/StoreFAQ</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>StoreLogin</servlet-name><url-pattern>/webapp/store/StoreLogin</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>TermsCondition</servlet-name><url-pattern>/webapp/store/TermsCondition</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>TrackOrder</servlet-name><url-pattern>/webapp/store/TrackOrder</url-pattern></servlet-mapping>
 
     <session-config><session-timeout>120</session-timeout></session-config>
-    <welcome-file-list><welcome-file>webapp/commoninfrastructure/WarehouseLogin.jsp</welcome-file></welcome-file-list>
+    <welcome-file-list><welcome-file>webapp/store/Homepage.jsp</welcome-file></welcome-file-list>
 </web-app>

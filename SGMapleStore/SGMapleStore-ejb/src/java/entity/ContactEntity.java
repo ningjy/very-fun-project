@@ -1,10 +1,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name = "Contact")
 public class ContactEntity implements Serializable {
@@ -40,6 +44,14 @@ public class ContactEntity implements Serializable {
     private String contactPassword;
     private String contactNotes;
     
+    @Temporal(TemporalType.DATE)
+    private Date contactCreationDate;
+    
+    @PrePersist
+    public void creationDate() {
+        this.contactCreationDate = new Date();
+    }
+  
     /* MISCELLANEOUS METHODS */ 
     public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
             String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
@@ -101,6 +113,7 @@ public class ContactEntity implements Serializable {
     public String getContactUsername() { return contactUsername; }
     public String getContactPassword() { return contactPassword; }
     public String getContactNotes() { return contactNotes; }
+    public Date getContactCreationDate() { return contactCreationDate; }
     
     /* SETTER METHODS */
     public void setContactID(Long contactID) { this.contactID = contactID; }
@@ -129,4 +142,5 @@ public class ContactEntity implements Serializable {
     public void setContactUsername(String contactUsername) { this.contactUsername = contactUsername; }
     public void setContactPassword(String contactPassword) { this.contactPassword = contactPassword; }
     public void setContactNotes(String contactNotes) { this.contactNotes = contactNotes; }
+    public void setContactCreationDate(Date contactCreationDate) { this.contactCreationDate = contactCreationDate; }
 }

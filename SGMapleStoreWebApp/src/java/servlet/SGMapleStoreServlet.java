@@ -5,6 +5,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -12,6 +14,8 @@ import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import ejb.CommonInfrastructureRemote;
 import ejb.WarehouseTransportRemote;
+import java.util.List;
+import java.util.Vector;
 
 public class SGMapleStoreServlet extends HttpServlet {
     @EJB
@@ -65,34 +69,96 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
             }
-            else if(pageAction.equals("goToContactDetails")) {
-                pageAction = "ContactDetails";
-            }
-            else if(pageAction.equals("goToNewItemGroup")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "NewItemGroup";
-            }
-            else if(pageAction.equals("goToNewItem")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "NewItem";
-            }
-            else if(pageAction.equals("goToQuantityAdjustment")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "QuantityAdjustment";
-            }
-            else if(pageAction.equals("goToPriceAdjustment")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "PriceAdjustment";
-            }
             else if(pageAction.equals("createContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 createCustomer(request);
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
             }
+            else if(pageAction.equals("goToContactDetails")) {
+                String contactIdentifier = request.getParameter("contactIdentifier");
+                request.setAttribute("contactInfo", getContactDetails(contactIdentifier));
+                pageAction = "ContactDetails";
+            }
+            else if(pageAction.equals("goToItem")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "Item";
+            }
+            else if(pageAction.equals("goToNewCompositeItem")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewCompositeItem";
+            }
+            else if(pageAction.equals("createCompositeItem")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                if(createCompositeItemRecord(request)) {
+                    request.setAttribute("successMessage", "Composite item has been created successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "One or more fields are invalid. Please check again.");
+                }
+                pageAction = "NewCompositeItem";
+            }
+            else if(pageAction.equals("goToQuantityAdjustment")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "QuantityAdjustment";
+            }
+            else if(pageAction.equals("adjustQuantity")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                if(createItemInventoryLog(userNRIC, request)) {
+                    request.setAttribute("successMessage", "Quantity adjustment(s) has been logged successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "One or more quantity adjustment records are invalid. Please check the inventory log.");
+                }
+                pageAction = "QuantityAdjustment";
+            }
+            else if(pageAction.equals("goToInventoryLogList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("inventoryLogList", (ArrayList)wtr.viewInventoryLogList());
+                pageAction = "InventoryLogList";
+            }
             else if(pageAction.equals("goToInvoiceList")) {
                 request.setAttribute("invoiceList", (ArrayList)wtr.viewInvoiceList());
                 pageAction = "InvoiceList";
+            }
+            else if(pageAction.equals("goToCheckout")) {
+                pageAction = "Checkout";
+            }
+            else if(pageAction.equals("goToContactUs")) {
+                pageAction = "ContactUs";
+            }
+            else if(pageAction.equals("goToErrorPage")) {
+                pageAction = "ErrorPage";
+            }
+            else if(pageAction.equals("goToHomepage")) {
+                pageAction = "Homepage";
+            }
+            else if(pageAction.equals("goToProductCategory")) {
+                pageAction = "ProductCategory";
+            }
+            else if(pageAction.equals("goToProductComparison")) {
+                pageAction = "ProductComparison";
+            }
+            else if(pageAction.equals("goToProductDetails")) {
+                pageAction = "ProductDetails";
+            }
+            else if(pageAction.equals("goToProductWishlist")) {
+                pageAction = "ProductWishlist";
+            }
+            else if(pageAction.equals("goToShoppingCart")) {
+                pageAction = "ShoppingCart";
+            }
+            else if(pageAction.equals("goToStoreFAQ")) {
+                pageAction = "StoreFAQ";
+            }
+            else if(pageAction.equals("goToStoreLogin")) {
+                pageAction = "StoreLogin";
+            }
+            else if(pageAction.equals("goToTermsCondition")) {
+                pageAction = "TermsCondition";
+            }
+            else if(pageAction.equals("goToTrackOrder")) {
+                pageAction = "TrackOrder";
             }
             dispatcher = servletContext.getNamedDispatcher(pageAction);
             dispatcher.forward(request, response);
@@ -107,6 +173,26 @@ public class SGMapleStoreServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        try {
+            ArrayList<Vector> retrievedItemList = (ArrayList)wtr.getItemListingNames();
+            JSONObject responseDetailsJson = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            
+            for(int i = 0; i <= retrievedItemList.size()-1; i++){
+                Vector v = retrievedItemList.get(i);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("itemName", String.valueOf(v.get(0)));
+                jsonObject.put("itemSKU", String.valueOf(v.get(1)));
+                jsonObject.put("itemQuantityAvail", String.valueOf(v.get(2)));
+                jsonObject.put("itemSellingPrice", String.valueOf(v.get(3)));
+                jsonArray.put(jsonObject);
+            }
+            responseDetailsJson.put("itemDetails", jsonArray);
+            response.setContentType("application/json");
+            response.getWriter().print(responseDetailsJson);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -153,5 +239,47 @@ public class SGMapleStoreServlet extends HttpServlet {
                 contactBillingCountry, contactBillingFax, contactBillingPhone, contactShippingAttn, contactShippingAddress, 
                 contactShippingCity, contactShippingState, contactShippingZipCode, contactShippingCountry, contactShippingFax, 
                 contactShippingPhone, contactUsername, contactPassword, contactNotes);
+    }
+    
+    private ArrayList<String> getContactDetails(String contactIdentifier) {
+        ArrayList<String> contactDetailsArr = new ArrayList();
+        Vector userInfoVec = cir.getContactInfo(contactIdentifier);
+        
+        contactDetailsArr.add((String)userInfoVec.get(0)); // First Name
+        contactDetailsArr.add((String)userInfoVec.get(1)); // Last Name
+        contactDetailsArr.add((String)userInfoVec.get(2)); // Contact Creation Date
+        return contactDetailsArr;
+    }
+    
+    private boolean createItemInventoryLog(String userNRIC, HttpServletRequest request){
+        boolean logCreationStatus = false;
+        String logDate = request.getParameter("logDate");
+        String logReason = request.getParameter("logReason");
+        String logDescription = request.getParameter("logDescription");
+        String[] itemNameArr = request.getParameterValues("itemName");
+        String[] itemSKUArr = request.getParameterValues("itemSKU");
+        String[] itemQtyArr = request.getParameterValues("itemQuantityAvail");
+        String[] itemQtyAdjustArr = request.getParameterValues("itemQuantityAdjust");
+        
+        logCreationStatus = wtr.createInventoryLog(userNRIC, logDate, logReason, logDescription, itemNameArr, 
+                itemSKUArr, itemQtyArr, itemQtyAdjustArr);
+        return logCreationStatus;
+    }
+    
+    private boolean createCompositeItemRecord(HttpServletRequest request){
+        boolean compCreationStatus = false;
+        String compositeName = request.getParameter("compositeName");
+        String compositeSKU = request.getParameter("compositeSKU");
+        String compositeSellPrice = request.getParameter("compositeSellPrice");
+        String compositeRebundleLvl = request.getParameter("compositeRebundleLvl");
+        String compositeDescription = request.getParameter("compositeDescription");
+        
+        String[] itemNameArr = request.getParameterValues("itemName");
+        String[] itemSKUArr = request.getParameterValues("itemSKU");
+        String[] itemQtyRequiredArr = request.getParameterValues("itemQuantityRequired");
+        
+        compCreationStatus = wtr.createCompositeItem(compositeName, compositeSKU, compositeSellPrice, compositeRebundleLvl, 
+                compositeDescription, itemNameArr, itemSKUArr, itemQtyRequiredArr);
+        return compCreationStatus;
     }
 }
