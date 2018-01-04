@@ -1,32 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-/**
- *
- * @author Derian
- */
-@Entity(name="Invoice")
+@Entity(name = "Invoice")
 public class InvoiceEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long invoiceNum;
     private String customerNotes;
-    private LocalDateTime dateTime;
+    @Temporal(TemporalType.DATE)
+    private Date dateTime;
     private String contactUsername;
     private String billingAddress;
     private String shippingAddress;
@@ -143,36 +135,11 @@ public class InvoiceEntity implements Serializable {
         this.active = active;
     }
     
-     public LocalDateTime getDateTime() {
+     public Date getDateTime() {
         return dateTime;
     }
 
-    public void setDate(LocalDateTime dateTime) {
+    public void setDate(Date dateTime) {
         this.dateTime = dateTime;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (invoiceNum != null ? invoiceNum.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof InvoiceEntity)) {
-            return false;
-        }
-        InvoiceEntity other = (InvoiceEntity) object;
-        if ((this.invoiceNum == null && other.invoiceNum != null) || (this.invoiceNum != null && !this.invoiceNum.equals(other.invoiceNum))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entity.InvoiceEntity[ id=" + invoiceNum + " ]";
     }
 }

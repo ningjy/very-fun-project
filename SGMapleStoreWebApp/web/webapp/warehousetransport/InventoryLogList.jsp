@@ -1,17 +1,18 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Item Group</title>
+        <title>SG MapleStore - Inventory Log List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
-        <link href="css/warehousetransport/weblayout/NewItemGroupCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -19,7 +20,6 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/warehousetransport/webjs/NewItemGroupJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -82,17 +82,15 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewContact"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Contact</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItemGroup"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItem"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToQuantityAdjustment"><i class="fa fa fa-balance-scale fa-fw"></i>&nbsp;&nbsp;Quantity Adjustments</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToPriceAdjustment"><i class="fa fa fa-usd fa-fw"></i>&nbsp;&nbsp;Price Adjustments</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewCompositeItem"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
                             <li>&nbsp;</li>
@@ -110,67 +108,79 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="contentFill contentLayout">
-                    <h3>New Item Group</h3>
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Inventory Log</h3>
+                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToQuantityAdjustment'">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Adjustment
+                    </button>
                 </div>
-                <div class="contentFill scroll-y scrollbox">
-                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        <div class="txn-creation clearfix">
-                            <div class="row" style="padding: 0 0 0 20px;">
-                                <div class="col-md-8 item-fields">
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Type</label>
-                                        <div class="col-md-8">
-                                            <label class="radio-inline cursor-pointer">
-                                                <input type="radio" name="itemGroupType" value="Goods" />&nbsp;Goods
-                                            </label>
-                                            <label class="radio-inline cursor-pointer">
-                                                <input type="radio" name="itemGroupType" value="Service" />&nbsp;Service
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label">Name</label>
-                                        <div class="col-md-9">
-                                            <input type="text" name="itemGroupName" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label required">Description</label>
-                                        <div class="col-md-9">
-                                            <textarea rows="3" name="itemGroupDescription" class="form-control"></textarea>
-                                        </div>
-                                    </div>
+                <table class="table zi-table table-hover" id="contactList">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Log Date</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="image-upload">
-                                        <img id="profileImage" src="images/image-upload.png" />
-                                        <span id="upload">
-                                            <input accept="image/gif,image/jpeg,image/png,image/bmp,image/jpg" type="file" onchange="readURL(this);" class="form-control upload" />
-                                        </span>
-                                    </div>
+                            </th>
+                            <th style="width: 17%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Reason</div>
                                 </div>
-                            </div>
-                        </div>
-                        <hr class="bdr-light" />
-                        <div class="txn-creation clearfix">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <label class="col-md-2 control-label required">Unit</label>
-                                    <div class="col-md-9">
-                                        <input type="text" name="itemGroupName" class="form-control" />
-                                    </div>
+                            </th>
+                            <th style="width: 16%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Creator ID</div>
                                 </div>
-                                <div class="col-md-8">
-                                    <label class="col-md-2 control-label required">Manufacturer</label>
-                                    <div class="col-md-9">
-                                        <input type="text" name="itemGroupManufacturer" class="form-control" />
-                                    </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Item Name</div>
                                 </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                            </th>
+                            <th style="width: 15%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Item SKU</div>
+                                </div>
+                            </th>
+                            <th style="width: 15%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Adjustment</div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            ArrayList<Vector> inventoryLogList = (ArrayList) request.getAttribute("inventoryLogList");
+                            if(inventoryLogList.isEmpty()){
+                        %>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">There are no inventory log records available.</td>
+                        </tr>
+                        <%
+                            }
+                            else {
+                                for(int i = 0; i <= inventoryLogList.size()-1; i++){
+                                    Vector v = inventoryLogList.get(i);
+                                    String logDate = String.valueOf(v.get(0));
+                                    String logReason = String.valueOf(v.get(1));
+                                    String logCreatorID = String.valueOf(v.get(2));
+                                    String itemName = String.valueOf(v.get(3));
+                                    String itemSKU = String.valueOf(v.get(4));
+                                    String itemQtyAdjustValue = String.valueOf(v.get(5));
+                        %>
+                        <tr tabindex="-1" class="active">
+                            <td style="padding-left: 20px;"><%= logDate %></td>
+                            <td><%= logReason %></td>
+                            <td><%= logCreatorID %></td>
+                            <td><%= itemName %></td>
+                            <td><%= itemSKU %></td>
+                            <td><%= itemQtyAdjustValue %></td>
+                            <%      }   %>
+                            <%  }   %>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb;
 
 import java.util.List;
@@ -11,7 +6,13 @@ import javax.ejb.Remote;
 
 @Remote
 public interface WarehouseTransportRemote {
-
-    public List<Vector> viewInvoiceList();
+    public List<Vector> getItemListingNames();
+    public boolean createInventoryLog(String userNRIC, String logDate, String logReason, String logDescription, 
+            String[] itemNameArr, String[] itemSKUArr, String[] itemQtyArr, String[] itemQtyAdjustArr);
+    public List<Vector> viewInventoryLogList();
     
+    public boolean createCompositeItem(String compositeName, String compositeSKU, String compositeSellPrice, 
+            String compositeRebundleLvl,  String compositeDescription, String[] itemNameArr, String[] itemSKUArr, 
+            String[] itemQtyRequiredArr);
+    public List<Vector> viewInvoiceList();
 }

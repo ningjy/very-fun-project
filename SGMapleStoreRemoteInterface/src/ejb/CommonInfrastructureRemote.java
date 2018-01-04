@@ -13,6 +13,7 @@ public interface CommonInfrastructureRemote {
             String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
             String contactShippingPhone, String contactUsername, String contactPassword, String contactNotes);
     public List<Vector> viewContactList();
+    public Vector getContactInfo(String contactIdentifier);
     
     public boolean empLogin(String empNRIC, String empPassword);
 }
