@@ -1,17 +1,18 @@
-<%@page import="java.util.Vector"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Invoice List</title>
+        <title>SG MapleStore - Employee List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/baselayout/iziModal.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
@@ -19,7 +20,9 @@
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/iziModal.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/EmployeeListJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -96,7 +99,7 @@
                             <li>&nbsp;</li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -107,68 +110,71 @@
             </nav>
 
             <!-- Content Space -->
-             <div id="page-wrapper">
-                <div class="contentFill contentLayout">
-                    <h3>Invoice List</h3>
+            <div id="page-wrapper">
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Employee List</h3>
+                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewEmployee'">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Employee
+                    </button>
                 </div>
-                <table class="table zi-table table-hover">
+                <table class="table zi-table table-hover" id="employeeList">
                     <thead>
                         <tr>
                             <th class="bulk-selection-cell"><input type="checkbox" /></th>
                             <th style="width: 20%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Customer Name</div>
+                                    <div class="pull-left over-flow">Name</div>
                                 </div>
                             </th>
                             <th style="width: 20%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Date</div>
+                                    <div class="pull-left over-flow">Email</div>
                                 </div>
                             </th>
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Number</div>
+                                    <div class="pull-left over-flow">Contact Number</div>
                                 </div>
                             </th>
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Order Number</div>
+                                    <div class="pull-left over-flow">Job Department</div>
                                 </div>
                             </th>
                             <th style="width: 20%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Total Amount</div>
+                                    <div class="pull-left over-flow">Job Designation</div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
-                            if(invoiceList.isEmpty()){
+                            ArrayList<Vector> employeeList = (ArrayList) request.getAttribute("employeeList");
+                            if(employeeList.isEmpty()){
                         %>
                         <tr>
-                            <td colspan="6" style="text-align: center;">There are no invoice records available.</td>
+                            <td colspan="6" style="text-align: center;">There are no employee records available.</td>
                         </tr>
                         <%
                             }
                             else {
-                                for(int i = 0; i <= invoiceList.size()-1; i++){
-                                    Vector v = invoiceList.get(i);
-                                    String invoiceCustomer = String.valueOf(v.get(0));
-                                    String invoiceDate = String.valueOf(v.get(1));
-                                    String invoiceID = String.valueOf(v.get(2));
-                                    String salesOrderID = String.valueOf(v.get(3));
-                                    String totalAmount = String.valueOf(v.get(4));
-                   
+                                for(int i = 0; i <= employeeList.size()-1; i++){
+                                    Vector v = employeeList.get(i);
+                                    String empFirstName = String.valueOf(v.get(0));
+                                    String empLastName = String.valueOf(v.get(1));
+                                    String empEmail = String.valueOf(v.get(2));
+                                    String empPhone = String.valueOf(v.get(3));
+                                    String empJobDepartment = String.valueOf(v.get(4));
+                                    String empJobDesignation = String.valueOf(v.get(5));
                         %>
                         <tr tabindex="-1" class="active">
                             <td class="bulk-selection-cell"><input type="checkbox" /></td>
-                            <td><%= invoiceCustomer %></td>
-                            <td><%= invoiceDate %></td>
-                            <td><%= invoiceID %></td>
-                            <td><%= salesOrderID %></td>
-                            <td><%= "$ "+totalAmount %></td>
+                            <td><%= empFirstName %>&nbsp;<%= empLastName %></td>
+                            <td><%= empEmail %></td>
+                            <td><%= empPhone %></td>
+                            <td><%= empJobDepartment %></td>
+                            <td><%= empJobDesignation %></td>
                             <%      }   %>
                             <%  }   %>
                         </tr>

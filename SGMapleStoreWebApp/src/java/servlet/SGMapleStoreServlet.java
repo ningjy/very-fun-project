@@ -1,22 +1,33 @@
 package servlet;
 
-import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.http.Part;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import java.util.ArrayList;
 import ejb.CommonInfrastructureRemote;
 import ejb.WarehouseTransportRemote;
-import java.util.List;
+
+import java.io.IOException;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Vector;
 
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 10,
+        maxFileSize = 1024 * 1024 * 50,
+        maxRequestSize = 1024 * 1024 * 100
+)
 public class SGMapleStoreServlet extends HttpServlet {
     @EJB
     private CommonInfrastructureRemote cir;
@@ -60,18 +71,14 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "NewContact";
             }
-            else if(pageAction.equals("goToNewEmployee")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "NewEmployee";
-            }
-            else if(pageAction.equals("goToContactList")) {
-                request.setAttribute("employeeNRIC", userNRIC);
-                request.setAttribute("contactList", (ArrayList)cir.viewContactList());
-                pageAction = "ContactList";
-            }
             else if(pageAction.equals("createContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 createCustomer(request);
+                request.setAttribute("contactList", (ArrayList)cir.viewContactList());
+                pageAction = "NewContact";
+            }
+            else if(pageAction.equals("goToContactList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
             }
@@ -79,6 +86,25 @@ public class SGMapleStoreServlet extends HttpServlet {
                 String contactIdentifier = request.getParameter("contactIdentifier");
                 request.setAttribute("contactInfo", getContactDetails(contactIdentifier));
                 pageAction = "ContactDetails";
+            }
+            else if(pageAction.equals("goToNewEmployee")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewEmployee";
+            }
+            else if(pageAction.equals("createEmployee")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                createEmployee(request);
+                pageAction = "NewEmployee";
+            }
+            else if(pageAction.equals("goToEmployeeList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("employeeList", (ArrayList)cir.viewEmployeeList());
+                pageAction = "EmployeeList";
+            }
+            else if(pageAction.equals("goToEmployeeDetails")) {
+                String employeeIdentifier = request.getParameter("employeeIdentifier");
+                request.setAttribute("employeeInfo", getEmployeeDetails(employeeIdentifier));
+                pageAction = "EmployeeDetails";
             }
             else if(pageAction.equals("goToItem")) {
                 request.setAttribute("employeeNRIC", userNRIC);
@@ -97,6 +123,11 @@ public class SGMapleStoreServlet extends HttpServlet {
                     request.setAttribute("errorMessage", "One or more fields are invalid. Please check again.");
                 }
                 pageAction = "NewCompositeItem";
+            }
+            else if(pageAction.equals("goToCompositeItemList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("compositeItemList", (ArrayList)wtr.viewCompositeItemList());
+                pageAction = "CompositeItemList";
             }
             else if(pageAction.equals("goToQuantityAdjustment")) {
                 request.setAttribute("employeeNRIC", userNRIC);
@@ -243,16 +274,62 @@ public class SGMapleStoreServlet extends HttpServlet {
     
     private ArrayList<String> getContactDetails(String contactIdentifier) {
         ArrayList<String> contactDetailsArr = new ArrayList();
-        Vector userInfoVec = cir.getContactInfo(contactIdentifier);
+        Vector contactInfoVec = cir.getContactInfo(contactIdentifier);
         
-        contactDetailsArr.add((String)userInfoVec.get(0)); // First Name
-        contactDetailsArr.add((String)userInfoVec.get(1)); // Last Name
-        contactDetailsArr.add((String)userInfoVec.get(2)); // Contact Creation Date
+        contactDetailsArr.add((String)contactInfoVec.get(0)); // First Name
+        contactDetailsArr.add((String)contactInfoVec.get(1)); // Last Name
+        contactDetailsArr.add((String)contactInfoVec.get(2)); // Contact Creation Date
         return contactDetailsArr;
     }
     
+    private boolean createEmployee(HttpServletRequest request){
+        boolean empCreationStatus;
+        
+        String empSalutation = request.getParameter("empSalutation");
+        String empFirstName = request.getParameter("empFirstName");
+        String empLastName = request.getParameter("empLastName");
+        String empEmail = request.getParameter("empEmail");
+        String empPhone = request.getParameter("empPhone");
+        
+        String empUniqueIdentifier = request.getParameter("empUniqueIdentifier");
+        String empDateOfBirth = request.getParameter("empDateOfBirth");
+        String empGender = request.getParameter("empGender");
+        String empRace = request.getParameter("empRace");
+        String empNationality = request.getParameter("empNationality");
+        
+        String empResidentAddress = request.getParameter("empResidentAddress");
+        String empResidentCity = request.getParameter("empResidentCity");
+        String empResidentState = request.getParameter("empResidentState");
+        String empResidentZipCode = request.getParameter("empResidentZipCode");
+        String empResidentCountry = request.getParameter("empResidentCountry");
+        
+        String empJobDepartment = request.getParameter("empJobDepartment");
+        String empJobDesignation = request.getParameter("empJobDesignation");
+        String empUsername = request.getParameter("empUsername");
+        String empPassword = request.getParameter("empPassword");
+        String empNotes = request.getParameter("empNotes");
+        
+        empCreationStatus = cir.createEmployee(empSalutation, empFirstName, empLastName, empEmail, empPhone, empUniqueIdentifier, 
+                empDateOfBirth, empGender, empRace, empNationality, empResidentAddress, empResidentCity, empResidentState, 
+                empResidentZipCode, empResidentCountry, empJobDepartment, empJobDesignation, empUsername, empPassword, empNotes);
+        
+        return empCreationStatus;
+    }
+    
+    private ArrayList<String> getEmployeeDetails(String employeeIdentifier) {
+        ArrayList<String> employeeDetailsArr = new ArrayList();
+        Vector employeeInfoVec = cir.getEmployeeInfo(employeeIdentifier);
+        
+        employeeDetailsArr.add((String)employeeInfoVec.get(0)); // First Name
+        employeeDetailsArr.add((String)employeeInfoVec.get(1)); // Last Name
+        employeeDetailsArr.add((String)employeeInfoVec.get(2)); // Employee Creation Date
+        
+        return employeeDetailsArr;
+    }
+    
     private boolean createItemInventoryLog(String userNRIC, HttpServletRequest request){
-        boolean logCreationStatus = false;
+        boolean logCreationStatus;
+        
         String logDate = request.getParameter("logDate");
         String logReason = request.getParameter("logReason");
         String logDescription = request.getParameter("logDescription");
@@ -267,7 +344,39 @@ public class SGMapleStoreServlet extends HttpServlet {
     }
     
     private boolean createCompositeItemRecord(HttpServletRequest request){
-        boolean compCreationStatus = false;
+        boolean compCreationStatus;
+        String fileName = "";
+        
+        try {
+            Part filePart = request.getPart("itemImage");
+            fileName = (String) getFileName(filePart);
+            
+            String applicationPath = request.getServletContext().getRealPath("");
+            String basePath = applicationPath + File.separator + "images" + File.separator;
+            
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            try {
+                File outputFilePath = new File(basePath + fileName);
+                inputStream = filePart.getInputStream();
+                outputStream = new FileOutputStream(outputFilePath);
+            
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+                while((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            } catch(Exception ex) {
+                ex.printStackTrace();
+                fileName = "";
+            } finally {
+                if(inputStream != null) { inputStream.close(); }
+                if(outputStream != null) { outputStream.close(); }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            fileName = "";
+        }
         String compositeName = request.getParameter("compositeName");
         String compositeSKU = request.getParameter("compositeSKU");
         String compositeSellPrice = request.getParameter("compositeSellPrice");
@@ -279,7 +388,18 @@ public class SGMapleStoreServlet extends HttpServlet {
         String[] itemQtyRequiredArr = request.getParameterValues("itemQuantityRequired");
         
         compCreationStatus = wtr.createCompositeItem(compositeName, compositeSKU, compositeSellPrice, compositeRebundleLvl, 
-                compositeDescription, itemNameArr, itemSKUArr, itemQtyRequiredArr);
+                compositeDescription, fileName, itemNameArr, itemSKUArr, itemQtyRequiredArr);
         return compCreationStatus;
+    }
+    
+    private String getFileName(Part part) {
+        final String partHeader = part.getHeader("content-disposition");
+        System.out.println("*****partHeader :" + partHeader);
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
     }
 }

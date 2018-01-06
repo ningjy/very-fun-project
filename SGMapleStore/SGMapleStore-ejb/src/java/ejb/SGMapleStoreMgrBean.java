@@ -23,7 +23,6 @@ import java.util.Vector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
 @Stateless
 public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, WarehouseTransportRemote {
     @PersistenceContext
@@ -95,53 +94,58 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
-    public boolean empLogin(String empNRIC, String empPassword) {
-        /* Must perform hashing here, not on the servlet side. Otherwise will produce different hash values */
+    public boolean createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
+            String empPhone, String empUniqueIdentifier, String empDateOfBirth, String empGender, String empRace, 
+            String empNationality, String empResidentAddress, String empResidentCity, String empResidentState, 
+            String empResidentZipCode, String empResidentCountry, String empJobDepartment, String empJobDesignation, 
+            String empUsername, String empPassword, String empNotes) {
         String hashedPassword = "";
         try{ hashedPassword = encodePassword(empPassword); }
         catch(NoSuchAlgorithmException ex){ ex.printStackTrace(); }
-
-        eEntity = new EmployeeEntity();
-        try{
-            Query q = em.createQuery("SELECT e FROM Employee e WHERE e.empNRIC = :empNRIC");
-            q.setParameter("empNRIC", empNRIC);
-            eEntity = (EmployeeEntity)q.getSingleResult();
-        }
-        catch(EntityNotFoundException enfe){
-            System.out.println("ERROR: Employee cannot be found. " + enfe.getMessage());
-            em.remove(eEntity);
-            eEntity = null;
-        }
-        catch(NoResultException nre){
-            System.out.println("ERROR: Employee does not exist. " + nre.getMessage());
-            em.remove(eEntity);
-            eEntity = null;
-        }
         
-        if(eEntity == null) { return false; }
-        //if(eEntity.getEmpPassword().equals(hashedPassword)) { return true; }
-        if(eEntity.getEmpPassword().equals(empPassword)) { return true; }    // TO BE REVERTED
-        return false;
+        eEntity = new EmployeeEntity();
+        eEntity.createEmployee(empSalutation, empFirstName, empLastName, empEmail, empPhone, empUniqueIdentifier, empDateOfBirth, 
+                empGender, empRace, empNationality, empResidentAddress, empResidentCity, empResidentState, empResidentZipCode, 
+                empResidentCountry, empJobDepartment, empJobDesignation, empUsername, hashedPassword, empNotes);
+        em.persist(eEntity);
+        return true;
     }
     
-    public ContactEntity lookupContact(String emailAddress){
-        ContactEntity ce = new ContactEntity();
-        try{
-            Query q = em.createQuery("SELECT c FROM Contact c WHERE c.contactEmail = :emailAddress");
-            q.setParameter("emailAddress", emailAddress);
-            ce = (ContactEntity)q.getSingleResult();
+    @Override
+    public List<Vector> viewEmployeeList(){
+        Query q = em.createQuery("SELECT e FROM Employee e");
+        List<Vector> employeeList = new ArrayList<Vector>();
+        
+        for(Object o: q.getResultList()){
+            EmployeeEntity employeeE = (EmployeeEntity) o;
+            Vector employeeVec = new Vector();
+            
+            employeeVec.add(employeeE.getEmpFirstName());
+            employeeVec.add(employeeE.getEmpLastName());
+            employeeVec.add(employeeE.getEmpEmail());
+            employeeVec.add(employeeE.getEmpPhone());
+            employeeVec.add(employeeE.getEmpJobDepartment());
+            employeeVec.add(employeeE.getEmpJobDesignation());
+            employeeList.add(employeeVec);
         }
-        catch(EntityNotFoundException enfe){
-            System.out.println("ERROR: Contact cannot be found. " + enfe.getMessage());
-            em.remove(ce);
-            ce = null;
+        return employeeList;
+    }
+    
+    @Override
+    public Vector getEmployeeInfo(String employeeIdentifier) {
+        eEntity = lookupEmployee(employeeIdentifier);
+        Vector employeeInfoVec = new Vector();
+        
+        if (eEntity != null) {
+            DateFormat df = new SimpleDateFormat("dd MMMMM yyyy");
+            
+            employeeInfoVec.add(eEntity.getEmpFirstName());
+            employeeInfoVec.add(eEntity.getEmpLastName());
+            employeeInfoVec.add(df.format(eEntity.getEmpCreationDate()));
+            
+            return employeeInfoVec;
         }
-        catch(NoResultException nre){
-            System.out.println("ERROR: Contact does not exist. " + nre.getMessage());
-            em.remove(ce);
-            ce = null;
-        }
-        return ce;
+        return null;
     }
     
     /* WAREHOUSE-TRANSPORT MODULE (JSON) */
@@ -216,17 +220,9 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     
     @Override
     public boolean createCompositeItem(String compositeName, String compositeSKU, String compositeSellPrice, 
-            String compositeRebundleLvl, String compositeDescription, String[] itemNameArr, String[] itemSKUArr, 
+            String compositeRebundleLvl, String compositeDescription, String fileName, String[] itemNameArr, String[] itemSKUArr, 
             String[] itemQtyRequiredArr) {
-        Double parseSellPrice = 0.0;
-        Double parseRebundleLvl = 0.0;
         ciEntity = new CompositeItemEntity();
-        
-        /* === MUST USE NumberFormatException, ELSE WILL GET PARSING ERROR === */
-        try { parseSellPrice = Double.parseDouble(compositeSellPrice); }
-        catch (NumberFormatException ex){ ex.printStackTrace(); }
-        try { parseRebundleLvl = Double.parseDouble(compositeRebundleLvl); }
-        catch (NumberFormatException ex){ ex.printStackTrace(); }
         
         List<Vector> packageItemList = new ArrayList<Vector>();
         for(int i = 0; i < itemNameArr.length; i++) {
@@ -236,10 +232,30 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             packageItemVec.add(itemQtyRequiredArr[i]);
             packageItemList.add(packageItemVec);
         }
-        ciEntity.createCompositeItem(compositeName, compositeSKU, parseSellPrice, parseRebundleLvl, 
-                compositeDescription, packageItemList);
+        ciEntity.createCompositeItem(compositeName, compositeSKU, Double.parseDouble(compositeSellPrice), 
+                Double.parseDouble(compositeRebundleLvl), compositeDescription, fileName, packageItemList);
         em.persist(ciEntity);
         return true;
+    }
+    
+    @Override
+    public List<Vector> viewCompositeItemList(){
+        Query q = em.createQuery("SELECT c FROM CompositeItem c");
+        List<Vector> compItemList = new ArrayList<Vector>();
+        
+        for(Object o: q.getResultList()){
+            CompositeItemEntity compE = (CompositeItemEntity) o;
+            Vector compVec = new Vector();
+            
+            compVec.add(compE.getCompositeImagePath());
+            compVec.add(compE.getCompositeName());
+            compVec.add(compE.getCompositeSKU());
+            compVec.add(compE.getCompositeQuantity());
+            compVec.add(compE.getCompositeSellPrice());
+            compVec.add(compE.getCompositeRebundleLvl());
+            compItemList.add(compVec);
+        }
+        return compItemList;
     }
     
     @Override
@@ -265,6 +281,75 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
 
     /* MISCELLANEOUS METHOD HELPERS */
+    @Override
+    public boolean empLogin(String empUsername, String empPassword) {
+        /* Must perform hashing here, not on the servlet side. Otherwise will produce different hash values */
+        String hashedPassword = "";
+        try{ hashedPassword = encodePassword(empPassword); }
+        catch(NoSuchAlgorithmException ex){ ex.printStackTrace(); }
+
+        eEntity = new EmployeeEntity();
+        try{
+            Query q = em.createQuery("SELECT e FROM Employee e WHERE e.empUsername = :empUsername");
+            q.setParameter("empUsername", empUsername);
+            eEntity = (EmployeeEntity)q.getSingleResult();
+        }
+        catch(EntityNotFoundException enfe){
+            System.out.println("ERROR: Employee cannot be found. " + enfe.getMessage());
+            em.remove(eEntity);
+            eEntity = null;
+        }
+        catch(NoResultException nre){
+            System.out.println("ERROR: Employee does not exist. " + nre.getMessage());
+            em.remove(eEntity);
+            eEntity = null;
+        }
+        if(eEntity == null) { return false; }
+        // if(eEntity.getEmpPassword().equals(hashedPassword)) { return true; }
+        if(eEntity.getEmpPassword().equals(empPassword)) { return true; }
+        return false;
+    }
+    
+    public ContactEntity lookupContact(String emailAddress){
+        ContactEntity ce = new ContactEntity();
+        try{
+            Query q = em.createQuery("SELECT c FROM Contact c WHERE c.contactEmail = :emailAddress");
+            q.setParameter("emailAddress", emailAddress);
+            ce = (ContactEntity)q.getSingleResult();
+        }
+        catch(EntityNotFoundException enfe){
+            System.out.println("ERROR: Contact cannot be found. " + enfe.getMessage());
+            em.remove(ce);
+            ce = null;
+        }
+        catch(NoResultException nre){
+            System.out.println("ERROR: Contact does not exist. " + nre.getMessage());
+            em.remove(ce);
+            ce = null;
+        }
+        return ce;
+    }
+    
+    public EmployeeEntity lookupEmployee(String emailAddress){
+        EmployeeEntity ee = new EmployeeEntity();
+        try{
+            Query q = em.createQuery("SELECT e FROM Employee e WHERE e.empEmail = :emailAddress");
+            q.setParameter("emailAddress", emailAddress);
+            ee = (EmployeeEntity)q.getSingleResult();
+        }
+        catch(EntityNotFoundException enfe){
+            System.out.println("ERROR: Employee cannot be found. " + enfe.getMessage());
+            em.remove(ee);
+            ee = null;
+        }
+        catch(NoResultException nre){
+            System.out.println("ERROR: Employee does not exist. " + nre.getMessage());
+            em.remove(ee);
+            ee = null;
+        }
+        return ee;
+    }
+    
     public String encodePassword(String password) throws NoSuchAlgorithmException {
         String hashedValue = "";
         
@@ -279,5 +364,4 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         }      
         return hashedValue;
     }
-    
 }

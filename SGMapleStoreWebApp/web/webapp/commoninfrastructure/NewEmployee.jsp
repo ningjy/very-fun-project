@@ -11,6 +11,9 @@
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.7.2/combined/css/gijgo.min.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -18,6 +21,10 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/NewEmployeeJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/vendorjs/gijgo.min.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -80,14 +87,14 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToEmployeeList"><i class="fa fa-address-book-o fa-fw"></i>&nbsp;&nbsp;Employee List</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewCompositeItem"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
@@ -111,7 +118,162 @@
                 </div>
                 <div class="contentFill scroll-y scrollbox">
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        
+                        <div class="row">
+                            <div class="col-md-9 col-sm-9, col-xs-9">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Employee Name</label>
+                                    <div class="col-md-2">
+                                        <select class="form-control" name="empSalutation">
+                                            <option value="">-- Salutation --</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Mrs.">Mrs.</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3"><input class="form-control" name="empFirstName" placeholder="First Name" /></div>
+                                    <div class="col-md-3"><input class="form-control" name="empLastName" placeholder="Last Name" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Employee Email</label>
+                                    <div class="col-md-6"><input class="form-control" name="empEmail" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Employee Phone</label>
+                                    <div class="col-md-6"><input class="form-control" name="empPhone" /></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <ul role="tablist" class="nav section-nav nav-pills nav-pills-flat">
+                                <li class="active"><a href="#psnParticularPane" role="tab" data-toggle="tab">Personal Particulars</a></li>
+                                <li><a href="#addressPane" role="tab" data-toggle="tab">Residential Address</a></li>
+                                <li><a href="#credentialsPane" role="tab" data-toggle="tab">Job Credentials</a></li>
+                                <li><a href="#notesPane" role="tab" data-toggle="tab">Notes</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="active" id="psnParticularPane">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-12 text-muted">Please fill in the personal particulars.</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Unique Identification Number (NRIC)</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empUniqueIdentifier" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Date of Birth</label>
+                                            <div class="col-md-7">
+                                                <input type="text" placeholder="MM/DD/YYYY" class="form-control" id="empDateOfBirth" name="empDateOfBirth" />
+                                                <script type="text/javascript">
+                                                    $('#empDateOfBirth').datepicker({
+                                                        uiLibrary: 'bootstrap4'
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Gender</label>
+                                            <div class="col-md-4">
+                                                <select class="form-control" name="empGender">
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">&nbsp;</div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Race</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empRace" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Nationality</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empNationality" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="addressPane">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-12 text-muted">Please fill in the residential address details.</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Address</label>
+                                            <div class="col-md-7"><textarea class="form-control" name="empResidentAddress"></textarea></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Country</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" id="empResidentCountry" name="empResidentCountry" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">State</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empResidentState" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">&nbsp;</div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">City</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empResidentCity" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Zip Code</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empResidentZipCode" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="credentialsPane">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-12 text-muted">Please fill in the employee's job credentials.</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Job Department</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empJobDepartment" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Job Designation</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empJobDesignation" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">&nbsp;</div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Username</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="empUsername" /></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">Password</label>
+                                            <div class="col-md-7"><input type="password" class="form-control" name="empPassword" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="notesPane">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="control-label">Notes<span class="text-muted">&nbsp;(For Internal Use)</span></label>
+                                        <br/><br/>
+                                        <textarea rows="4" name="empNotes" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="bdr-light" />
+                        <div class="row">
+                            <div class="btn-toolbar col-md-5">
+                                <input type="hidden" name="pageTransit" value="createEmployee"/>
+                                <button class="btn btn-primary" type="submit" value="submit">Create Employee</button>&nbsp;&nbsp;
+                                <button class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToDashboard'" type="button">Cancel</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

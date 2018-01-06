@@ -86,14 +86,14 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToEmployeeList"><i class="fa fa-address-book-o fa-fw"></i>&nbsp;&nbsp;Employee List</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewCompositeItem"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
@@ -134,7 +134,7 @@
                         <%= errorMessage%>
                     </div>
                     <%  } %>
-                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">
                         <div class="zi-txn-form">
                             <div class="col-md-8">
                                 <div class="form-group">
@@ -175,7 +175,7 @@
                                     <label for="file-upload" class="btn btn-outline btn-primary btn-sm btn-block" style="margin-top: 10px;">
                                         <i class="fa fa-cloud-upload"></i>&nbsp;&nbsp;Upload Image
                                     </label>
-                                    <input id="file-upload" type="file" accept="image/*" onchange="javascript: previewImage(event)" />
+                                    <input id="file-upload" name="itemImage" type="file" accept="image/*" onchange="javascript: previewImage(event)" />
                                 </div>
                             </div>
                             <div class="top-space">

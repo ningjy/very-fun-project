@@ -1,62 +1,119 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name = "Employee")
 public class EmployeeEntity implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long empID;
-    private String empNRIC;
-    private String empPassword;
+    private String empSalutation;
     private String empFirstName;
     private String empLastName;
+    private String empEmail;
+    private String empPhone;
+    
+    @Id
+    private String empUniqueIdentifier;
+    private String empDateOfBirth;
+    private String empGender;
     private String empRace;
     private String empNationality;
-    private String empDOB;
-    private String empGender;
+    
     private String empResidentAddress;
-    private String empPostalCode;
-    private String empContactNum;
-    private String empEmail;
-    private String empJobTitle;
-    private String empDepartment;
+    private String empResidentCity;
+    private String empResidentState;
+    private String empResidentZipCode;
+    private String empResidentCountry;
+    
+    private String empJobDepartment;
+    private String empJobDesignation;
+    private String empUsername;
+    private String empPassword;
+    private String empNotes;
+    
+    @Temporal(TemporalType.DATE)
+    private Date empCreationDate;
+    
+    @PrePersist
+    public void creationDate() {
+        this.empCreationDate = new Date();
+    }
+    
+    /* MISCELLANEOUS METHODS */
+    public void createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
+            String empPhone, String empUniqueIdentifier, String empDateOfBirth, String empGender, String empRace, 
+            String empNationality, String empResidentAddress, String empResidentCity, String empResidentState, 
+            String empResidentZipCode, String empResidentCountry, String empJobDepartment, String empJobDesignation, 
+            String empUsername, String empHashedPassword, String empNotes) {
+        this.empSalutation = empSalutation;
+        this.empFirstName = empFirstName;
+        this.empLastName = empLastName;
+        this.empEmail = empEmail;
+        this.empPhone = empPhone;
+        this.empUniqueIdentifier = empUniqueIdentifier;
+        this.empDateOfBirth = empDateOfBirth;
+        this.empGender = empGender;
+        this.empRace = empRace;
+        this.empNationality = empNationality;
+        this.empResidentAddress = empResidentAddress;
+        this.empResidentCity = empResidentCity;
+        this.empResidentState = empResidentState;
+        this.empResidentZipCode = empResidentZipCode;
+        this.empResidentCountry = empResidentCountry;
+        this.empJobDepartment = empJobDepartment;
+        this.empJobDesignation = empJobDesignation;
+        this.empUsername = empUsername;
+        this.empPassword = empHashedPassword;
+        this.empNotes = empNotes;
+    }
     
     /* GETTER METHODS */
-    public Long getEmpID() { return empID; }
-    public String getEmpNRIC() { return empNRIC; }
-    public String getEmpPassword() { return empPassword; }
+    public String getEmpSalutation() { return empSalutation; }
     public String getEmpFirstName() { return empFirstName; }
     public String getEmpLastName() { return empLastName; }
+    public String getEmpEmail() { return empEmail; }
+    public String getEmpPhone() { return empPhone; }
+    public String getEmpUniqueIdentifier() { return empUniqueIdentifier; }
+    public String getEmpDateOfBirth() { return empDateOfBirth; }
+    public String getEmpGender() { return empGender; }
     public String getEmpRace() { return empRace; }
     public String getEmpNationality() { return empNationality; }
-    public String getEmpDOB() { return empDOB; }
-    public String getEmpGender() { return empGender; }
     public String getEmpResidentAddress() { return empResidentAddress; }
-    public String getEmpPostalCode() { return empPostalCode; }
-    public String getEmpContactNum() { return empContactNum; }
-    public String getEmpEmail() { return empEmail; }
-    public String getEmpJobTitle() { return empJobTitle; }
-    public String getEmpDepartment() { return empDepartment; }
+    public String getEmpResidentCity() { return empResidentCity; }
+    public String getEmpResidentState() { return empResidentState; }
+    public String getEmpResidentZipCode() { return empResidentZipCode; }
+    public String getEmpResidentCountry() { return empResidentCountry; }
+    public String getEmpJobDepartment() { return empJobDepartment; }
+    public String getEmpJobDesignation() { return empJobDesignation; }
+    public String getEmpUsername() { return empUsername; }
+    public String getEmpPassword() { return empPassword; }
+    public String getEmpNotes() { return empNotes; }
+    public Date getEmpCreationDate() { return empCreationDate; }
     
     /* SETTER METHODS */
-    public void setEmpID(Long empID) { this.empID = empID; }
-    public void setEmpNRIC(String empNRIC) { this.empNRIC = empNRIC; }
-    public void setEmpPassword(String empPassword) { this.empPassword = empPassword; }
+    public void setEmpSalutation(String empSalutation) { this.empSalutation = empSalutation; }
     public void setEmpFirstName(String empFirstName) { this.empFirstName = empFirstName; }
     public void setEmpLastName(String empLastName) { this.empLastName = empLastName; }
-    public void setEmpRace(String empRace) { this.empRace = empRace; }
-    public void setEmpNationality(String empNationality) { this.empNationality = empNationality; }
-    public void setEmpDOB(String empDOB) { this.empDOB = empDOB;}
-    public void setEmpGender(String empGender) { this.empGender = empGender; }
-    public void setEmpResidentAddress(String empResidentAddress) { this.empResidentAddress = empResidentAddress; }
-    public void setEmpPostalCode(String empPostalCode) { this.empPostalCode = empPostalCode; }
-    public void setEmpContactNum(String empContactNum) { this.empContactNum = empContactNum; }
     public void setEmpEmail(String empEmail) { this.empEmail = empEmail; }
-    public void setEmpJobTitle(String empJobTitle) { this.empJobTitle = empJobTitle; }
-    public void setEmpDepartment(String empDepartment) { this.empDepartment = empDepartment; }
+    public void setEmpPhone(String empPhone) { this.empPhone = empPhone; }
+    public void setEmpUniqueIdentifier(String empUniqueIdentifier) { this.empUniqueIdentifier = empUniqueIdentifier; }
+    public void setEmpDateOfBirth(String empDateOfBirth) { this.empDateOfBirth = empDateOfBirth; }
+    public void setEmpGender(String empGender) { this.empGender = empGender; }
+    public void setEmpRace(String empRace) { this.empUniqueIdentifier = empRace; }
+    public void setEmpNationality(String empNationality) { this.empNationality = empNationality; }
+    public void setEmpResidentAddress(String empResidentAddress) { this.empResidentAddress = empResidentAddress; }
+    public void setEmpResidentCity(String empResidentCity) { this.empResidentCity = empResidentCity; }
+    public void setEmpResidentState(String empResidentState) { this.empResidentState = empResidentState; }
+    public void setEmpResidentZipCode(String empResidentZipCode) { this.empResidentZipCode = empResidentZipCode; }
+    public void setEmpResidentCountry(String empResidentCountry) { this.empResidentCountry = empResidentCountry; }
+    public void setEmpJobDepartment(String empJobDepartment) { this.empJobDepartment = empJobDepartment; }
+    public void setEmpJobDesignation(String empJobDesignation) { this.empJobDesignation = empJobDesignation; }
+    public void setEmpUsername(String empUsername) { this.empUsername = empUsername; }
+    public void setEmpPassword(String empPassword) { this.empPassword = empPassword; }
+    public void setEmpNotes(String empNotes) { this.empNotes = empNotes; }
+    public void setEmpCreationDate(Date empCreationDate) { this.empCreationDate = empCreationDate; }
 }

@@ -1,12 +1,12 @@
-<%@page import="java.util.Vector"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Invoice List</title>
+        <title>SG MapleStore - Inventory Log List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -96,7 +96,7 @@
                             <li>&nbsp;</li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -107,74 +107,80 @@
             </nav>
 
             <!-- Content Space -->
-             <div id="page-wrapper">
-                <div class="contentFill contentLayout">
-                    <h3>Invoice List</h3>
+            <div id="page-wrapper">
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Composite Item List</h3>
+                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewCompositeItem'">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Composite Item
+                    </button>
                 </div>
                 <table class="table zi-table table-hover">
                     <thead>
                         <tr>
-                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
-                            <th style="width: 20%;" class="sortable text-left">
+                            <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Customer Name</div>
+                                    <div class="pull-left over-flow">Image</div>
                                 </div>
                             </th>
-                            <th style="width: 20%;" class="sortable text-left">
+                            <th style="width: 17%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Date</div>
+                                    <div class="pull-left over-flow">Name</div>
+                                </div>
+                            </th>
+                            <th style="width: 16%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">SKU</div>
                                 </div>
                             </th>
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Number</div>
+                                    <div class="pull-left over-flow">Quantity</div>
                                 </div>
                             </th>
-                            <th style="width: 18%;" class="sortable text-left">
+                            <th style="width: 15%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Order Number</div>
+                                    <div class="pull-left over-flow">Selling Price</div>
                                 </div>
                             </th>
-                            <th style="width: 20%;" class="sortable text-left">
+                            <th style="width: 15%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Total Amount</div>
+                                    <div class="pull-left over-flow">Rebundle Level</div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
-                            if(invoiceList.isEmpty()){
+                            ArrayList<Vector> compositeItemList = (ArrayList) request.getAttribute("compositeItemList");
+                            if(compositeItemList.isEmpty()){
                         %>
                         <tr>
-                            <td colspan="6" style="text-align: center;">There are no invoice records available.</td>
+                            <td colspan="6" style="text-align: center;">There are no composite item records available.</td>
                         </tr>
                         <%
                             }
                             else {
-                                for(int i = 0; i <= invoiceList.size()-1; i++){
-                                    Vector v = invoiceList.get(i);
-                                    String invoiceCustomer = String.valueOf(v.get(0));
-                                    String invoiceDate = String.valueOf(v.get(1));
-                                    String invoiceID = String.valueOf(v.get(2));
-                                    String salesOrderID = String.valueOf(v.get(3));
-                                    String totalAmount = String.valueOf(v.get(4));
-                   
+                                for(int i = 0; i <= compositeItemList.size()-1; i++){
+                                    Vector v = compositeItemList.get(i);
+                                    String compositeImagePath = String.valueOf(v.get(0));
+                                    String compositeName = String.valueOf(v.get(1));
+                                    String compositeSKU = String.valueOf(v.get(2));
+                                    String compositeQuantity = String.valueOf(v.get(3));
+                                    String compositeSellPrice = String.valueOf(v.get(4));
+                                    String compositeRebundleLvl = String.valueOf(v.get(5));
                         %>
                         <tr tabindex="-1" class="active">
-                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
-                            <td><%= invoiceCustomer %></td>
-                            <td><%= invoiceDate %></td>
-                            <td><%= invoiceID %></td>
-                            <td><%= salesOrderID %></td>
-                            <td><%= "$ "+totalAmount %></td>
+                            <td style="padding-left: 20px;"><img src="images/<%= compositeImagePath %>" style="max-width: 70px; max-height: 70px;" /></td>
+                            <td><%= compositeName %></td>
+                            <td><%= compositeSKU %></td>
+                            <td><%= compositeQuantity %></td>
+                            <td><%= compositeSellPrice %></td>
+                            <td><%= compositeRebundleLvl %></td>
                             <%      }   %>
                             <%  }   %>
                         </tr>
                     </tbody>
                 </table>
-                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>

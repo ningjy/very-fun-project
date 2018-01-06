@@ -6,12 +6,15 @@
     </servlet>
     <servlet><servlet-name>WarehouseDashboard</servlet-name><jsp-file>/webapp/commoninfrastructure/WarehouseDashboard.jsp</jsp-file></servlet>
     <servlet><servlet-name>WarehouseLogin</servlet-name><jsp-file>/webapp/commoninfrastructure/WarehouseLogin.jsp</jsp-file></servlet>
-    <servlet><servlet-name>ContactList</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactList.jsp</jsp-file></servlet>
     <servlet><servlet-name>ContactDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactDetails.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewContact</servlet-name><jsp-file>/webapp/commoninfrastructure/NewContact.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ContactList</servlet-name><jsp-file>/webapp/commoninfrastructure/ContactList.jsp</jsp-file></servlet>
+    <servlet><servlet-name>EmployeeDetails</servlet-name><jsp-file>/webapp/commoninfrastructure/EmployeeDetails.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewEmployee</servlet-name><jsp-file>/webapp/commoninfrastructure/NewEmployee.jsp</jsp-file></servlet>
+    <servlet><servlet-name>EmployeeList</servlet-name><jsp-file>/webapp/commoninfrastructure/EmployeeList.jsp</jsp-file></servlet>
     <servlet><servlet-name>Item</servlet-name><jsp-file>/webapp/warehousetransport/NewItem.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewCompositeItem</servlet-name><jsp-file>/webapp/warehousetransport/NewCompositeItem.jsp</jsp-file></servlet>
+    <servlet><servlet-name>CompositeItemList</servlet-name><jsp-file>/webapp/warehousetransport/CompositeItemList.jsp</jsp-file></servlet>
     <servlet><servlet-name>QuantityAdjustment</servlet-name><jsp-file>/webapp/warehousetransport/QuantityAdjustment.jsp</jsp-file></servlet>
     <servlet><servlet-name>InventoryLogList</servlet-name><jsp-file>/webapp/warehousetransport/InventoryLogList.jsp</jsp-file></servlet>
     <servlet><servlet-name>NewInvoice</servlet-name><jsp-file>/webapp/warehousetransport/NewInvoice.jsp</jsp-file></servlet>
@@ -36,12 +39,15 @@
     </servlet-mapping>
     <servlet-mapping><servlet-name>WarehouseDashboard</servlet-name><url-pattern>/webapp/commoninfrastructure/WarehouseDashboard</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>WarehouseLogin</servlet-name><url-pattern>/webapp/commoninfrastructure/WarehouseLogin</url-pattern></servlet-mapping>
-    <servlet-mapping><servlet-name>ContactList</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactList</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>ContactDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactDetails</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewContact</servlet-name><url-pattern>/webapp/commoninfrastructure/NewContact</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ContactList</servlet-name><url-pattern>/webapp/commoninfrastructure/ContactList</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>EmployeeDetails</servlet-name><url-pattern>/webapp/commoninfrastructure/EmployeeDetails</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewEmployee</servlet-name><url-pattern>/webapp/commoninfrastructure/NewEmployee</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>EmployeeList</servlet-name><url-pattern>/webapp/commoninfrastructure/EmployeeList</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>Item</servlet-name><url-pattern>/webapp/warehousetransport/NewItem</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewCompositeItem</servlet-name><url-pattern>/webapp/warehousetransport/NewCompositeItem</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>CompositeItemList</servlet-name><url-pattern>/webapp/warehousetransport/CompositeItemList</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>QuantityAdjustment</servlet-name><url-pattern>/webapp/warehousetransport/QuantityAdjustment</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>InventoryLogList</servlet-name><url-pattern>/webapp/warehousetransport/InventoryLogList</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>NewInvoice</servlet-name><url-pattern>/webapp/warehousetransport/NewInvoice</url-pattern></servlet-mapping>
