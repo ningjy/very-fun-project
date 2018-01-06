@@ -5,25 +5,25 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Contact Details</title>
+        <title>SG MapleStore - Employee Details</title>
         
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="css/commoninfrastructure/weblayout/ContactDetailsCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/weblayout/EmployeeDetailsCSS.css" rel="stylesheet" type="text/css">
         
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/webjs/ContactDetailsJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/EmployeeDetailsJS.js" type="text/javascript"></script>
     </head>
     <body>
         <%
-            ArrayList<String> contactInfoArr = (ArrayList) request.getAttribute("contactInfo");
-            String contactFirstName, contactLastName, contactCreationDate;
-            contactFirstName = contactLastName = contactCreationDate = "";
+            ArrayList<String> employeeInfoArr = (ArrayList) request.getAttribute("employeeInfo");
+            String empFirstName, empLastName, empCreationDate;
+            empFirstName = empLastName = empCreationDate = "";
 
-            if (contactInfoArr != null) {
-                contactFirstName = (String)contactInfoArr.get(0);
-                contactLastName = (String)contactInfoArr.get(1);
-                contactCreationDate = (String)contactInfoArr.get(2);
+            if (employeeInfoArr != null) {
+                empFirstName = (String)employeeInfoArr.get(0);
+                empLastName = (String)employeeInfoArr.get(1);
+                empCreationDate = (String)employeeInfoArr.get(2);
             }
         %>
         <section class="dashboard section">
@@ -35,8 +35,8 @@
                                 <div class="profile-thumb">
                                     <img src="images/user/user-thumb.jpg" class="rounded-circle">
                                 </div>
-                                <h5 class="text-center"><%= contactFirstName %>&nbsp;<%= contactLastName %></h5>
-                                <p>Joined&nbsp;<%= contactCreationDate %></p>
+                                <h5 class="text-center"><%= empFirstName %>&nbsp;<%= empLastName %></h5>
+                                <p>Joined&nbsp;<%= empCreationDate %></p>
                                 <a href="user-profile.html" class="btn btn-main-sm">Edit Profile</a>
                             </div>
                             <div class="widget user-dashboard-menu">

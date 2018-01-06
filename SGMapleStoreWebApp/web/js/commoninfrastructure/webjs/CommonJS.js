@@ -31,17 +31,4 @@ $(document).ready(function() {
         autostart: 1,
         pauseOnHover: 0
     });
-    
-    var countryOptions = {
-        url: "resources/countries.json",
-        getValue: "name",
-        list: {	
-            match: {
-                enabled: true
-            }
-        },
-        theme: "square"
-    };
-    $("#contactBillingCountry").easyAutocomplete(countryOptions);
-    $("#contactShippingCountry").easyAutocomplete(countryOptions);
-});   
+});

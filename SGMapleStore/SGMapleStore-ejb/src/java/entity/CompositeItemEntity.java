@@ -33,13 +33,14 @@ public class CompositeItemEntity implements Serializable {
     
     /* MISCELLANEOUS METHODS */
     public void createCompositeItem(String compositeName, String compositeSKU, Double compositeSellPrice, 
-            Double compositeRebundleLvl, String compositeDescription, List<Vector> packageItemList) {
+            Double compositeRebundleLvl, String compositeDescription, String fileName, List<Vector> packageItemList) {
         this.compositeName = compositeName;
         this.compositeSKU = compositeSKU;
         this.compositeSellPrice = compositeSellPrice;
         this.compositeQuantity = 0.0;
         this.compositeRebundleLvl = compositeRebundleLvl;
         this.compositeDescription = compositeDescription;
+        this.compositeImagePath = fileName;
         this.compositeArrList = (ArrayList)packageItemList;
     }
     

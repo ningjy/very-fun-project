@@ -15,5 +15,13 @@ public interface CommonInfrastructureRemote {
     public List<Vector> viewContactList();
     public Vector getContactInfo(String contactIdentifier);
     
+    public boolean createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
+            String empPhone, String empUniqueIdentifier, String empDateOfBirth, String empGender, String empRace, 
+            String empNationality, String empResidentAddress, String empResidentCity, String empResidentState, 
+            String empResidentZipCode, String empResidentCountry, String empJobDepartment, String empJobDesignation, 
+            String empUsername, String empPassword, String empNotes);
+    public List<Vector> viewEmployeeList();
+    public Vector getEmployeeInfo(String employeeIdentifier);
+    
     public boolean empLogin(String empNRIC, String empPassword);
 }

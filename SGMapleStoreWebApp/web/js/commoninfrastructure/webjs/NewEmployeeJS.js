@@ -29,17 +29,5 @@ $(document).ready(function() {
         },
         theme: "square"
     };
-    $("#contactBillingCountry").easyAutocomplete(countryOptions);
-    $("#contactShippingCountry").easyAutocomplete(countryOptions);
+    $("#empResidentCountry").easyAutocomplete(countryOptions);
 });
-
-function copyBillingAdd() {
-    $('#contactShippingAttn').val($('#contactBillingAttn').val());
-    $('#contactShippingAddress').val($('#contactBillingAddress').val());
-    $('#contactShippingCity').val($('#contactBillingCity').val());
-    $('#contactShippingState').val($('#contactBillingState').val());
-    $('#contactShippingZipCode').val($('#contactBillingZipCode').val());
-    $('#contactShippingCountry').val($('#contactBillingCountry').val());
-    $('#contactShippingFax').val($('#contactBillingFax').val());
-    $('#contactShippingPhone').val($('#contactBillingPhone').val());
-}

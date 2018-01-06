@@ -12,7 +12,8 @@ public interface WarehouseTransportRemote {
     public List<Vector> viewInventoryLogList();
     
     public boolean createCompositeItem(String compositeName, String compositeSKU, String compositeSellPrice, 
-            String compositeRebundleLvl,  String compositeDescription, String[] itemNameArr, String[] itemSKUArr, 
-            String[] itemQtyRequiredArr);
+            String compositeRebundleLvl,  String compositeDescription, String fileName, String[] itemNameArr, 
+            String[] itemSKUArr, String[] itemQtyRequiredArr);
+    public List<Vector> viewCompositeItemList();
     public List<Vector> viewInvoiceList();
 }

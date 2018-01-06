@@ -50,7 +50,6 @@
                                 </div>            
                             </div>
                         </div>
-                        <div class="already-account">Don't have an account? <a href="WarehouseSignup.jsp">Create one here</a></div>
                     </div>
                 </div>
             </div>

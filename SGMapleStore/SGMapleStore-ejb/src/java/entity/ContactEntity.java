@@ -52,13 +52,13 @@ public class ContactEntity implements Serializable {
         this.contactCreationDate = new Date();
     }
   
-    /* MISCELLANEOUS METHODS */ 
+    /* MISCELLANEOUS METHODS */
     public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
             String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
             String contactBillingState, String contactBillingZipCode, String contactBillingCountry, String contactBillingFax, 
             String contactBillingPhone, String contactShippingAttn, String contactShippingAddress, String contactShippingCity, 
             String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
-            String contactShippingPhone, String contactUsername, String contactPassword, String contactNotes) {
+            String contactShippingPhone, String contactUsername, String contactHashedPassword, String contactNotes) {
         this.contactSalutation = contactSalutation;
         this.contactFirstName = contactFirstName;
         this.contactLastName = contactLastName;
@@ -82,7 +82,7 @@ public class ContactEntity implements Serializable {
         this.contactShippingFax = contactShippingFax;
         this.contactShippingPhone = contactShippingPhone;
         this.contactUsername = contactUsername;
-        this.contactPassword = contactPassword;
+        this.contactPassword = contactHashedPassword;
         this.contactNotes = contactNotes;
     }
     
