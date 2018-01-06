@@ -31,6 +31,12 @@ $(document).ready(function() {
     };
     $("#contactBillingCountry").easyAutocomplete(countryOptions);
     $("#contactShippingCountry").easyAutocomplete(countryOptions);
+    
+    $("#closeSuccess").click(function() { $('#successPanel').fadeOut(300); });
+    $("#closeError").click(function() { $('#errorPanel').fadeOut(300); });
+    
+    $("#customerRadio").click(function () { $(".supplierInfo").hide(); });
+    $("#supplierRadio").click(function () { $(".supplierInfo").show(); });
 });
 
 function copyBillingAdd() {

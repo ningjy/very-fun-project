@@ -6,14 +6,17 @@ import javax.ejb.Remote;
 
 @Remote
 public interface CommonInfrastructureRemote {
-    public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
+    public boolean createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
             String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
             String contactBillingState, String contactBillingZipCode, String contactBillingCountry, String contactBillingFax, 
             String contactBillingPhone, String contactShippingAttn, String contactShippingAddress, String contactShippingCity, 
             String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
-            String contactShippingPhone, String contactUsername, String contactPassword, String contactNotes);
+            String contactShippingPhone, String contactUsername, String contactPassword, String suppCompanyName, String suppBillAccNo, 
+            String contactNotes);
     public List<Vector> viewContactList();
     public Vector getContactInfo(String contactIdentifier);
+    public boolean deleteMultipleContact(String[] contactEmailListArr);
+    public boolean deleteAContact(String hiddenContactEmail);
     
     public boolean createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
             String empPhone, String empUniqueIdentifier, String empDateOfBirth, String empGender, String empRace, 
@@ -22,6 +25,8 @@ public interface CommonInfrastructureRemote {
             String empUsername, String empPassword, String empNotes);
     public List<Vector> viewEmployeeList();
     public Vector getEmployeeInfo(String employeeIdentifier);
+    public boolean deleteMultipleEmployee(String[] empEmailListArr);
+    public boolean deleteAnEmployee(String hiddenEmpEmail);
     
     public boolean empLogin(String empNRIC, String empPassword);
 }

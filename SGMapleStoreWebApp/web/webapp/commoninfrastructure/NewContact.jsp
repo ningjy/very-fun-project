@@ -13,6 +13,9 @@
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
+        <style type="text/css">
+            .supplierInfo { display: none; }
+        </style>
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -115,6 +118,24 @@
                     <h3>New Contact</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
+                    <%
+                        String successMessage = (String)request.getAttribute("successMessage");
+                        if (successMessage != null) {
+                    %>
+                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeSuccess">&times;</button>
+                        <%= successMessage %>
+                    </div>
+                    <%  } %>
+                    <%
+                        String errorMessage = (String)request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeError">&times;</button>
+                        <%= errorMessage %>
+                    </div>
+                    <%  } %>
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
                         <div class="row">
                             <div class="col-md-9 col-sm-9, col-xs-9">
@@ -143,10 +164,10 @@
                                     <label class="control-label col-md-3">Contact Type</label>
                                     <div class="col-md-9">
                                         <div class="radio-inline">
-                                            <label class="cursor-pointer"><input type="radio" name="contactType" value="Customer" />&nbsp;Customer</label>
+                                            <label class="cursor-pointer"><input type="radio" name="contactType" id="customerRadio" value="Customer" />&nbsp;Customer</label>
                                         </div>
                                         <div class="radio-inline">
-                                            <label class="cursor-pointer"><input type="radio" name="contactType" value="Supplier" />&nbsp;Supplier</label>
+                                            <label class="cursor-pointer"><input type="radio" name="contactType" id="supplierRadio" value="Supplier" />&nbsp;Supplier</label>
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +185,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label col-md-12 text-muted">Billing Address</label>
+                                            <label class="control-label col-md-12 text-muted"><strong>Billing Address</strong></label>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-4">Attn.</label>
@@ -202,7 +223,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label col-md-12 text-muted">
-                                                Shipping Address&nbsp;&nbsp;
+                                                <strong>Shipping Address&nbsp;&nbsp;</strong>
                                                 <a href="javascript:copyBillingAdd();"><i class="fa fa-copy fa-fw"></i>&nbsp;Copy billing address</a>
                                             </label>
                                         </div>
@@ -245,12 +266,30 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label class="control-label col-md-12 text-muted"><strong>System Credentials</strong></label>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="control-label col-md-4">Username</label>
                                             <div class="col-md-7"><input type="text" class="form-control" name="contactUsername" /></div>
                                         </div>
+                                        <div class="form-group supplierInfo">
+                                            <label class="control-label col-md-12 text-muted"><strong>Supplier Information</strong></label>
+                                        </div>
+                                        <div class="form-group supplierInfo">
+                                            <label class="control-label col-md-4">Company Name</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="suppCompanyName" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group"><label class="control-label col-md-12 text-muted">&nbsp;</label></div>
                                         <div class="form-group">
                                             <label class="control-label col-md-4">Password</label>
                                             <div class="col-md-7"><input type="password" class="form-control" name="contactPassword" /></div>
+                                        </div>
+                                        <div class="form-group supplierInfo"><label class="control-label col-md-12 text-muted">&nbsp;</label></div>
+                                        <div class="form-group supplierInfo">
+                                            <label class="control-label col-md-4">Billing Account No.</label>
+                                            <div class="col-md-7"><input type="text" class="form-control" name="suppBillAccNo" /></div>
                                         </div>
                                     </div>
                                 </div>
@@ -268,7 +307,7 @@
                         <hr class="bdr-light" />
                         <div class="row">
                             <div class="btn-toolbar col-md-5">
-                                <input type="hidden" name="pageTransit" value="createContact"/>
+                                <input type="hidden" name="pageTransit" value="createContact" />
                                 <button class="btn btn-primary" type="submit" value="submit">Create Contact</button>&nbsp;&nbsp;
                                 <button class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToDashboard'" type="button">Cancel</button>
                             </div>

@@ -117,6 +117,24 @@
                     <h3>New Employee</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
+                    <%
+                        String successMessage = (String)request.getAttribute("successMessage");
+                        if (successMessage != null) {
+                    %>
+                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeSuccess">&times;</button>
+                        <%= successMessage %>
+                    </div>
+                    <%  } %>
+                    <%
+                        String errorMessage = (String)request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeError">&times;</button>
+                        <%= errorMessage %>
+                    </div>
+                    <%  } %>
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
                         <div class="row">
                             <div class="col-md-9 col-sm-9, col-xs-9">
