@@ -35,12 +35,13 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     private InvoiceEntity invoice;
     
     @Override
-    public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
+    public boolean createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
             String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
             String contactBillingState, String contactBillingZipCode, String contactBillingCountry, String contactBillingFax, 
             String contactBillingPhone, String contactShippingAttn, String contactShippingAddress, String contactShippingCity, 
             String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
-            String contactShippingPhone, String contactUsername, String contactPassword, String contactNotes) {
+            String contactShippingPhone, String contactUsername, String contactPassword, String suppCompanyName, String suppBillAccNo, 
+            String contactNotes) {
         String hashedPassword = "";
         try{ hashedPassword = encodePassword(contactPassword); }
         catch(NoSuchAlgorithmException ex){ ex.printStackTrace(); }
@@ -50,8 +51,9 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
                 contactBillingAttn, contactBillingAddress, contactBillingCity, contactBillingState, contactBillingZipCode, 
                 contactBillingCountry, contactBillingFax, contactBillingPhone, contactShippingAttn, contactShippingAddress, 
                 contactShippingCity, contactShippingState, contactShippingZipCode, contactShippingCountry, contactShippingFax, 
-                contactShippingPhone, contactUsername, hashedPassword, contactNotes);
+                contactShippingPhone, contactUsername, hashedPassword, suppCompanyName, suppBillAccNo, contactNotes);
         em.persist(cEntity);
+        return true;
     }
     
     @Override
@@ -69,8 +71,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             contactVec.add(contactE.getContactEmail());
             contactVec.add(contactE.getContactPhone());
             contactVec.add(contactE.getContactType());
-            contactVec.add(contactE.getContactBillingCity());
-            contactVec.add(contactE.getContactBillingCountry());
+            contactVec.add(contactE.getSuppCompanyName());
             contactList.add(contactVec);
         }
         return contactList;
@@ -86,11 +87,42 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             
             contactInfoVec.add(cEntity.getContactFirstName());
             contactInfoVec.add(cEntity.getContactLastName());
+            contactInfoVec.add(cEntity.getContactEmail());
             contactInfoVec.add(df.format(cEntity.getContactCreationDate()));
             
             return contactInfoVec;
         }
         return null;
+    }
+    
+    @Override
+    public boolean deleteMultipleContact(String[] contactEmailListArr) {
+        boolean contactDeletionStatus = true;
+        for (String contactEmail : contactEmailListArr) {
+            if (lookupContact(contactEmail) == null) {
+                contactDeletionStatus = false;
+            } else {
+                cEntity = lookupContact(contactEmail);
+                em.remove(cEntity);
+                em.flush();
+                em.clear();
+            }
+        }
+        return contactDeletionStatus;
+    }
+    
+    @Override
+    public boolean deleteAContact(String hiddenContactEmail) {
+        boolean contactDeletionStatus = true;
+        if (lookupContact(hiddenContactEmail) == null) {
+            contactDeletionStatus = false;
+        } else {
+            cEntity = lookupContact(hiddenContactEmail);
+            em.remove(cEntity);
+            em.flush();
+            em.clear();
+        }
+        return contactDeletionStatus;
     }
     
     @Override
@@ -141,11 +173,42 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             
             employeeInfoVec.add(eEntity.getEmpFirstName());
             employeeInfoVec.add(eEntity.getEmpLastName());
+            employeeInfoVec.add(eEntity.getEmpEmail());
             employeeInfoVec.add(df.format(eEntity.getEmpCreationDate()));
             
             return employeeInfoVec;
         }
         return null;
+    }
+    
+    @Override
+    public boolean deleteMultipleEmployee(String[] empEmailListArr) {
+        boolean empDeletionStatus = true;
+        for (String empEmail : empEmailListArr) {
+            if (lookupEmployee(empEmail) == null) {
+                empDeletionStatus = false;
+            } else {
+                eEntity = lookupEmployee(empEmail);
+                em.remove(eEntity);
+                em.flush();
+                em.clear();
+            }
+        }
+        return empDeletionStatus;
+    }
+    
+    @Override
+    public boolean deleteAnEmployee(String hiddenEmpEmail) {
+        boolean empDeletionStatus = true;
+        if (lookupEmployee(hiddenEmpEmail) == null) {
+            empDeletionStatus = false;
+        } else {
+            eEntity = lookupEmployee(hiddenEmpEmail);
+            em.remove(eEntity);
+            em.flush();
+            em.clear();
+        }
+        return empDeletionStatus;
     }
     
     /* WAREHOUSE-TRANSPORT MODULE (JSON) */

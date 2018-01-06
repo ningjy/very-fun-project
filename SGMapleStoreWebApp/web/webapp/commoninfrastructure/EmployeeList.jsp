@@ -111,76 +111,102 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
-                    <h3 style="display: inline;">Employee List</h3>
-                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewEmployee'">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Employee
-                    </button>
-                </div>
-                <table class="table zi-table table-hover" id="employeeList">
-                    <thead>
-                        <tr>
-                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
-                            <th style="width: 20%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Name</div>
-                                </div>
-                            </th>
-                            <th style="width: 20%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Email</div>
-                                </div>
-                            </th>
-                            <th style="width: 18%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Contact Number</div>
-                                </div>
-                            </th>
-                            <th style="width: 18%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Job Department</div>
-                                </div>
-                            </th>
-                            <th style="width: 20%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Job Designation</div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            ArrayList<Vector> employeeList = (ArrayList) request.getAttribute("employeeList");
-                            if(employeeList.isEmpty()){
-                        %>
-                        <tr>
-                            <td colspan="6" style="text-align: center;">There are no employee records available.</td>
-                        </tr>
-                        <%
-                            }
-                            else {
-                                for(int i = 0; i <= employeeList.size()-1; i++){
-                                    Vector v = employeeList.get(i);
-                                    String empFirstName = String.valueOf(v.get(0));
-                                    String empLastName = String.valueOf(v.get(1));
-                                    String empEmail = String.valueOf(v.get(2));
-                                    String empPhone = String.valueOf(v.get(3));
-                                    String empJobDepartment = String.valueOf(v.get(4));
-                                    String empJobDesignation = String.valueOf(v.get(5));
-                        %>
-                        <tr tabindex="-1" class="active">
-                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
-                            <td><%= empFirstName %>&nbsp;<%= empLastName %></td>
-                            <td><%= empEmail %></td>
-                            <td><%= empPhone %></td>
-                            <td><%= empJobDepartment %></td>
-                            <td><%= empJobDesignation %></td>
-                            <%      }   %>
-                            <%  }   %>
-                        </tr>
-                    </tbody>
-                </table>
-                <div id="modal-iframe"></div>
+                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm delete the selected employee(s)?');">
+                    <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                        <h3 style="display: inline;">Employee List</h3>
+                        <input type="hidden" name="pageTransit" value="deleteMultipleEmp"/>
+                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;">
+                            <i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete Employee
+                        </button>
+                        <button type="button" class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewEmployee'">
+                            <i class="fa fa-plus"></i>&nbsp;&nbsp;New Employee
+                        </button>
+                    </div>
+                    
+                    <%
+                        String successMessage = (String)request.getAttribute("successMessage");
+                        if (successMessage != null) {
+                    %>
+                    <div class="alert alert-success" id="successPanel" style="margin: 10px 0 10px 0;">
+                        <button type="button" class="close" id="closeSuccess">&times;</button>
+                        <%= successMessage %>
+                    </div>
+                    <%  } %>
+                    <%
+                        String errorMessage = (String)request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 10px 0 10px 0;">
+                        <button type="button" class="close" id="closeError">&times;</button>
+                        <%= errorMessage %>
+                    </div>
+                    <%  } %>
+                    
+                    <table class="table zi-table table-hover" id="employeeList">
+                        <thead>
+                            <tr>
+                                <th class="bulk-selection-cell"><input type="checkbox" class="selectAll" /></th>
+                                <th style="width: 19%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Name</div>
+                                    </div>
+                                </th>
+                                <th style="width: 19%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Email</div>
+                                    </div>
+                                </th>
+                                <th style="width: 18%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Contact Number</div>
+                                    </div>
+                                </th>
+                                <th style="width: 18%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Job Department</div>
+                                    </div>
+                                </th>
+                                <th style="width: 20%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Job Designation</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                ArrayList<Vector> employeeList = (ArrayList) request.getAttribute("employeeList");
+                                if(employeeList.isEmpty()){
+                            %>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">There are no employee records available.</td>
+                            </tr>
+                            <%
+                                }
+                                else {
+                                    for(int i = 0; i <= employeeList.size()-1; i++){
+                                        Vector v = employeeList.get(i);
+                                        String empFirstName = String.valueOf(v.get(0));
+                                        String empLastName = String.valueOf(v.get(1));
+                                        String empEmail = String.valueOf(v.get(2));
+                                        String empPhone = String.valueOf(v.get(3));
+                                        String empJobDepartment = String.valueOf(v.get(4));
+                                        String empJobDesignation = String.valueOf(v.get(5));
+                            %>
+                            <tr tabindex="-1" class="active">
+                                <td class="bulk-selection-cell"><input type="checkbox" name="empEmailList" value="<%= empEmail %>"/></td>
+                                <td><%= empFirstName %>&nbsp;<%= empLastName %></td>
+                                <td><%= empEmail %></td>
+                                <td><%= empPhone %></td>
+                                <td><%= empJobDepartment %></td>
+                                <td><%= empJobDesignation %></td>
+                                <%      }   %>
+                                <%  }   %>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="modal-iframe"></div>
+                </form>
             </div>
         </div>
     </body>

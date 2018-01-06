@@ -30,4 +30,7 @@ $(document).ready(function() {
         theme: "square"
     };
     $("#empResidentCountry").easyAutocomplete(countryOptions);
+    
+    $("#closeSuccess").click(function() { $('#successPanel').fadeOut(300); });
+    $("#closeError").click(function() { $('#errorPanel').fadeOut(300); });
 });

@@ -122,7 +122,7 @@
                     %>
                     <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
                         <button type="button" class="close" id="closeSuccess">&times;</button>
-                        <%= successMessage%>
+                        <%= successMessage %>
                     </div>
                     <%  } %>
                     <%
@@ -131,7 +131,7 @@
                     %>
                     <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
                         <button type="button" class="close" id="closeError">&times;</button>
-                        <%= errorMessage%>
+                        <%= errorMessage %>
                     </div>
                     <%  } %>
                     <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">

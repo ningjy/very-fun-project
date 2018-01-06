@@ -42,6 +42,8 @@ public class ContactEntity implements Serializable {
     
     private String contactUsername;
     private String contactPassword;
+    private String suppCompanyName;
+    private String suppBillAccNo;
     private String contactNotes;
     
     @Temporal(TemporalType.DATE)
@@ -58,7 +60,8 @@ public class ContactEntity implements Serializable {
             String contactBillingState, String contactBillingZipCode, String contactBillingCountry, String contactBillingFax, 
             String contactBillingPhone, String contactShippingAttn, String contactShippingAddress, String contactShippingCity, 
             String contactShippingState, String contactShippingZipCode, String contactShippingCountry, String contactShippingFax, 
-            String contactShippingPhone, String contactUsername, String contactHashedPassword, String contactNotes) {
+            String contactShippingPhone, String contactUsername, String contactHashedPassword, String suppCompanyName, String suppBillAccNo, 
+            String contactNotes) {
         this.contactSalutation = contactSalutation;
         this.contactFirstName = contactFirstName;
         this.contactLastName = contactLastName;
@@ -83,6 +86,8 @@ public class ContactEntity implements Serializable {
         this.contactShippingPhone = contactShippingPhone;
         this.contactUsername = contactUsername;
         this.contactPassword = contactHashedPassword;
+        this.suppCompanyName = suppCompanyName;
+        this.suppBillAccNo = suppBillAccNo;
         this.contactNotes = contactNotes;
     }
     
@@ -112,6 +117,8 @@ public class ContactEntity implements Serializable {
     public String getContactShippingPhone() { return contactShippingPhone; }
     public String getContactUsername() { return contactUsername; }
     public String getContactPassword() { return contactPassword; }
+    public String getSuppCompanyName() { return suppCompanyName; }
+    public String getSuppBillAccNo() { return suppBillAccNo; }
     public String getContactNotes() { return contactNotes; }
     public Date getContactCreationDate() { return contactCreationDate; }
     
@@ -141,6 +148,8 @@ public class ContactEntity implements Serializable {
     public void setContactShippingPhone(String contactShippingPhone) { this.contactShippingPhone = contactShippingPhone; }
     public void setContactUsername(String contactUsername) { this.contactUsername = contactUsername; }
     public void setContactPassword(String contactPassword) { this.contactPassword = contactPassword; }
+    public void setSuppCompanyName(String suppCompanyName) { this.suppCompanyName = suppCompanyName; }
+    public void setSuppBillAccNo(String suppBillAccNo) { this.suppBillAccNo = suppBillAccNo; }
     public void setContactNotes(String contactNotes) { this.contactNotes = contactNotes; }
     public void setContactCreationDate(Date contactCreationDate) { this.contactCreationDate = contactCreationDate; }
 }
