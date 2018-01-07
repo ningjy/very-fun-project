@@ -164,9 +164,12 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("employeeList", (ArrayList)cir.viewEmployeeList());
                 pageAction = "EmployeeList";
             }
-            else if(pageAction.equals("goToItem")) {
+            else if(pageAction.equals("goToNewItem")) {
                 request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "Item";
+                pageAction = "NewItem";
+            }else if(pageAction.equals("goToItemList")){
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "ItemList";
             }
             else if(pageAction.equals("goToNewCompositeItem")) {
                 request.setAttribute("employeeNRIC", userNRIC);
@@ -206,21 +209,29 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("inventoryLogList", (ArrayList)wtr.viewInventoryLogList());
                 pageAction = "InventoryLogList";
             }
+            else if(pageAction.equals("goToSalesOrderList")){
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("salesOrderList", (ArrayList)wtr.viewSalesOrderlist());
+                pageAction = "SalesOrderList";
+            }
             else if(pageAction.equals("goToInvoiceList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
                 request.setAttribute("invoiceList", (ArrayList)wtr.viewInvoiceList());
                 pageAction = "InvoiceList";
             }
             else if(pageAction.equals("createInvoice")) {
-                createInvoice(request);
+                request.setAttribute("employeeNRIC", userNRIC);
+                /*createInvoice(request);//WORK IN PROGRESS
                 if(createInvoice(request)) {
                     request.setAttribute("successMessage", "Invoice has been created successfully.");
                 }
                 else {
                     request.setAttribute("errorMessage", "One or more fields are invalid. Please check again.");
-                }
-                pageAction = "NewInvoice";
+                }*/
+                pageAction = "InvoiceList";
             }
             else if(pageAction.equals("goToNewInvoice")) {
+                request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "NewInvoice";
             }
             else if(pageAction.equals("goToCheckout")) {
@@ -236,12 +247,14 @@ public class SGMapleStoreServlet extends HttpServlet {
                 System.out.println("Inside goToNewInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "NewInventoryCategory";
-            } else if (pageAction.equals("goToViewCategories")) {
+            } 
+            else if (pageAction.equals("goToViewCategories")) {
                 System.out.println("Inside goToViewInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 viewAllInventoryCategories(request);
                 pageAction = "ViewInventoryCategories";
-            } else if (pageAction.equals("createNewInventoryCategory")) {
+            } 
+            else if (pageAction.equals("createNewInventoryCategory")) {
                 System.out.println("Inside createNewInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 if(createInventoryCategory(request)){
@@ -251,7 +264,8 @@ public class SGMapleStoreServlet extends HttpServlet {
                     viewAllInventoryCategories(request);
                     pageAction = "ViewInventoryCategories";
                 }
-            } else if (pageAction.equals("goToViewOneInventoryCategory")) {
+            } 
+            else if (pageAction.equals("goToViewOneInventoryCategory")) {
                 System.out.println("Inside goToViewOneInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 String selectedCategory = request.getParameter("cateName");
@@ -260,7 +274,8 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("cateDesc", request.getParameter("cateDesc"));
                 request.setAttribute("cateSubs", request.getParameter("catesubs"));
                 pageAction = "viewOneInventoryCategory";
-            }else if (pageAction.equals("modifyInventoryCategory")) {
+            }
+            else if (pageAction.equals("modifyInventoryCategory")) {
                 System.out.println("Inside modifyInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 modifyInventoryCategory(request);
@@ -284,8 +299,7 @@ public class SGMapleStoreServlet extends HttpServlet {
             }
             else if(pageAction.equals("goToShoppingCart")) {
                 pageAction = "ShoppingCart";
-            }
-            
+            }           
             else if(pageAction.equals("goToStoreFAQ")) {
                 pageAction = "StoreFAQ";
             }
@@ -514,7 +528,6 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         return compCreationStatus;
     }
-<<<<<<< Updated upstream
     
     private String getFileName(Part part) {
         final String partHeader = part.getHeader("content-disposition");
@@ -526,8 +539,6 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         return null;
     }
-<<<<<<< HEAD
-<<<<<<< refs/remotes/Winston/master
     
     private boolean createInventoryCategory(HttpServletRequest request) {
         String newCategoryName = request.getParameter("newInventoryCategoryName");
@@ -560,31 +571,4 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         wtr.modifyInventoryCategory(categoryName,updatedCategoryDesc,sCats);
     }
-    
 }
-=======
-=======
->>>>>>> master
-}
-=======
-
-    private boolean createInvoice(HttpServletRequest request) {
-        boolean invoiceCreated = false;
-        String status = request.getParameter("status");
-        String contactUsername = request.getParameter("contactUsername");
-        String paymentReferenceNum = request.getParameter("paymentReferenceNum");
-        String paymentMode = request.getParameter("paymentMode");
-        String discountAmt = request.getParameter("discountAmt");
-        String shippingAmt = request.getParameter("shippingAmt");
-        
-        invoiceCreated = wtr.createInvoice(status,contactUsername,
-                paymentReferenceNum,paymentMode,discountAmt,shippingAmt); 
-        
-        return invoiceCreated;
-    }
-}
->>>>>>> Stashed changes
-<<<<<<< HEAD
->>>>>>> Update to latest changes
-=======
->>>>>>> master

@@ -1,10 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Dashboard</title>
+        <title>SG MapleStore - Sales Order List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -21,9 +23,8 @@
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0;">
                 <a class="navbar-brand" href="SGMapleStore?pageTransit=goToDashboard">
-                    <!-- <img src="images/landing/moneymind_logo.png" /> -->
                     SG MapleStore
                 </a>
                 
@@ -51,7 +52,7 @@
                 </ul>
             
                 <!-- Left Navigation -->
-                <div class="navbar-default sidebar" role="navigation">
+                <div class="navbar-default sidebar">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
                             <li>
@@ -87,21 +88,15 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToViewCategories"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;View Categories</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewInventoryCategory"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Create New Category</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li>&nbsp;</li>
+                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -113,9 +108,76 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="row">
-                    
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Sales Order List</h3>
                 </div>
+                <table class="table zi-table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Sales Order No.</div>
+                                </div>
+                            </th>
+                            <th style="width: 17%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Date Created</div>
+                                </div>
+                            </th>
+                            <th style="width: 16%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Status</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Name</div>
+                                </div>
+                            </th>
+                            <th style="width: 15%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Username</div>
+                                </div>
+                            </th>
+                            <th style="width: 15%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Billing Amount</div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            ArrayList<Vector> salesOrderList = (ArrayList) request.getAttribute("salesOrderList");
+                            if(salesOrderList.isEmpty()){
+                        %>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">There are no sales order records available.</td>
+                        </tr>
+                        <%
+                            }
+                            else {
+                                for(int i = 0; i <= salesOrderList.size()-1; i++){
+                                    Vector v = salesOrderList.get(i);
+                                    String salesOrderNumber = String.valueOf(v.get(0));
+                                    String creationDateTime = String.valueOf(v.get(1));
+                                    String status = String.valueOf(v.get(2));
+                                    String fullName = String.valueOf(v.get(3));
+                                    String username = String.valueOf(v.get(4));
+                                    String totalAmount = String.valueOf(v.get(5));
+                        %>
+                        <tr tabindex="-1" class="active">
+                            <td><%= salesOrderNumber %></td>
+                            <td><%= creationDateTime %></td>
+                            <td><%= status %></td>
+                            <td><%= fullName %></td>
+                            <td><%= username %></td>
+                            <td><%= totalAmount %></td>
+                            <%      }   %>
+                            <%  }   %>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>

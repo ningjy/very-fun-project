@@ -17,6 +17,7 @@ import entity.InventoryLogEntity;
 import entity.CompositeItemEntity;
 import entity.InvoiceEntity;
 import entity.CategoryEntity;
+import entity.SalesOrderEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -370,9 +371,34 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
-    public List<Vector> viewInvoiceList() {
-        List<Vector> invoiceList = new ArrayList<Vector>();
+    public List<Vector> viewSalesOrderlist(){
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Query q = em.createQuery("SELECT s FROM SalesOrder s");
+        List<Vector> salesOrderList = new ArrayList<Vector>();
+        
+        for(Object o: q.getResultList()){
+            SalesOrderEntity salesOrder = (SalesOrderEntity) o;
+            ContactEntity cust = salesOrder.getCustomer();
+            Vector soVec = new Vector();
+            /*
+            Order of columns in view page:
+            ID, creation date, status, full name, username, total amount NETT, 
+            */
+            soVec.add(salesOrder.getSalesOrderNumber());
+            soVec.add(df.format(salesOrder.getCreationDateTime()));
+            soVec.add(salesOrder.getStatus());
+            soVec.add(cust.getContactSalutation()+" "+cust.getContactFirstName()+" "+cust.getContactLastName());
+            soVec.add(cust.getContactUsername());           
+            soVec.add(salesOrder.getTotalPrice()+salesOrder.getShippingAmt()-salesOrder.getDiscountAmt());
+            salesOrderList.add(soVec);
+        }
+        return salesOrderList;
+    }
+    
+    @Override
+    public List<Vector> viewInvoiceList() {//WORK IN PROGRESS
+        List<Vector> invoiceList = new ArrayList<Vector>();
+        /*SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         ContactEntity customer = null;
         //Extract invoices
         Query q = em.createQuery("SELECT i FROM Invoice i");
@@ -389,46 +415,18 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
                 Iterator it = result.iterator();
                 customer = (ContactEntity)it.next();
             }*/
-            invoiceVec.add(invoiceE.getInvoiceNum());
+            /*invoiceVec.add(invoiceE.getInvoiceNum());
             //invoiceVec.add(df.format(invoiceE.getDateTime()));
             invoiceVec.add(invoiceE.getPaymentReferenceNum());
             invoiceVec.add(invoiceE.getContactUsername());
             /*invoiceVec.add(customer.getContactSalutation()
                     +" "+customer.getContactFirstName()
                     +" "+customer.getContactLastName());*/    
-            invoiceVec.add(invoiceE.getShippingAmt()+invoiceE.getDiscountAmt());
+            /*invoiceVec.add(invoiceE.getShippingAmt()+invoiceE.getDiscountAmt());
 
             invoiceList.add(invoiceVec);
-        }
+        }*/
         return invoiceList;
-    }
-    
-    @Override
-    public boolean createInvoice(String status, String contactUsername, 
-            String paymentReferenceNum, 
-            String paymentMode, String discountAmt, String shippingAmt) {
-        Double shipping = 0.0;
-        Double discount = 0.0;
-        
-        /* === MUST USE NumberFormatException, ELSE WILL GET PARSING ERROR === */
-        try { discount = Double.parseDouble(discountAmt); }
-        catch (NumberFormatException ex){ ex.printStackTrace(); }
-        try { shipping = Double.parseDouble(shippingAmt); }
-        catch (NumberFormatException ex){ ex.printStackTrace(); }
-        try{
-            invoice = new InvoiceEntity("testing", contactUsername,
-                "testing billing", "testing shipping", new Long(12345), 
-                paymentReferenceNum, "Visa", discount , shipping, null,
-                status, true);
-            //System.out.println("***********ENTITY CREATED********");
-            em.persist(invoice);
-            //System.out.println("***********ENTITY PERSISTED********");
-      
-        }catch(Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 
     /* MISCELLANEOUS METHOD HELPERS */
