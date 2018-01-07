@@ -16,6 +16,7 @@ import entity.ItemEntity;
 import entity.InventoryLogEntity;
 import entity.CompositeItemEntity;
 import entity.InvoiceEntity;
+import entity.CategoryEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -281,6 +282,51 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         return logList;
     }
     
+     public boolean createInventoryCategory(String newCategoryName,String newCategoryDesc,ArrayList<String> sCats){
+        CategoryEntity newInventoryCategory = new CategoryEntity();
+        newInventoryCategory.setName(newCategoryName);
+        newInventoryCategory.setDescription(newCategoryDesc);
+        newInventoryCategory.setSubcategories(sCats);
+        newInventoryCategory.setActive(true);
+        em.persist(newInventoryCategory);
+        return true;
+    }
+    
+    
+    public List<Vector> viewAllInventoryCategories(){
+        Query q = em.createQuery("SELECT c FROM Category c");
+        List results = q.getResultList();
+        List<Vector> categories = new ArrayList<Vector>();
+        
+        for(Object o:q.getResultList()){
+            CategoryEntity cate = (CategoryEntity) o;
+            Vector cateVec = new Vector();
+            cateVec.add(cate.getName());
+            cateVec.add(cate.getDescription());
+            ArrayList<String> subs = cate.getSubcategories();
+            String subsline = "";
+            for(int n=0;n<subs.size();n++){
+                if(n==0){
+                    subsline = subsline+subs.get(n);
+                }else{
+                    subsline = subsline+";"+subs.get(n);
+                }
+            }
+            cateVec.add(subsline);
+            categories.add(cateVec);
+        }
+        return categories;
+    }
+    
+    public void modifyInventoryCategory(String categoryName,String updatedCategoryDesc,ArrayList<String> sCats){
+        Query q = em.createQuery("SELECT c FROM Category c WHERE c.name=:cateName");
+        q.setParameter("cateName", categoryName);
+        CategoryEntity categoryE = (CategoryEntity)q.getSingleResult();
+        categoryE.setDescription(updatedCategoryDesc);
+        categoryE.setSubcategories(sCats);
+        em.persist(categoryE);
+    }
+    
     @Override
     public boolean createCompositeItem(String compositeName, String compositeSKU, String compositeSellPrice, 
             String compositeRebundleLvl, String compositeDescription, String fileName, String[] itemNameArr, String[] itemSKUArr, 
@@ -427,4 +473,8 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         }      
         return hashedValue;
     }
+    
+    
+   
+    
 }
