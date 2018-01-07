@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Vector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 
 @Stateless
 public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, WarehouseTransportRemote {
@@ -369,24 +371,64 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     
     @Override
     public List<Vector> viewInvoiceList() {
-        Query q = em.createQuery("SELECT i FROM Invoice i");
         List<Vector> invoiceList = new ArrayList<Vector>();
-        
-        /*for(Object o: q.getResultList()){
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        ContactEntity customer = null;
+        //Extract invoices
+        Query q = em.createQuery("SELECT i FROM Invoice i");
+        for(Object o: q.getResultList()){
             InvoiceEntity invoiceE = (InvoiceEntity) o;
             Vector invoiceVec = new Vector();
             
-            invoiceVec.add(invoiceE.getCustomer().getContactSalutation()
-                    +" "+invoiceE.getCustomer().getContactFirstName()
-                    +" "+invoiceE.getCustomer().getContactLastName());
-            invoiceVec.add(invoiceE.getDate());
-            invoiceVec.add(invoiceE.getId());
-            invoiceVec.add(invoiceE.getSalesOrderID());
-            invoiceVec.add(invoiceE.getTotalAmount());
+            //Extract the customer based on the stored username
+            /*Query q1 = em.createQuery("SELECT c FROM Contact c WHERE c.contactUsername =: username");
+            q1.setParameter("username",invoiceE.getContactUsername());
+            invoiceVec.add(invoiceE.getInvoiceNum());
+            List result = q1.getResultList();
+            if(!result.isEmpty()){
+                Iterator it = result.iterator();
+                customer = (ContactEntity)it.next();
+            }*/
+            invoiceVec.add(invoiceE.getInvoiceNum());
+            //invoiceVec.add(df.format(invoiceE.getDateTime()));
+            invoiceVec.add(invoiceE.getPaymentReferenceNum());
+            invoiceVec.add(invoiceE.getContactUsername());
+            /*invoiceVec.add(customer.getContactSalutation()
+                    +" "+customer.getContactFirstName()
+                    +" "+customer.getContactLastName());*/    
+            invoiceVec.add(invoiceE.getShippingAmt()+invoiceE.getDiscountAmt());
 
             invoiceList.add(invoiceVec);
-        }*/
+        }
         return invoiceList;
+    }
+    
+    @Override
+    public boolean createInvoice(String status, String contactUsername, 
+            String paymentReferenceNum, 
+            String paymentMode, String discountAmt, String shippingAmt) {
+        Double shipping = 0.0;
+        Double discount = 0.0;
+        
+        /* === MUST USE NumberFormatException, ELSE WILL GET PARSING ERROR === */
+        try { discount = Double.parseDouble(discountAmt); }
+        catch (NumberFormatException ex){ ex.printStackTrace(); }
+        try { shipping = Double.parseDouble(shippingAmt); }
+        catch (NumberFormatException ex){ ex.printStackTrace(); }
+        try{
+            invoice = new InvoiceEntity("testing", contactUsername,
+                "testing billing", "testing shipping", new Long(12345), 
+                paymentReferenceNum, "Visa", discount , shipping, null,
+                status, true);
+            //System.out.println("***********ENTITY CREATED********");
+            em.persist(invoice);
+            //System.out.println("***********ENTITY PERSISTED********");
+      
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /* MISCELLANEOUS METHOD HELPERS */
