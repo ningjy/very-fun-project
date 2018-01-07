@@ -219,6 +219,41 @@ public class SGMapleStoreServlet extends HttpServlet {
             else if(pageAction.equals("goToErrorPage")) {
                 pageAction = "ErrorPage";
             }
+            else if (pageAction.equals("goToNewInventoryCategory")) {
+                System.out.println("Inside goToNewInventoryCategory");
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewInventoryCategory";
+            } else if (pageAction.equals("goToViewCategories")) {
+                System.out.println("Inside goToViewInventoryCategory");
+                request.setAttribute("employeeNRIC", userNRIC);
+                viewAllInventoryCategories(request);
+                pageAction = "ViewInventoryCategories";
+            } else if (pageAction.equals("createNewInventoryCategory")) {
+                System.out.println("Inside createNewInventoryCategory");
+                request.setAttribute("employeeNRIC", userNRIC);
+                if(createInventoryCategory(request)){
+                    viewAllInventoryCategories(request);
+                    pageAction = "ViewInventoryCategories";
+                }else{
+                    viewAllInventoryCategories(request);
+                    pageAction = "ViewInventoryCategories";
+                }
+            } else if (pageAction.equals("goToViewOneInventoryCategory")) {
+                System.out.println("Inside goToViewOneInventoryCategory");
+                request.setAttribute("employeeNRIC", userNRIC);
+                String selectedCategory = request.getParameter("cateName");
+                System.out.println(selectedCategory);
+                request.setAttribute("cateName", selectedCategory);
+                request.setAttribute("cateDesc", request.getParameter("cateDesc"));
+                request.setAttribute("cateSubs", request.getParameter("catesubs"));
+                pageAction = "viewOneInventoryCategory";
+            }else if (pageAction.equals("modifyInventoryCategory")) {
+                System.out.println("Inside modifyInventoryCategory");
+                request.setAttribute("employeeNRIC", userNRIC);
+                modifyInventoryCategory(request);
+                viewAllInventoryCategories(request);
+                pageAction = "ViewInventoryCategories";
+            }
             else if(pageAction.equals("goToHomepage")) {
                 pageAction = "Homepage";
             }
@@ -237,6 +272,7 @@ public class SGMapleStoreServlet extends HttpServlet {
             else if(pageAction.equals("goToShoppingCart")) {
                 pageAction = "ShoppingCart";
             }
+            
             else if(pageAction.equals("goToStoreFAQ")) {
                 pageAction = "StoreFAQ";
             }
@@ -476,4 +512,37 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         return null;
     }
+    
+    private boolean createInventoryCategory(HttpServletRequest request) {
+        String newCategoryName = request.getParameter("newInventoryCategoryName");
+        String newCategoryDesc = request.getParameter("newInventoryCategoryDesc");
+        int subcategoriesCount = Integer.parseInt(request.getParameter("subcategories"));
+        ArrayList<String> sCats = new ArrayList();
+        for (int i = 1; i <= subcategoriesCount; i++) {
+            String variable = "sCat" + i;
+            sCats.add(request.getParameter(variable));
+        }
+        if(wtr.createInventoryCategory(newCategoryName, newCategoryDesc, sCats)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    private void viewAllInventoryCategories(HttpServletRequest request) {
+        request.setAttribute("categoryList", (ArrayList) wtr.viewAllInventoryCategories());
+    }
+    
+    private void modifyInventoryCategory(HttpServletRequest request) {
+        String categoryName = request.getParameter("cateName");
+        String updatedCategoryDesc = request.getParameter("updatedInventoryCategoryDesc");
+        int subcategoriesCount = Integer.parseInt(request.getParameter("subcategories"));
+        ArrayList<String> sCats = new ArrayList();
+        for (int i = 1; i <= subcategoriesCount; i++) {
+            String variable = "sCat" + i;
+            sCats.add(request.getParameter(variable));
+        }
+        wtr.modifyInventoryCategory(categoryName,updatedCategoryDesc,sCats);
+    }
+    
 }
