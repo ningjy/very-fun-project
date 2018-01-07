@@ -526,6 +526,7 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         return null;
     }
+<<<<<<< HEAD
 <<<<<<< refs/remotes/Winston/master
     
     private boolean createInventoryCategory(HttpServletRequest request) {
@@ -562,6 +563,8 @@ public class SGMapleStoreServlet extends HttpServlet {
     
 }
 =======
+=======
+>>>>>>> master
 }
 =======
 
@@ -581,4 +584,7 @@ public class SGMapleStoreServlet extends HttpServlet {
     }
 }
 >>>>>>> Stashed changes
+<<<<<<< HEAD
 >>>>>>> Update to latest changes
+=======
+>>>>>>> master

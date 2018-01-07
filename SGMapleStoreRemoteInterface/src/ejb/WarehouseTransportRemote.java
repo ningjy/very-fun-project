@@ -16,6 +16,7 @@ public interface WarehouseTransportRemote {
             String[] itemSKUArr, String[] itemQtyRequiredArr);
     public List<Vector> viewCompositeItemList();
     public List<Vector> viewInvoiceList();
+<<<<<<< HEAD
 <<<<<<< refs/remotes/Winston/master
     public boolean createInventoryCategory(String newCategoryName,String newCategoryDesc,ArrayList<String> sCats);
     public List<Vector> viewAllInventoryCategories();
@@ -24,4 +25,8 @@ public interface WarehouseTransportRemote {
 
     public boolean createInvoice(String status, String contactUsername, String paymentReferenceNum, String paymentMode, String discountAmt, String shippingAmt);
 >>>>>>> Update to latest changes
+=======
+
+    public boolean createInvoice(String status, String contactUsername, String paymentReferenceNum, String paymentMode, String discountAmt, String shippingAmt);
+>>>>>>> master
 }
