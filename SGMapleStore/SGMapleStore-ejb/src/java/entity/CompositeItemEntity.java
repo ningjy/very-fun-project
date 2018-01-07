@@ -23,7 +23,7 @@ public class CompositeItemEntity implements Serializable {
     private String compositeImagePath;
     private ArrayList<Vector> compositeArrList;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date compositeCreationDate;
     
     @PrePersist
