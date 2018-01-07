@@ -400,6 +400,7 @@
                                                                     <li><a href="SGMapleStore?pageTransit=goToProductComparison">Product Comparison</a></li>
                                                                     <li><a href="SGMapleStore?pageTransit=goToStoreFAQ">FAQ</a></li>
                                                                     <li><a href="SGMapleStore?pageTransit=goToErrorPage">Error Page</a></li>
+                                                                    <li><a href="SGMapleStore?pageTransit=goToLogout">Warehouse</a></li>
                                                                 </ul>
                                                             </div>
                                                                 

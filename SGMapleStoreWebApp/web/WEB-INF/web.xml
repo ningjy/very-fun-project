@@ -32,6 +32,9 @@
     <servlet><servlet-name>StoreLogin</servlet-name><jsp-file>/webapp/store/StoreLogin.jsp</jsp-file></servlet>
     <servlet><servlet-name>TermsCondition</servlet-name><jsp-file>/webapp/store/TermsCondition.jsp</jsp-file></servlet>
     <servlet><servlet-name>TrackOrder</servlet-name><jsp-file>/webapp/store/TrackOrder.jsp</jsp-file></servlet>
+    <servlet><servlet-name>NewInventoryCategory</servlet-name><jsp-file>/webapp/warehousetransport/NewInventoryCategory.jsp</jsp-file></servlet>
+    <servlet><servlet-name>ViewInventoryCategories</servlet-name><jsp-file>/webapp/warehousetransport/ViewInventoryCategories.jsp</jsp-file></servlet>
+    <servlet><servlet-name>viewOneInventoryCategory</servlet-name><jsp-file>/webapp/warehousetransport/viewOneInventoryCategory.jsp</jsp-file></servlet>
     
     <servlet-mapping>
         <servlet-name>SGMapleStore</servlet-name>
@@ -65,6 +68,9 @@
     <servlet-mapping><servlet-name>StoreLogin</servlet-name><url-pattern>/webapp/store/StoreLogin</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>TermsCondition</servlet-name><url-pattern>/webapp/store/TermsCondition</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>TrackOrder</servlet-name><url-pattern>/webapp/store/TrackOrder</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>NewInventoryCategory</servlet-name><url-pattern>/webapp/warehousetransport/NewInventoryCategory</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ViewInventoryCategories</servlet-name><url-pattern>/webapp/warehousetransport/ViewInventoryCategories</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>viewOneInventoryCategory</servlet-name><url-pattern>/webapp/warehousetransport/viewOneInventoryCategory</url-pattern></servlet-mapping>
 
     <session-config><session-timeout>120</session-timeout></session-config>
     <welcome-file-list><welcome-file>webapp/store/Homepage.jsp</welcome-file></welcome-file-list>
