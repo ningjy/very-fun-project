@@ -1,6 +1,10 @@
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -111,28 +115,41 @@
                 <div class="contentFill contentLayout">
                     <h3>Invoice List</h3>
                 </div>
+<<<<<<< Updated upstream
                 <table class="table zi-table table-hover">
+=======
+                <div>
+                    <button type="button" class="btn btn-success float-left" onclick="location.href='SGMapleStore?pageTransit=goToNewInvoice'">New Invoice</button>
+                </div>
+                <table class="table zi-table table-hover" id="contactList">
+>>>>>>> Stashed changes
                     <thead>
                         <tr>
-                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
                             <th style="width: 20%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Customer Name</div>
+                                    <div class="pull-left over-flow">Invoice Number</div>
                                 </div>
                             </th>
+                            <!--
                             <th style="width: 20%;" class="sortable text-left">
                                 <div class="placeholder-container">
                                     <div class="pull-left over-flow">Invoice Date</div>
                                 </div>
                             </th>
+                            -->
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Number</div>
+                                    <div class="pull-left over-flow">Payment Ref.</div>
                                 </div>
                             </th>
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Order Number</div>
+                                    <div class="pull-left over-flow">Customer Username</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Customer Name</div>
                                 </div>
                             </th>
                             <th style="width: 20%;" class="sortable text-left">
@@ -144,7 +161,6 @@
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
                             if(invoiceList.isEmpty()){
                         %>
                         <tr>
@@ -152,26 +168,15 @@
                         </tr>
                         <%
                             }
-                            else {
-                                for(int i = 0; i <= invoiceList.size()-1; i++){
-                                    Vector v = invoiceList.get(i);
-                                    String invoiceCustomer = String.valueOf(v.get(0));
-                                    String invoiceDate = String.valueOf(v.get(1));
-                                    String invoiceID = String.valueOf(v.get(2));
-                                    String salesOrderID = String.valueOf(v.get(3));
-                                    String totalAmount = String.valueOf(v.get(4));
-                   
-                        %>
-                        <tr tabindex="-1" class="active">
-                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
-                            <td><%= invoiceCustomer %></td>
-                            <td><%= invoiceDate %></td>
-                            <td><%= invoiceID %></td>
-                            <td><%= salesOrderID %></td>
-                            <td><%= "$ "+totalAmount %></td>
-                            <%      }   %>
-                            <%  }   %>
-                        </tr>
+                            else {%>
+                        <c:forEach items="${invoiceList}" var="invoiceVec">
+                            <tr tabindex="-1" class="active">
+                            <c:forEach items="${invoiceVec}" var="item">            
+                                    <td><c:out value="${item}"/></td>                                                        
+                            </c:forEach>
+                            </tr>
+                        </c:forEach>                    
+                        <%}%>                     
                     </tbody>
                 </table>
                 <div id="modal-iframe"></div>

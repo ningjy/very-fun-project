@@ -16,4 +16,6 @@ public interface WarehouseTransportRemote {
             String[] itemSKUArr, String[] itemQtyRequiredArr);
     public List<Vector> viewCompositeItemList();
     public List<Vector> viewInvoiceList();
+
+    public boolean createInvoice(String status, String contactUsername, String paymentReferenceNum, String paymentMode, String discountAmt, String shippingAmt);
 }

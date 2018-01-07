@@ -210,6 +210,19 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("invoiceList", (ArrayList)wtr.viewInvoiceList());
                 pageAction = "InvoiceList";
             }
+            else if(pageAction.equals("createInvoice")) {
+                createInvoice(request);
+                if(createInvoice(request)) {
+                    request.setAttribute("successMessage", "Invoice has been created successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "One or more fields are invalid. Please check again.");
+                }
+                pageAction = "NewInvoice";
+            }
+            else if(pageAction.equals("goToNewInvoice")) {
+                pageAction = "NewInvoice";
+            }
             else if(pageAction.equals("goToCheckout")) {
                 pageAction = "Checkout";
             }
@@ -465,6 +478,7 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         return compCreationStatus;
     }
+<<<<<<< Updated upstream
     
     private String getFileName(Part part) {
         final String partHeader = part.getHeader("content-disposition");
@@ -477,3 +491,21 @@ public class SGMapleStoreServlet extends HttpServlet {
         return null;
     }
 }
+=======
+
+    private boolean createInvoice(HttpServletRequest request) {
+        boolean invoiceCreated = false;
+        String status = request.getParameter("status");
+        String contactUsername = request.getParameter("contactUsername");
+        String paymentReferenceNum = request.getParameter("paymentReferenceNum");
+        String paymentMode = request.getParameter("paymentMode");
+        String discountAmt = request.getParameter("discountAmt");
+        String shippingAmt = request.getParameter("shippingAmt");
+        
+        invoiceCreated = wtr.createInvoice(status,contactUsername,
+                paymentReferenceNum,paymentMode,discountAmt,shippingAmt); 
+        
+        return invoiceCreated;
+    }
+}
+>>>>>>> Stashed changes

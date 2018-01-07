@@ -31,6 +31,30 @@ public class InvoiceEntity implements Serializable {
     private String status;
     private boolean active; 
 
+    public InvoiceEntity(){}
+    public InvoiceEntity(String customerNotes,
+            String contactUsername, String billingAddress, 
+            String shippingAddress, Long contactNum, 
+            String paymentReferenceNum, String paymentMode, 
+            Double discountAmt, Double shippingAmt, 
+            List<Vector> itemList, String status, 
+            boolean active) {
+        
+        this.customerNotes = customerNotes;
+        this.dateTime = new Date();
+        this.contactUsername = contactUsername;
+        this.billingAddress = billingAddress;
+        this.shippingAddress = shippingAddress;
+        this.contactNum = contactNum;
+        this.paymentReferenceNum = paymentReferenceNum;
+        this.paymentMode = paymentMode;
+        this.discountAmt = discountAmt;
+        this.shippingAmt = shippingAmt;
+        this.itemList = itemList;
+        this.status = status;
+        this.active = active;
+    }
+
     public Long getInvoiceNum() {
         return invoiceNum;
     }
