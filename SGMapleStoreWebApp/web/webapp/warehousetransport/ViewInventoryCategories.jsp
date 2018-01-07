@@ -1,23 +1,26 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Dashboard</title>
-        
+        <title>SG MapleStore - View Inventory Categories</title>
+
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
-        
+
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/modifyCategory.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -26,7 +29,7 @@
                     <!-- <img src="images/landing/moneymind_logo.png" /> -->
                     SG MapleStore
                 </a>
-                
+
                 <!-- Top Navigation -->
                 <div id="pageAnnouncement">
                     <div class="ccr-last-update">
@@ -49,7 +52,7 @@
                     <li class="divider"></li>
                     <li><a href="SGMapleStore?pageTransit=goToLogout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
                 </ul>
-            
+
                 <!-- Left Navigation -->
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
@@ -81,17 +84,20 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToEmployeeList"><i class="fa fa-address-book-o fa-fw"></i>&nbsp;&nbsp;Employee List</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewContact"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Contact</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewItemGroup"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToNewItem"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToQuantityAdjustment"><i class="fa fa fa-balance-scale fa-fw"></i>&nbsp;&nbsp;Quantity Adjustments</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToPriceAdjustment"><i class="fa fa fa-usd fa-fw"></i>&nbsp;&nbsp;Price Adjustments</a></li>
                                 </ul>
                             </li>
+                            <!-- JQ Starts Here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
@@ -99,6 +105,7 @@
                                     <li><a href="SGMapleStore?pageTransit=goToNewInventoryCategory"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Create New Category</a></li>
                                 </ul>
                             </li>
+                            <!-- JQ Ends Here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
@@ -113,10 +120,82 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="row">
-                    
+                <div class="contentFill contentLayout">
+                    <h3>View Inventory Categories</h3>
                 </div>
+
+                <table class="table zi-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Name</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Description</div>
+                                </div>
+                            </th>
+                            <th style="width: 60%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Sub-categories</div>
+                                </div>
+                            </th>
+                            <th style="width: 10%;" class="sortable text-center">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow"></div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            ArrayList<Vector> categories = (ArrayList) request.getAttribute("categoryList");
+                            if (categories.isEmpty()) {
+                        %>
+                        <tr>
+                            <td colspan="3" style="text-align: center;">There are no categories available.</td>
+                        </tr>
+                        <%
+                        } else {
+                            for (int i = 0; i <= categories.size() - 1; i++) {
+                                Vector v = categories.get(i);
+                                String cateName = String.valueOf(v.get(0));
+                                String cateDesc = String.valueOf(v.get(1));
+                                String catesubs = String.valueOf(v.get(2));
+                        %>
+                        <tr tabindex="-1" class="active">
+                            <td><%= cateName%></td>
+                            <td><%= cateDesc%></td>
+                            <td>
+                            <%
+                                String[] subs = catesubs.split(";");
+                                for(int n = 0; n < subs.length;n++){
+                            %>
+                            <%=n+1%>. <%= subs[n]%><br>
+                            <%
+                                }
+                            %>
+                            </td>
+                            <td>
+                                <form action="SGMapleStore" method="POST">
+                                    <input type="hidden" name="pageTransit" value="goToViewOneInventoryCategory"/>
+                                    <input type="hidden" name="cateName" value="<%=cateName%>"/>
+                                    <input type="hidden" name="cateDesc" value="<%=cateDesc%>"/>
+                                    <input type="hidden" name="cateSubs" value="<%=catesubs%>"/>
+                                    <button class="btn btn-primary" type="submit" value="submit">Modify</button>
+                                </form>
+                            </td>
+                            <%      }   %>
+                            <%  }%>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
+            <!-- End of Content -->
+
         </div>
     </body>
 </html>
