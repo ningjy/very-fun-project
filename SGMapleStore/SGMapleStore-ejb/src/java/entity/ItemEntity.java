@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "Item")
 public class ItemEntity implements Serializable {
+
+    @ManyToOne
+    private SalesOrderEntity salesOrder;
     @Id
     private String itemSKU;
     private String itemName;
