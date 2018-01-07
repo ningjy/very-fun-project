@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,20 +16,45 @@ public class InvoiceEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long invoiceNum;
-    @Temporal(TemporalType.TIMESTAMP)
+    private String customerNotes;
+    @Temporal(TemporalType.DATE)
     private Date dateTime;
-    @OneToOne(mappedBy = "invoice")
-    private SalesOrderEntity salesOrder;
-    private Long transactionNumber;
+    private String contactUsername;
+    private String billingAddress;
+    private String shippingAddress;
+    private Long contactNum;
+    private String paymentReferenceNum;
+    private String paymentMode;
+    private Double discountAmt;
+    private Double shippingAmt; 
+    private List<Vector> itemList;
+    private String status;
+    private boolean active; 
 
-    public SalesOrderEntity getSalesOrder() {
-        return salesOrder;
+    public InvoiceEntity(){}
+    public InvoiceEntity(String customerNotes,
+            String contactUsername, String billingAddress, 
+            String shippingAddress, Long contactNum, 
+            String paymentReferenceNum, String paymentMode, 
+            Double discountAmt, Double shippingAmt, 
+            List<Vector> itemList, String status, 
+            boolean active) {
+        
+        this.customerNotes = customerNotes;
+        this.dateTime = new Date();
+        this.contactUsername = contactUsername;
+        this.billingAddress = billingAddress;
+        this.shippingAddress = shippingAddress;
+        this.contactNum = contactNum;
+        this.paymentReferenceNum = paymentReferenceNum;
+        this.paymentMode = paymentMode;
+        this.discountAmt = discountAmt;
+        this.shippingAmt = shippingAmt;
+        this.itemList = itemList;
+        this.status = status;
+        this.active = active;
     }
 
-    public void setSalesOrder(SalesOrderEntity salesOrder) {
-        this.salesOrder = salesOrder;
-    }
-    
     public Long getInvoiceNum() {
         return invoiceNum;
     }
@@ -39,15 +63,103 @@ public class InvoiceEntity implements Serializable {
         this.invoiceNum = invoiceNum;
     }
 
-    public Long getTransactionNumber() {
-        return transactionNumber;
+    public String getCustomerNotes() {
+        return customerNotes;
     }
 
-    public void setTransactionNumber(Long transactionNumber) {
-        this.transactionNumber = transactionNumber;
+    public void setCustomerNotes(String customerNotes) {
+        this.customerNotes = customerNotes;
     }
 
-    public Date getDateTime() {
+    public String getContactUsername() {
+        return contactUsername;
+    }
+
+    public void setContactUsername(String contactUsername) {
+        this.contactUsername = contactUsername;
+    }
+
+    public String getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public Long getContactNum() {
+        return contactNum;
+    }
+
+    public void setContactNum(Long contactNum) {
+        this.contactNum = contactNum;
+    }
+
+    public String getPaymentReferenceNum() {
+        return paymentReferenceNum;
+    }
+
+    public void setPaymentReferenceNum(String paymentReferenceNum) {
+        this.paymentReferenceNum = paymentReferenceNum;
+    }
+
+    public String getPaymentMode() {
+        return paymentMode;
+    }
+
+    public void setPaymentMode(String paymentMode) {
+        this.paymentMode = paymentMode;
+    }
+
+    public Double getDiscountAmt() {
+        return discountAmt;
+    }
+
+    public void setDiscountAmt(Double discountAmt) {
+        this.discountAmt = discountAmt;
+    }
+
+    public Double getShippingAmt() {
+        return shippingAmt;
+    }
+
+    public void setShippingAmt(Double shippingAmt) {
+        this.shippingAmt = shippingAmt;
+    }
+
+    public List<Vector> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<Vector> itemList) {
+        this.itemList = itemList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+     public Date getDateTime() {
         return dateTime;
     }
 
