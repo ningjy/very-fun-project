@@ -20,6 +20,7 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/SalesOrderListJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -111,7 +112,7 @@
                 <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
                     <h3 style="display: inline;">Sales Order List</h3>
                 </div>
-                <table class="table zi-table table-hover">
+                <table class="table zi-table table-hover" id="salesOrderList">
                     <thead>
                         <tr>
                             <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
@@ -178,6 +179,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>
