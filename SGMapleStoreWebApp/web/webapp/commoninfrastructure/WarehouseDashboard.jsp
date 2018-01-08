@@ -92,6 +92,7 @@
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
+                            <li><br><br></li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
