@@ -17,12 +17,15 @@ import entity.InventoryLogEntity;
 import entity.CompositeItemEntity;
 import entity.InvoiceEntity;
 import entity.CategoryEntity;
+import entity.SalesOrderEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 
 @Stateless
 public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, WarehouseTransportRemote {
@@ -368,21 +371,58 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
-    public List<Vector> viewInvoiceList() {
-        Query q = em.createQuery("SELECT i FROM Invoice i");
-        List<Vector> invoiceList = new ArrayList<Vector>();
+    public List<Vector> viewSalesOrderlist(){
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Query q = em.createQuery("SELECT s FROM SalesOrder s");
+        List<Vector> salesOrderList = new ArrayList<Vector>();
         
-        /*for(Object o: q.getResultList()){
+        for(Object o: q.getResultList()){
+            SalesOrderEntity salesOrder = (SalesOrderEntity) o;
+            ContactEntity cust = salesOrder.getCustomer();
+            Vector soVec = new Vector();
+            /*
+            Order of columns in view page:
+            ID, creation date, status, full name, username, total amount NETT, 
+            */
+            soVec.add(salesOrder.getSalesOrderNumber());
+            soVec.add(df.format(salesOrder.getCreationDateTime()));
+            soVec.add(salesOrder.getStatus());
+            soVec.add(cust.getContactSalutation()+" "+cust.getContactFirstName()+" "+cust.getContactLastName());
+            soVec.add(cust.getContactUsername());           
+            soVec.add(salesOrder.getTotalPrice()+salesOrder.getShippingAmt()-salesOrder.getDiscountAmt());
+            salesOrderList.add(soVec);
+        }
+        return salesOrderList;
+    }
+    
+    @Override
+    public List<Vector> viewInvoiceList() {//WORK IN PROGRESS
+        List<Vector> invoiceList = new ArrayList<Vector>();
+        /*SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        ContactEntity customer = null;
+        //Extract invoices
+        Query q = em.createQuery("SELECT i FROM Invoice i");
+        for(Object o: q.getResultList()){
             InvoiceEntity invoiceE = (InvoiceEntity) o;
             Vector invoiceVec = new Vector();
             
-            invoiceVec.add(invoiceE.getCustomer().getContactSalutation()
-                    +" "+invoiceE.getCustomer().getContactFirstName()
-                    +" "+invoiceE.getCustomer().getContactLastName());
-            invoiceVec.add(invoiceE.getDate());
-            invoiceVec.add(invoiceE.getId());
-            invoiceVec.add(invoiceE.getSalesOrderID());
-            invoiceVec.add(invoiceE.getTotalAmount());
+            //Extract the customer based on the stored username
+            /*Query q1 = em.createQuery("SELECT c FROM Contact c WHERE c.contactUsername =: username");
+            q1.setParameter("username",invoiceE.getContactUsername());
+            invoiceVec.add(invoiceE.getInvoiceNum());
+            List result = q1.getResultList();
+            if(!result.isEmpty()){
+                Iterator it = result.iterator();
+                customer = (ContactEntity)it.next();
+            }*/
+            /*invoiceVec.add(invoiceE.getInvoiceNum());
+            //invoiceVec.add(df.format(invoiceE.getDateTime()));
+            invoiceVec.add(invoiceE.getPaymentReferenceNum());
+            invoiceVec.add(invoiceE.getContactUsername());
+            /*invoiceVec.add(customer.getContactSalutation()
+                    +" "+customer.getContactFirstName()
+                    +" "+customer.getContactLastName());*/    
+            /*invoiceVec.add(invoiceE.getShippingAmt()+invoiceE.getDiscountAmt());
 
             invoiceList.add(invoiceVec);
         }*/

@@ -35,7 +35,7 @@ public class EmployeeEntity implements Serializable {
     private String empPassword;
     private String empNotes;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date empCreationDate;
     
     @PrePersist
