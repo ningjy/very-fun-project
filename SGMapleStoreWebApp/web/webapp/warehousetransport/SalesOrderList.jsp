@@ -6,7 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Inventory Log List</title>
+        <title>SG MapleStore - Sales Order List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -20,6 +20,7 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/webjs/SalesOrderListJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -93,14 +94,8 @@
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <li><br><br></li>
-                            <li>
-                                <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToViewCategories"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;View Categories</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewInventoryCategory"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Create New Category</a></li>
-                                </ul>
-                            </li>
+                            <li>&nbsp;</li>
+                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
@@ -115,79 +110,76 @@
             <!-- Content Space -->
             <div id="page-wrapper">
                 <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
-                    <h3 style="display: inline;">Inventory Category List</h3>
-                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewInventoryCategory'">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Inventory Category
-                    </button>
+                    <h3 style="display: inline;">Sales Order List</h3>
                 </div>
-                <table class="table zi-table table-hover">
+                <table class="table zi-table table-hover" id="salesOrderList">
                     <thead>
                         <tr>
-                            <th style="width: 20%;" class="sortable text-left">
+                            <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Sales Order No.</div>
+                                </div>
+                            </th>
+                            <th style="width: 17%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Date Created</div>
+                                </div>
+                            </th>
+                            <th style="width: 16%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Status</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
                                     <div class="pull-left over-flow">Name</div>
                                 </div>
                             </th>
-                            <th style="width: 20%;" class="sortable text-left">
+                            <th style="width: 15%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Description</div>
+                                    <div class="pull-left over-flow">Username</div>
                                 </div>
                             </th>
-                            <th style="width: 60%;" class="sortable text-left">
+                            <th style="width: 15%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Sub-categories</div>
-                                </div>
-                            </th>
-                            <th style="width: 10%;" class="sortable text-center">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow"></div>
+                                    <div class="pull-left over-flow">Billing Amount</div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> categories = (ArrayList) request.getAttribute("categoryList");
-                            if (categories.isEmpty()) {
+                            ArrayList<Vector> salesOrderList = (ArrayList) request.getAttribute("salesOrderList");
+                            if(salesOrderList.isEmpty()){
                         %>
                         <tr>
-                            <td colspan="3" style="text-align: center;">There are no categories available.</td>
+                            <td colspan="6" style="text-align: center;">There are no sales order records available.</td>
                         </tr>
                         <%
-                        } else {
-                            for (int i = 0; i <= categories.size() - 1; i++) {
-                                Vector v = categories.get(i);
-                                String cateName = String.valueOf(v.get(0));
-                                String cateDesc = String.valueOf(v.get(1));
-                                String catesubs = String.valueOf(v.get(2));
+                            }
+                            else {
+                                for(int i = 0; i <= salesOrderList.size()-1; i++){
+                                    Vector v = salesOrderList.get(i);
+                                    String salesOrderNumber = String.valueOf(v.get(0));
+                                    String creationDateTime = String.valueOf(v.get(1));
+                                    String status = String.valueOf(v.get(2));
+                                    String fullName = String.valueOf(v.get(3));
+                                    String username = String.valueOf(v.get(4));
+                                    String totalAmount = String.valueOf(v.get(5));
                         %>
                         <tr tabindex="-1" class="active">
-                            <td><%= cateName%></td>
-                            <td><%= cateDesc%></td>
-                            <td>
-                            <%
-                                String[] subs = catesubs.split(";");
-                                for(int n = 0; n < subs.length;n++){
-                            %>
-                            <%=n+1%>. <%= subs[n]%><br>
-                            <%
-                                }
-                            %>
-                            </td>
-                            <td>
-                                <form action="SGMapleStore" method="POST">
-                                    <input type="hidden" name="pageTransit" value="goToViewOneInventoryCategory"/>
-                                    <input type="hidden" name="cateName" value="<%=cateName%>"/>
-                                    <input type="hidden" name="cateDesc" value="<%=cateDesc%>"/>
-                                    <input type="hidden" name="cateSubs" value="<%=catesubs%>"/>
-                                    <button class="btn btn-primary" type="submit" value="submit">Modify</button>
-                                </form>
-                            </td>
+                            <td><%= salesOrderNumber %></td>
+                            <td><%= creationDateTime %></td>
+                            <td><%= status %></td>
+                            <td><%= fullName %></td>
+                            <td><%= username %></td>
+                            <td><%= totalAmount %></td>
                             <%      }   %>
-                            <%  }%>
+                            <%  }   %>
                         </tr>
                     </tbody>
                 </table>
+                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>
