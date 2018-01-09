@@ -6,14 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity(name = "Contact")
 public class ContactEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long contactID;
@@ -48,7 +46,7 @@ public class ContactEntity implements Serializable {
     private String suppBillAccNo;
     private String contactNotes;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date contactCreationDate;
     
     @PrePersist

@@ -15,17 +15,17 @@ public class BillEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long billNum;
     private Long poNum;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date creationDateTime;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date dueDateTime;
     private String paymentReferenceNum;
     private Double discountFactor;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date discountDateTime;
     private String paymentMode;
     private String status;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date paymentDateTime;
     private boolean active;
 
