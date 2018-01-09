@@ -25,7 +25,7 @@ public class InventoryLogEntity implements Serializable {
     private Double itemQtyAfterAdjust;
     private String itemQtyAdjustValue;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date logCreationDate;
     
     @PrePersist

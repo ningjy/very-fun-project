@@ -20,10 +20,10 @@ public class PurchaseOrderEntity implements Serializable {
     private String rAddress;
     private String rContactPerson;
     private String rContactNum;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date deliveryDateTime;
     private String poNotes;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date poDateTime;
     private boolean active;
     private Long vContactNum;
