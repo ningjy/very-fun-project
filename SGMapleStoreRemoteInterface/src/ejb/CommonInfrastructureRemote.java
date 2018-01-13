@@ -15,8 +15,9 @@ public interface CommonInfrastructureRemote {
             String contactNotes);
     public List<Vector> viewContactList();
     public Vector getContactInfo(String contactIdentifier);
-    public boolean deleteMultipleContact(String[] contactEmailListArr);
-    public boolean deleteAContact(String hiddenContactEmail);
+    public boolean deactivateMultipleContact(String[] contactEmailListArr);
+    public boolean deactivateAContact(String hiddenContactEmail);
+    public boolean activateAContact(String hiddenContactEmail);
     
     public boolean createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
             String empPhone, String empUniqueIdentifier, String empDateOfBirth, String empGender, String empRace, 
@@ -25,8 +26,9 @@ public interface CommonInfrastructureRemote {
             String empUsername, String empPassword, String empNotes);
     public List<Vector> viewEmployeeList();
     public Vector getEmployeeInfo(String employeeIdentifier);
-    public boolean deleteMultipleEmployee(String[] empEmailListArr);
-    public boolean deleteAnEmployee(String hiddenEmpEmail);
+    public boolean deactivateMultipleEmployee(String[] empEmailListArr);
+    public boolean deactivateAnEmployee(String hiddenEmpEmail);
+    public boolean activateAnEmployee(String hiddenEmpEmail);
     
     public boolean empLogin(String empNRIC, String empPassword);
 }

@@ -6,30 +6,28 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - View Inventory Categories</title>
-
+        <title>SG MapleStore - Inventory Log List</title>
+        
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
-
+        
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/warehousetransport/webjs/modifyCategory.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0;">
                 <a class="navbar-brand" href="SGMapleStore?pageTransit=goToDashboard">
-                    <!-- <img src="images/landing/moneymind_logo.png" /> -->
                     SG MapleStore
                 </a>
-
+                
                 <!-- Top Navigation -->
                 <div id="pageAnnouncement">
                     <div class="ccr-last-update">
@@ -52,9 +50,9 @@
                     <li class="divider"></li>
                     <li><a href="SGMapleStore?pageTransit=goToLogout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
                 </ul>
-
+            
                 <!-- Left Navigation -->
-                <div class="navbar-default sidebar" role="navigation">
+                <div class="navbar-default sidebar">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
                             <li>
@@ -84,29 +82,20 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Contacts<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li><a href="SGMapleStore?pageTransit=goToContactList"><i class="fa fa-address-book fa-fw"></i>&nbsp;&nbsp;Contact List</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewContact"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Contact</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewEmployee"><i class="fa fa-user-plus fa-fw"></i>&nbsp;&nbsp;New Employee</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToEmployeeList"><i class="fa fa-address-book-o fa-fw"></i>&nbsp;&nbsp;Employee List</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItemGroup"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Groups</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewItem"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToQuantityAdjustment"><i class="fa fa fa-balance-scale fa-fw"></i>&nbsp;&nbsp;Quantity Adjustments</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToPriceAdjustment"><i class="fa fa fa-usd fa-fw"></i>&nbsp;&nbsp;Price Adjustments</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <!-- JQ Starts Here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
-                            <li>
-                                <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToViewCategories"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;View Categories</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewInventoryCategory"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Create New Category</a></li>
-                                </ul>
-                            </li>
-                            <!-- JQ Ends Here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 -->
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li>&nbsp;</li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
@@ -120,11 +109,13 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="contentFill contentLayout">
-                    <h3>View Inventory Categories</h3>
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Inventory Category List</h3>
+                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewInventoryCategory'">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Inventory Category
+                    </button>
                 </div>
-
-                <table class="table zi-table">
+                <table class="table zi-table table-hover">
                     <thead>
                         <tr>
                             <th style="width: 20%;" class="sortable text-left">
@@ -155,7 +146,7 @@
                             if (categories.isEmpty()) {
                         %>
                         <tr>
-                            <td colspan="3" style="text-align: center;">There are no categories available.</td>
+                            <td colspan="4" style="text-align: center;">There are no categories available.</td>
                         </tr>
                         <%
                         } else {
@@ -192,10 +183,7 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
-            <!-- End of Content -->
-
         </div>
     </body>
 </html>

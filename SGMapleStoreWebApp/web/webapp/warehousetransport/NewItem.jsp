@@ -11,7 +11,9 @@
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
-        <link href="css/warehousetransport/weblayout/NewItemGroupCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/warehousetransport/weblayout/NewCompositeItemCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -19,7 +21,9 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/warehousetransport/webjs/NewItemGroupJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/NewItemJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -88,15 +92,16 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
                             <li>&nbsp;</li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -112,8 +117,93 @@
                     <h3>New Item</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
-                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form">
-                        
+                    <%
+                        String successMessage = (String)request.getAttribute("successMessage");
+                        if (successMessage != null) {
+                    %>
+                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeSuccess">&times;</button>
+                        <%= successMessage %>
+                    </div>
+                    <%  } %>
+                    <%
+                        String errorMessage = (String)request.getAttribute("errorMessage");
+                        if (errorMessage != null) {
+                    %>
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
+                        <button type="button" class="close" id="closeError">&times;</button>
+                        <%= errorMessage %>
+                    </div>
+                    <%  } %>
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">
+                        <div class="zi-txn-form">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Name</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required class="form-control" name="itemName" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">SKU</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required class="form-control" name="itemSKU" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor ID (Contact ID)</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required class="form-control" name="vendorID" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor Product Code</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required class="form-control" name="vendorProductCode" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Selling Price</label>
+                                    <div class="col-md-2">
+                                        <input type="number" required class="form-control" name="itemSellingPrice" />
+                                    </div>
+                                    <div class="col-md-1"><br></div>
+                                    <label class="col-md-3 control-label required">Initial Stock Quantity</label>
+                                    <div class="col-md-2">
+                                        <input type="number" required class="form-control" name="itemQuantity" />
+                                    </div>
+                                </div>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Reorder Level</label>
+                                    <div class="col-md-2">
+                                        <input type="number" required class="form-control" name="itemReorderLevel" />
+                                    </div>
+                                </div>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Item Description</label>
+                                    <div class="col-md-9">
+                                        <input type="text" required class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-7">
+                                    <div class="image-upload">
+                                        <img id="output-image" />
+                                    </div>
+                                    <label for="file-upload" style="margin-top: 10px; margin-left: 7px">
+                                        <button type="button" class="btn btn-warning " onclick="$('#file-upload').click();"><span class="glyphicon glyphicon-open"></span> Upload Image</button>
+                                        *Image upload is necessary
+                                    </label>                                   
+                                    <input id="file-upload" style="visibility:hidden" required name="itemImage" type="file" accept="image/*" onchange="javascript: previewImage(event)" />
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                            <input type="hidden" name="pageTransit" value="createItem"/>
+                            <button type="submit" class="btn btn-primary" value="submit">Create Item</button>
+                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Cancel</button>
+                        </div>
+                        </div>                        
                     </form>
                 </div>
             </div>

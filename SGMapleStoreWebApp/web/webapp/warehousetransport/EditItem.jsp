@@ -1,28 +1,37 @@
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.ArrayList" %>
-<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Contact List</title>
+        <title>SG MapleStore - Edit Item</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="css/commoninfrastructure/baselayout/iziModal.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/warehousetransport/weblayout/NewCompositeItemCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
-        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/basejs/iziModal.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/webjs/ContactListJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/NewItemJS.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
+        <script>
+            //if image has been replaced, set this hidden value to yes.
+            function imageReplacement(){
+                document.getElementById('imageReplacement').value = 'yes';
+                console.log("bitch i changed it");
+            }
+        </script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -112,23 +121,34 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm deactivate the selected contact(s)?');">
-                    <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
-                        <h3 style="display: inline;">Contact List</h3>
-                        <input type="hidden" name="pageTransit" value="deactivateMultipleContact"/>
-                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;" id="deactivateContact" disabled>
-                            <i class="fa fa-ban"></i>&nbsp;&nbsp;Deactivate Contact
-                        </button>
-                        <button type="button" class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewContact'">
-                            <i class="fa fa-plus"></i>&nbsp;&nbsp;New Contact
-                        </button>
-                    </div>
-                    
+                <div class="contentFill contentLayout">
+                    <h3>Edit Item</h3>
+                </div>
+                <div class="contentFill scroll-y scrollbox">
+                    <%
+                        //Extracting field values from ArrayList passed from servlet to jsp.
+                        ArrayList itemDetails = (ArrayList)request.getAttribute("itemDetails");
+                        String itemName, itemSKU, vendorID, vendorProductCode, itemDescription, itemImageDirPath;
+                        itemName = itemSKU = vendorID = vendorProductCode = itemDescription = itemImageDirPath = "";
+                        Double itemSellingPrice, itemQuantity, itemReorderLevel;
+                        itemSellingPrice= itemQuantity= itemReorderLevel=0.0;
+                        if(!itemDetails.isEmpty()){
+                            itemName = (String)itemDetails.get(0);
+                            itemSKU = (String)itemDetails.get(1);
+                            vendorID = (String)itemDetails.get(2);
+                            vendorProductCode = (String)itemDetails.get(3);
+                            itemSellingPrice = (Double)itemDetails.get(4);
+                            itemQuantity = (Double) itemDetails.get(5);
+                            itemReorderLevel = (Double) itemDetails.get(6);
+                            itemDescription = (String) itemDetails.get(7);
+                            itemImageDirPath = (String) itemDetails.get(8);
+                        }
+                    %>
                     <%
                         String successMessage = (String)request.getAttribute("successMessage");
                         if (successMessage != null) {
                     %>
-                    <div class="alert alert-success" id="successPanel" style="margin: 10px 0 10px 0;">
+                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
                         <button type="button" class="close" id="closeSuccess">&times;</button>
                         <%= successMessage %>
                     </div>
@@ -137,82 +157,83 @@
                         String errorMessage = (String)request.getAttribute("errorMessage");
                         if (errorMessage != null) {
                     %>
-                    <div class="alert alert-danger" id="errorPanel" style="margin: 10px 0 10px 0;">
+                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
                         <button type="button" class="close" id="closeError">&times;</button>
                         <%= errorMessage %>
                     </div>
                     <%  } %>
-                    
-                    <table class="table zi-table table-hover" id="contactList">
-                        <thead>
-                            <tr>
-                                <th class="bulk-selection-cell"><input type="checkbox" class="selectAll"/></th>
-                                <th style="width: 17%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Name</div>
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">
+                        <div class="zi-txn-form">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Name</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required value="<%=itemName%>" class="form-control" name="itemName" />
                                     </div>
-                                </th>
-                                <th style="width: 21%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Email</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">SKU</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required readonly value="<%=itemSKU%>" class="form-control" name="itemSKU" />
                                     </div>
-                                </th>
-                                <th style="width: 17%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Contact No.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor ID (Contact ID)</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required value="<%=vendorID%>" class="form-control" name="vendorID" />
                                     </div>
-                                </th>
-                                <th style="width: 22%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Contact Type</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor Product Code</label>
+                                    <div class="col-md-5">
+                                        <input type="text" required value="<%=vendorProductCode%>"  class="form-control" name="vendorProductCode" />
                                     </div>
-                                </th>
-                                <th style="width: 17%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Active Status</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Selling Price</label>
+                                    <div class="col-md-2">
+                                        <input type="number" required value="<%=itemSellingPrice%>"  class="form-control" name="itemSellingPrice" />
                                     </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                ArrayList<Vector> contactList = (ArrayList) request.getAttribute("contactList");
-                                String dpActiveStatus = "";
-                                if(contactList.isEmpty()){
-                            %>
-                            <tr>
-                                <td colspan="6" style="text-align: center;">There are no contact records available.</td>
-                            </tr>
-                            <%
-                                }
-                                else {
-                                    for(int i = 0; i <= contactList.size()-1; i++){
-                                        Vector v = contactList.get(i);
-                                        String contactSalutation = String.valueOf(v.get(0));
-                                        String contactFirstName = String.valueOf(v.get(1));
-                                        String contactLastName = String.valueOf(v.get(2));
-                                        String contactEmail = String.valueOf(v.get(3));
-                                        String contactPhone = String.valueOf(v.get(4));
-                                        String contactType = String.valueOf(v.get(5));
-                                        String suppCompanyName = String.valueOf(v.get(6));
-                                        String contactActiveStatus = String.valueOf(v.get(7));
-                                        if(contactActiveStatus.equals("false")) { dpActiveStatus = "Inactive"; }
-                                        else if (contactActiveStatus.equals("true")) { dpActiveStatus = "Active"; }
-                            %>
-                            <tr tabindex="-1" class="active">
-                                <td class="bulk-selection-cell"><input type="checkbox" class="contactCheck" name="contactEmailList" value="<%= contactEmail %>" /></td>
-                                <td><%= contactSalutation %>&nbsp;<%= contactFirstName %>&nbsp;<%= contactLastName %></td>
-                                <td><%= contactEmail %></td>
-                                <td><%= contactPhone %></td>
-                                <td><%= contactType %><br/>(<%= suppCompanyName %>)</td>
-                                <td><%= dpActiveStatus %></td>
-                                <%      }   %>
-                                <%  }   %>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="modal-iframe"></div>
-                </form>
+                                    <div class="col-md-1"><br></div>
+                                    <label class="col-md-3 control-label required">In Stock Quantity</label>
+                                    <div class="col-md-2">
+                                        <input type="number" required value="<%=itemQuantity.intValue()%>"  class="form-control" name="itemQuantity" />
+                                    </div>
+                                </div>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Reorder Level</label>
+                                    <div class="col-md-9">
+                                        <input type="number" required value="<%=itemReorderLevel.intValue()%>"  class="form-control" name="itemReorderLevel" />
+                                    </div>
+                                </div>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Item Description</label>
+                                    <div class="col-md-9">
+                                        <input type="text" required value="<%=itemDescription%>"  class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="col-md-7">
+                                    <div class="image-upload">
+                                        <img id="output-image" class="img-responsive" src="uploads/images/Items/<%= itemImageDirPath%>"/>
+                                    </div>
+                                    <label for="file-upload" style="margin-top: 10px; margin-left: 7px">
+                                        <button type="button" class="btn btn-warning " onclick="$('#file-upload').click();"><span class="glyphicon glyphicon-open"></span> Replace Image</button>
+                                    </label>
+                                    <input type="hidden" id="imageReplacement" name="imageReplacement" value="no"/>
+                                    <input id="file-upload" name="itemImage" style="visibility:hidden" type="file" accept="image/*" onchange="javascript: previewImage(event); window.imageReplacement();" />
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                            <input type="hidden" name="originalItemImage" value="<%=itemImageDirPath%>"/>                           
+                            <input type="hidden" name="pageTransit" value="editItem"/>
+                            <button type="submit" class="btn btn-primary">Update Item</button>
+                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Go Back To Item List</button>
+                        </div>
+                        </div>                        
+                    </form>
+                </div>
             </div>
         </div>
     </body>

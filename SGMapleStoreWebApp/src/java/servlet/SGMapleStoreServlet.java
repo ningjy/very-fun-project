@@ -92,26 +92,38 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("contactInfo", getContactDetails(contactIdentifier));
                 pageAction = "ContactDetails";
             }
-            else if(pageAction.equals("deleteMultipleContact")) {
+            else if(pageAction.equals("deactivateMultipleContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 String[] contactEmailListArr = request.getParameterValues("contactEmailList");
-                if(cir.deleteMultipleContact(contactEmailListArr)) {
-                    request.setAttribute("successMessage", "Contact(s) have been deleted successfully.");
+                if(cir.deactivateMultipleContact(contactEmailListArr)) {
+                    request.setAttribute("successMessage", "Contact(s) have been deactivated successfully.");
                 }
                 else {
-                    request.setAttribute("errorMessage", "One or more contacts cannot be deleted. Please try again later.");
+                    request.setAttribute("errorMessage", "One or more contacts cannot be deactivated. Please try again later.");
                 }
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
             }
-            else if(pageAction.equals("deleteAContact")) {
+            else if(pageAction.equals("deactivateAContact")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 String hiddenContactEmail = request.getParameter("hiddenContactEmail");
-                if(cir.deleteAContact(hiddenContactEmail)) {
-                    request.setAttribute("successMessage", "Selected contact have been deleted successfully.");
+                if(cir.deactivateAContact(hiddenContactEmail)) {
+                    request.setAttribute("successMessage", "Selected contact have been deactivated successfully.");
                 }
                 else {
-                    request.setAttribute("errorMessage", "Selected contact cannot be deleted. Please try again later.");
+                    request.setAttribute("errorMessage", "Selected contact cannot be deactivated. Please try again later.");
+                }
+                request.setAttribute("contactList", (ArrayList)cir.viewContactList());
+                pageAction = "ContactList";
+            }
+            else if(pageAction.equals("activateAContact")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                String hiddenContactEmail = request.getParameter("hiddenContactEmail");
+                if(cir.activateAContact(hiddenContactEmail)) {
+                    request.setAttribute("successMessage", "Selected contact have been activated successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "Selected contact cannot be activated. Please try again later.");
                 }
                 request.setAttribute("contactList", (ArrayList)cir.viewContactList());
                 pageAction = "ContactList";
@@ -140,33 +152,50 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("employeeInfo", getEmployeeDetails(employeeIdentifier));
                 pageAction = "EmployeeDetails";
             }
-            else if(pageAction.equals("deleteMultipleEmp")) {
+            else if(pageAction.equals("deactivateMultipleEmp")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 String[] empEmailListArr = request.getParameterValues("empEmailList");
-                if(cir.deleteMultipleEmployee(empEmailListArr)) {
-                    request.setAttribute("successMessage", "Employee record(s) have been deleted successfully.");
+                if(cir.deactivateMultipleEmployee(empEmailListArr)) {
+                    request.setAttribute("successMessage", "Employee record(s) have been deactivated successfully.");
                 }
                 else {
-                    request.setAttribute("errorMessage", "One or more employee record(s) cannot be deleted. Please try again later.");
+                    request.setAttribute("errorMessage", "One or more employee record(s) cannot be deactivated. Please try again later.");
                 }
                 request.setAttribute("employeeList", (ArrayList)cir.viewEmployeeList());
                 pageAction = "EmployeeList";
             }
-            else if(pageAction.equals("deleteAnEmployee")) {
+            else if(pageAction.equals("deactivateAnEmployee")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 String hiddenEmpEmail = request.getParameter("hiddenEmpEmail");
-                if(cir.deleteAnEmployee(hiddenEmpEmail)) {
-                    request.setAttribute("successMessage", "Selected employee have been deleted successfully.");
+                if(cir.deactivateAnEmployee(hiddenEmpEmail)) {
+                    request.setAttribute("successMessage", "Selected employee have been deactivated successfully.");
                 }
                 else {
-                    request.setAttribute("errorMessage", "Selected employee cannot be deleted. Please try again later.");
+                    request.setAttribute("errorMessage", "Selected employee cannot be deactivated. Please try again later.");
                 }
                 request.setAttribute("employeeList", (ArrayList)cir.viewEmployeeList());
                 pageAction = "EmployeeList";
             }
-            else if(pageAction.equals("goToItem")) {
+            else if(pageAction.equals("activateAnEmployee")) {
                 request.setAttribute("employeeNRIC", userNRIC);
-                pageAction = "Item";
+                String hiddenEmpEmail = request.getParameter("hiddenEmpEmail");
+                if(cir.activateAnEmployee(hiddenEmpEmail)) {
+                    request.setAttribute("successMessage", "Selected employee have been activated successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "Selected employee cannot be activated. Please try again later.");
+                }
+                request.setAttribute("employeeList", (ArrayList)cir.viewEmployeeList());
+                pageAction = "EmployeeList";
+            }
+            else if(pageAction.equals("goToNewItem")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewItem";
+            }
+            else if(pageAction.equals("goToItemList")){
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("itemList", wtr.viewItemList());
+                pageAction = "ItemList";
             }
             else if(pageAction.equals("goToNewCompositeItem")) {
                 request.setAttribute("employeeNRIC", userNRIC);
@@ -187,6 +216,12 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("compositeItemList", (ArrayList)wtr.viewCompositeItemList());
                 pageAction = "CompositeItemList";
             }
+            else if(pageAction.equals("goToCompositeItemDetails")) {
+                String compositeIdentifier = request.getParameter("compositeIdentifier");
+                request.setAttribute("compositeItemInfo", wtr.getCompositeItemInfo(compositeIdentifier));   // SPECIAL CASE (VECTOR)
+                request.setAttribute("assocCompItemInventoryList", (ArrayList)wtr.getAssocCompItemInventoryInfo(compositeIdentifier));
+                pageAction = "CompositeItemDetails";
+            }
             else if(pageAction.equals("goToQuantityAdjustment")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "QuantityAdjustment";
@@ -206,9 +241,30 @@ public class SGMapleStoreServlet extends HttpServlet {
                 request.setAttribute("inventoryLogList", (ArrayList)wtr.viewInventoryLogList());
                 pageAction = "InventoryLogList";
             }
+            else if(pageAction.equals("goToSalesOrderList")){
+                request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("salesOrderList", (ArrayList)wtr.viewSalesOrderlist());
+                pageAction = "SalesOrderList";
+            }
             else if(pageAction.equals("goToInvoiceList")) {
+                request.setAttribute("employeeNRIC", userNRIC);
                 request.setAttribute("invoiceList", (ArrayList)wtr.viewInvoiceList());
                 pageAction = "InvoiceList";
+            }
+            else if(pageAction.equals("createInvoice")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                /*
+                if(createInvoice(request)) {
+                    request.setAttribute("successMessage", "Invoice has been created successfully.");
+                }
+                else {
+                    request.setAttribute("errorMessage", "One or more fields are invalid. Please check again.");
+                }*/
+                pageAction = "InvoiceList";
+            }
+            else if(pageAction.equals("goToNewInvoice")) {
+                request.setAttribute("employeeNRIC", userNRIC);
+                pageAction = "NewInvoice";
             }
             else if(pageAction.equals("goToCheckout")) {
                 pageAction = "Checkout";
@@ -223,32 +279,33 @@ public class SGMapleStoreServlet extends HttpServlet {
                 System.out.println("Inside goToNewInventoryCategory");
                 request.setAttribute("employeeNRIC", userNRIC);
                 pageAction = "NewInventoryCategory";
-            } else if (pageAction.equals("goToViewCategories")) {
-                System.out.println("Inside goToViewInventoryCategory");
+            } 
+            else if (pageAction.equals("goToItemCategoryList")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 viewAllInventoryCategories(request);
                 pageAction = "ViewInventoryCategories";
-            } else if (pageAction.equals("createNewInventoryCategory")) {
-                System.out.println("Inside createNewInventoryCategory");
+            } 
+            else if (pageAction.equals("createNewInventoryCategory")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 if(createInventoryCategory(request)){
                     viewAllInventoryCategories(request);
                     pageAction = "ViewInventoryCategories";
-                }else{
+                }
+                else{
                     viewAllInventoryCategories(request);
                     pageAction = "ViewInventoryCategories";
                 }
-            } else if (pageAction.equals("goToViewOneInventoryCategory")) {
-                System.out.println("Inside goToViewOneInventoryCategory");
+            } 
+            else if (pageAction.equals("goToViewOneInventoryCategory")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 String selectedCategory = request.getParameter("cateName");
-                System.out.println(selectedCategory);
+                
                 request.setAttribute("cateName", selectedCategory);
                 request.setAttribute("cateDesc", request.getParameter("cateDesc"));
                 request.setAttribute("cateSubs", request.getParameter("catesubs"));
                 pageAction = "viewOneInventoryCategory";
-            }else if (pageAction.equals("modifyInventoryCategory")) {
-                System.out.println("Inside modifyInventoryCategory");
+            }
+            else if (pageAction.equals("modifyInventoryCategory")) {
                 request.setAttribute("employeeNRIC", userNRIC);
                 modifyInventoryCategory(request);
                 viewAllInventoryCategories(request);
@@ -272,7 +329,6 @@ public class SGMapleStoreServlet extends HttpServlet {
             else if(pageAction.equals("goToShoppingCart")) {
                 pageAction = "ShoppingCart";
             }
-            
             else if(pageAction.equals("goToStoreFAQ")) {
                 pageAction = "StoreFAQ";
             }
@@ -379,10 +435,11 @@ public class SGMapleStoreServlet extends HttpServlet {
         ArrayList<String> contactDetailsArr = new ArrayList();
         Vector contactInfoVec = cir.getContactInfo(contactIdentifier);
         
-        contactDetailsArr.add((String)contactInfoVec.get(0)); // Contact First Name
-        contactDetailsArr.add((String)contactInfoVec.get(1)); // Contact Last Name
-        contactDetailsArr.add((String)contactInfoVec.get(2)); // Contact Email
-        contactDetailsArr.add((String)contactInfoVec.get(2)); // Contact Creation Date
+        contactDetailsArr.add((String)contactInfoVec.get(0));           // Contact First Name
+        contactDetailsArr.add((String)contactInfoVec.get(1));           // Contact Last Name
+        contactDetailsArr.add((String)contactInfoVec.get(2));           // Contact Email
+        contactDetailsArr.add(String.valueOf(contactInfoVec.get(3)));   // Contact Active Status
+        contactDetailsArr.add((String)contactInfoVec.get(4));           // Contact Creation Date
         return contactDetailsArr;
     }
     
@@ -425,10 +482,11 @@ public class SGMapleStoreServlet extends HttpServlet {
         ArrayList<String> employeeDetailsArr = new ArrayList();
         Vector employeeInfoVec = cir.getEmployeeInfo(employeeIdentifier);
         
-        employeeDetailsArr.add((String)employeeInfoVec.get(0)); // Employee First Name
-        employeeDetailsArr.add((String)employeeInfoVec.get(1)); // Employee Last Name
-        employeeDetailsArr.add((String)employeeInfoVec.get(2)); // Employee Email
-        employeeDetailsArr.add((String)employeeInfoVec.get(3)); // Employee Creation Date
+        employeeDetailsArr.add((String)employeeInfoVec.get(0));             // Employee First Name
+        employeeDetailsArr.add((String)employeeInfoVec.get(1));             // Employee Last Name
+        employeeDetailsArr.add((String)employeeInfoVec.get(2));             // Employee Email
+        employeeDetailsArr.add(String.valueOf(employeeInfoVec.get(3)));     // Employee Active Status
+        employeeDetailsArr.add((String)employeeInfoVec.get(4));             // Employee Creation Date
         
         return employeeDetailsArr;
     }
@@ -459,13 +517,15 @@ public class SGMapleStoreServlet extends HttpServlet {
             Part filePart = request.getPart("itemImage");
             fileName = (String) getFileName(filePart);
             
-            String applicationPath = request.getServletContext().getRealPath("");
-            String basePath = applicationPath + File.separator + "images" + File.separator;
+            String appPath = request.getServletContext().getRealPath("");
+            String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+            String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + 
+                    "uploads" + File.separator + "images" + File.separator + "CompositeItems" + File.separator;
             
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
-                File outputFilePath = new File(basePath + fileName);
+                File outputFilePath = new File(imageDir + fileName);
                 inputStream = filePart.getInputStream();
                 outputStream = new FileOutputStream(outputFilePath);
             
@@ -544,5 +604,4 @@ public class SGMapleStoreServlet extends HttpServlet {
         }
         wtr.modifyInventoryCategory(categoryName,updatedCategoryDesc,sCats);
     }
-    
 }

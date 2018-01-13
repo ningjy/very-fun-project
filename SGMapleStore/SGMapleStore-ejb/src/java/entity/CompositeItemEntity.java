@@ -22,6 +22,7 @@ public class CompositeItemEntity implements Serializable {
     private String compositeDescription;
     private String compositeImagePath;
     private ArrayList<Vector> compositeArrList;
+    private Vector itemInventorySKUVec;
     
     @Temporal(TemporalType.DATE)
     private Date compositeCreationDate;
@@ -33,7 +34,7 @@ public class CompositeItemEntity implements Serializable {
     
     /* MISCELLANEOUS METHODS */
     public void createCompositeItem(String compositeName, String compositeSKU, Double compositeSellPrice, 
-            Double compositeRebundleLvl, String compositeDescription, String fileName, List<Vector> packageItemList) {
+            Double compositeRebundleLvl, String compositeDescription, String fileName, List<Vector> packageItemList, Vector itemInventorySKUVec) {
         this.compositeName = compositeName;
         this.compositeSKU = compositeSKU;
         this.compositeSellPrice = compositeSellPrice;
@@ -42,6 +43,7 @@ public class CompositeItemEntity implements Serializable {
         this.compositeDescription = compositeDescription;
         this.compositeImagePath = fileName;
         this.compositeArrList = (ArrayList)packageItemList;
+        this.itemInventorySKUVec = itemInventorySKUVec;
     }
     
     /* GETTER METHODS */
@@ -53,6 +55,7 @@ public class CompositeItemEntity implements Serializable {
     public String getCompositeDescription() { return compositeDescription; }
     public String getCompositeImagePath() { return compositeImagePath; }
     public ArrayList<Vector> getCompositeArrList() { return compositeArrList; }
+    public Vector getItemInventorySKUVec() { return itemInventorySKUVec; }
     public Date getCompositeCreationDate() { return compositeCreationDate; }
     
     /* SETTER METHODS */
@@ -64,5 +67,6 @@ public class CompositeItemEntity implements Serializable {
     public void setCompositeDescription(String compositeDescription) { this.compositeDescription = compositeDescription; }
     public void setCompositeImagePath(String compositeImagePath) { this.compositeImagePath = compositeImagePath; }
     public void setCompositeArrList(ArrayList<Vector> compositeArrList) { this.compositeArrList = compositeArrList; }
+    public void setItemInventorySKUVec(Vector itemInventorySKUVec) { this.itemInventorySKUVec = itemInventorySKUVec; }
     public void setCompositeCreationDate(Date compositeCreationDate) { this.compositeCreationDate = compositeCreationDate; }
 }

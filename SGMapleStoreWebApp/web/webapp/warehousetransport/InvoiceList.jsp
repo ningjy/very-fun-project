@@ -1,6 +1,9 @@
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -88,13 +91,14 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
                             <li>&nbsp;</li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
@@ -114,25 +118,24 @@
                 <table class="table zi-table table-hover">
                     <thead>
                         <tr>
-                            <th class="bulk-selection-cell"><input type="checkbox" /></th>
                             <th style="width: 20%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Customer Name</div>
-                                </div>
-                            </th>
-                            <th style="width: 20%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Invoice Date</div>
-                                </div>
-                            </th>
-                            <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
                                     <div class="pull-left over-flow">Invoice Number</div>
                                 </div>
                             </th>
                             <th style="width: 18%;" class="sortable text-left">
                                 <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Order Number</div>
+                                    <div class="pull-left over-flow">Payment Ref.</div>
+                                </div>
+                            </th>
+                            <th style="width: 18%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Customer Username</div>
+                                </div>
+                            </th>
+                            <th style="width: 20%;" class="sortable text-left">
+                                <div class="placeholder-container">
+                                    <div class="pull-left over-flow">Customer Name</div>
                                 </div>
                             </th>
                             <th style="width: 20%;" class="sortable text-left">
@@ -144,7 +147,6 @@
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> invoiceList = (ArrayList) request.getAttribute("invoiceList");
                             if(invoiceList.isEmpty()){
                         %>
                         <tr>
@@ -152,26 +154,8 @@
                         </tr>
                         <%
                             }
-                            else {
-                                for(int i = 0; i <= invoiceList.size()-1; i++){
-                                    Vector v = invoiceList.get(i);
-                                    String invoiceCustomer = String.valueOf(v.get(0));
-                                    String invoiceDate = String.valueOf(v.get(1));
-                                    String invoiceID = String.valueOf(v.get(2));
-                                    String salesOrderID = String.valueOf(v.get(3));
-                                    String totalAmount = String.valueOf(v.get(4));
-                   
-                        %>
-                        <tr tabindex="-1" class="active">
-                            <td class="bulk-selection-cell"><input type="checkbox" /></td>
-                            <td><%= invoiceCustomer %></td>
-                            <td><%= invoiceDate %></td>
-                            <td><%= invoiceID %></td>
-                            <td><%= salesOrderID %></td>
-                            <td><%= "$ "+totalAmount %></td>
-                            <%      }   %>
-                            <%  }   %>
-                        </tr>
+                            else {%>                    
+                        <%}%>                     
                     </tbody>
                 </table>
                 <div id="modal-iframe"></div>

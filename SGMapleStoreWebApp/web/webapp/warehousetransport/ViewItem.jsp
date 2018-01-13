@@ -1,18 +1,18 @@
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.ArrayList" %>
-<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Inventory Log List</title>
+        <title>SG MapleStore - View Item</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
+        <link href="css/warehousetransport/weblayout/NewCompositeItemCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
         <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
@@ -20,6 +20,7 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/NewItemJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -109,79 +110,89 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
-                    <h3 style="display: inline;">Inventory Log</h3>
-                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToQuantityAdjustment'">
-                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Adjustment
-                    </button>
+                <div class="contentFill contentLayout">
+                    <h3>View Item</h3>
                 </div>
-                <table class="table zi-table table-hover">
-                    <thead>
-                        <tr>
-                            <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Log Date</div>
+                <div class="contentFill scroll-y scrollbox">
+                    <%
+                        //Extracting field values from ArrayList passed from servlet to jsp.
+                        ArrayList itemDetails = (ArrayList)request.getAttribute("itemDetails");
+                        String itemName, itemSKU, vendorID, vendorProductCode, itemDescription, itemImageDirPath;
+                        itemName = itemSKU = vendorID = vendorProductCode = itemDescription = itemImageDirPath = "";
+                        Double itemSellingPrice, itemQuantity, itemReorderLevel;
+                        itemSellingPrice= itemQuantity= itemReorderLevel=0.0;
+                        if(!itemDetails.isEmpty()){
+                            itemName = (String)itemDetails.get(0);
+                            itemSKU = (String)itemDetails.get(1);
+                            vendorID = (String)itemDetails.get(2);
+                            vendorProductCode = (String)itemDetails.get(3);
+                            itemSellingPrice = (Double)itemDetails.get(4);
+                            itemQuantity = (Double) itemDetails.get(5);
+                            itemReorderLevel = (Double) itemDetails.get(6);
+                            itemDescription = (String) itemDetails.get(7);
+                            itemImageDirPath = (String) itemDetails.get(8);
+                        }
+                    %>
+                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">
+                        <div class="zi-txn-form">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Name</label>
+                                    <div class="col-md-5">
+                                        <input type="text" readonly value="<%=itemName%>" class="form-control" name="itemName" />
+                                    </div>
                                 </div>
-                            </th>
-                            <th style="width: 17%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Reason</div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">SKU</label>
+                                    <div class="col-md-5">
+                                        <input type="text" readonly value="<%=itemSKU%>" class="form-control" name="itemSKU" />
+                                    </div>
                                 </div>
-                            </th>
-                            <th style="width: 16%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Creator ID</div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor ID (Contact ID)</label>
+                                    <div class="col-md-5">
+                                        <input type="text" readonly value="<%=vendorID%>" class="form-control" name="vendorID" />
+                                    </div>
                                 </div>
-                            </th>
-                            <th style="width: 18%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Item Name</div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Vendor Product Code</label>
+                                    <div class="col-md-5">
+                                        <input type="text" readonly value="<%=vendorProductCode%>"  class="form-control" name="vendorProductCode" />
+                                    </div>
                                 </div>
-                            </th>
-                            <th style="width: 15%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Item SKU</div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label required">Selling Price</label>
+                                    <div class="col-md-2">
+                                        <input type="text" readonly value="<%=itemSellingPrice%>"  class="form-control" name="itemSellingPrice" />
+                                    </div>
+                                    <div class="col-md-1"><br></div>
+                                    <label class="col-md-3 control-label required">In Stock Quantity</label>
+                                    <div class="col-md-2">
+                                        <input type="text" readonly value="<%=itemQuantity.intValue()%>"  class="form-control" name="itemQuantity" />
+                                    </div>
                                 </div>
-                            </th>
-                            <th style="width: 15%;" class="sortable text-left">
-                                <div class="placeholder-container">
-                                    <div class="pull-left over-flow">Adjustment</div>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Reorder Level</label>
+                                    <div class="col-md-2">
+                                        <input type="text" readonly value="<%=itemReorderLevel.intValue()%>"  class="form-control" name="itemReorderLevel" />
+                                    </div>
                                 </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <%
-                            ArrayList<Vector> inventoryLogList = (ArrayList) request.getAttribute("inventoryLogList");
-                            if(inventoryLogList.isEmpty()){
-                        %>
-                        <tr>
-                            <td colspan="6" style="text-align: center;">There are no inventory log records available.</td>
-                        </tr>
-                        <%
-                            }
-                            else {
-                                for(int i = 0; i <= inventoryLogList.size()-1; i++){
-                                    Vector v = inventoryLogList.get(i);
-                                    String logDate = String.valueOf(v.get(0));
-                                    String logReason = String.valueOf(v.get(1));
-                                    String logCreatorID = String.valueOf(v.get(2));
-                                    String itemName = String.valueOf(v.get(3));
-                                    String itemSKU = String.valueOf(v.get(4));
-                                    String itemQtyAdjustValue = String.valueOf(v.get(5));
-                        %>
-                        <tr tabindex="-1" class="active">
-                            <td style="padding-left: 20px;"><%= logDate %></td>
-                            <td><%= logReason %></td>
-                            <td><%= logCreatorID %></td>
-                            <td><%= itemName %></td>
-                            <td><%= itemSKU %></td>
-                            <td><%= itemQtyAdjustValue %></td>
-                            <%      }   %>
-                            <%  }   %>
-                        </tr>
-                    </tbody>
-                </table>
+                                <div class="form-group">                                 
+                                    <label class="col-md-2 control-label required">Item Description</label>
+                                    <div class="col-md-9">
+                                        <input type="text" readonly value="<%=itemDescription%>"  class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">                               
+                                    <img class="img-responsive" src="uploads/images/Items/<%= itemImageDirPath%>"/>
+                            </div>
+                            <div class="col-md-8">
+                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Go Back To Item List</button>
+                        </div>
+                        </div>                        
+                    </form>
+                </div>
             </div>
         </div>
     </body>

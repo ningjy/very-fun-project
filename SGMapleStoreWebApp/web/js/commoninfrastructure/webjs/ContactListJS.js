@@ -35,4 +35,7 @@ $(document).ready(function() {
             $('input:checkbox').attr('checked', false);
         }
     });
+    $('.contactCheck').on('change', function() {
+        $('#deactivateContact').prop('disabled', !$('.contactCheck').filter(':checked').length);
+    }).trigger('change');
 });
