@@ -25,7 +25,7 @@
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/warehousetransport/webjs/NewInvoiceJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/NewInvoice.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
     </head>

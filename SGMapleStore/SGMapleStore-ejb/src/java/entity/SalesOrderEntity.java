@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -39,7 +41,8 @@ public class SalesOrderEntity implements Serializable {
     private Double discountAmt;
     private Double shippingAmt;
     private Double totalPrice;
-    @OneToMany(mappedBy = "salesOrder")
+    @ManyToMany
+    @JoinTable(name="Ordered Items")
     private Collection<ItemEntity> itemList = new ArrayList<ItemEntity>();
     private String status;
     private boolean isPaid;

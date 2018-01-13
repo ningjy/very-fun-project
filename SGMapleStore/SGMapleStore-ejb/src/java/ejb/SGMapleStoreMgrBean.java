@@ -396,6 +396,91 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
+    public ArrayList<ArrayList> viewItemList(){
+        ArrayList<ArrayList> itemList = new ArrayList<>();
+        Query q = em.createQuery("SELECT i FROM Item i WHERE i.activeStatus=true");
+        for(Object o: q.getResultList()){
+            ItemEntity item = (ItemEntity) o;
+            ArrayList itemArr = new ArrayList();
+            itemArr.add(item.getItemImageDirPath());
+            itemArr.add(item.getItemName());
+            itemArr.add(item.getItemSKU());
+            itemArr.add(item.getItemSellingPrice());
+            itemArr.add(item.getItemQuantity());
+            itemList.add(itemArr);
+        }       
+        return itemList;        
+    }
+    
+    @Override
+    public boolean createItem(String itemImageDirPath, String itemSKU, String itemName, String itemDescription, String itemQuantity, String itemReorderLevel, String itemSellingPrice, String vendorID, String vendorProductCode) {
+        try{
+            ItemEntity item = new ItemEntity(itemSKU, itemName, itemDescription, Double.parseDouble(itemQuantity), Double.parseDouble(itemReorderLevel), Double.parseDouble(itemSellingPrice), itemImageDirPath, vendorID, vendorProductCode);
+        em.persist(item);
+        return true;
+        }catch(Exception e){
+            System.out.println("***NEW ITEM COULD NOT BE CREATED***");
+            return false;
+        }      
+    }
+    
+    @Override
+    public ArrayList viewItem(String itemSKU) {
+        ArrayList itemDetails = new ArrayList();
+        Query q = em.createQuery("SELECT i FROM Item i WHERE i.itemSKU = :chosenSKU");
+        q.setParameter("chosenSKU", itemSKU);
+        List resultList = q.getResultList();
+        //below may throw no result exception or non unique result exception
+        if(resultList.isEmpty()){
+           System.out.println("**WMS VIEW ITEM: There is no such item in the database!**");
+        }else{
+            ItemEntity result = (ItemEntity)resultList.get(0);
+      
+            itemDetails.add(result.getItemName());
+            itemDetails.add(result.getItemSKU());
+            itemDetails.add(result.getVendorID());
+            itemDetails.add(result.getVendorProductCode());
+            itemDetails.add(result.getItemSellingPrice());
+            itemDetails.add(result.getItemQuantity());
+            itemDetails.add(result.getItemReorderLevel());
+            itemDetails.add(result.getItemDescription());
+            itemDetails.add(result.getItemImageDirPath());
+        }      
+        return itemDetails;
+    }
+    
+    @Override
+    public void deleteItem(String itemSKU){
+        Query q = em.createQuery("SELECT i FROM Item i WHERE i.itemSKU = :chosenSKU");
+        q.setParameter("chosenSKU", itemSKU);
+        ItemEntity item = (ItemEntity)q.getSingleResult();
+        //set this item to inactive!
+        System.out.println("Setting "+itemSKU+" to inactive!");
+        item.setActiveStatus(false);
+    }
+    
+    @Override
+    public boolean editItem(String itemImageDirPath, String itemSKU, String itemName, String itemDescription, String itemQuantity, String itemReorderLevel, String itemSellingPrice, String vendorID, String vendorProductCode){       
+        try{
+            Query q1 = em.createQuery("SELECT i FROM Item i WHERE i.itemSKU =:chosenSKU");
+            q1.setParameter("chosenSKU", itemSKU);
+            ItemEntity item = (ItemEntity) q1.getSingleResult();
+            item.setItemImageDirPath(itemImageDirPath);
+            item.setItemName(itemName);
+            item.setItemDescription(itemDescription);
+            item.setItemQuantity(Double.valueOf(itemQuantity));
+            item.setItemReorderLevel(Double.valueOf(itemReorderLevel));
+            item.setItemSellingPrice(Double.valueOf(itemSellingPrice));
+            item.setVendorID(vendorID);
+            item.setVendorProductCode(vendorProductCode);
+            System.out.println("******ITEM EDITED********");
+            return true;
+        }catch(NumberFormatException e){
+            return false;
+        }      
+    }
+    
+    @Override
     public List<Vector> viewInvoiceList() {//WORK IN PROGRESS
         List<Vector> invoiceList = new ArrayList<Vector>();
         /*SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -512,9 +597,5 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             hashedValue = sb.toString();
         }      
         return hashedValue;
-    }
-    
-    
-   
-    
+    }   
 }

@@ -1,5 +1,6 @@
 package servlet;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +18,14 @@ import ejb.WarehouseTransportRemote;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 10,
@@ -169,6 +173,7 @@ public class SGMapleStoreServlet extends HttpServlet {
                 pageAction = "NewItem";
             }else if(pageAction.equals("goToItemList")){
                 request.setAttribute("employeeNRIC", userNRIC);
+                request.setAttribute("itemList", wtr.viewItemList());
                 pageAction = "ItemList";
             }
             else if(pageAction.equals("goToNewCompositeItem")) {
@@ -221,7 +226,7 @@ public class SGMapleStoreServlet extends HttpServlet {
             }
             else if(pageAction.equals("createInvoice")) {
                 request.setAttribute("employeeNRIC", userNRIC);
-                /*createInvoice(request);//WORK IN PROGRESS
+                /*
                 if(createInvoice(request)) {
                     request.setAttribute("successMessage", "Invoice has been created successfully.");
                 }
@@ -312,8 +317,43 @@ public class SGMapleStoreServlet extends HttpServlet {
             else if(pageAction.equals("goToTrackOrder")) {
                 pageAction = "TrackOrder";
             }
+            else if(pageAction.equals("createItem")){
+                request.setAttribute("employeeNRIC", userNRIC);
+                if(createItem(request,response)){
+                    request.setAttribute("successMessage", "New item created successfully");
+                }else{
+                    request.setAttribute("errorMessage", "Error creating new item");
+                }
+                pageAction = "NewItem";
+            }
+            else if(pageAction.equals("goToViewItem")){
+                request.setAttribute("employeeNRIC",userNRIC);
+                request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
+                pageAction = "ViewItem";
+            }
+            else if(pageAction.equals("deleteItem")){
+                request.setAttribute("employeeNRIC",userNRIC);
+                wtr.deleteItem(request.getParameter("itemSKU"));
+                request.setAttribute("itemList", wtr.viewItemList());
+                pageAction = "ItemList";
+            }
+            else if(pageAction.equals("goToEditItem")){
+                request.setAttribute("employeeNRIC",userNRIC);
+                request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
+                pageAction = "EditItem";
+            }
+            else if(pageAction.equals("editItem")){
+                request.setAttribute("employeeNRIC",userNRIC);
+                if(editItem(request,response)){
+                    request.setAttribute("successMessage", "Item edited successfully");
+                    request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
+                }else{
+                    request.setAttribute("errorMessage", "Error editing item");
+                }             
+                pageAction = "EditItem";
+            }
             dispatcher = servletContext.getNamedDispatcher(pageAction);
-            dispatcher.forward(request, response);
+            dispatcher.forward(request, response);       
         }
         catch(Exception ex) {
             log("Exception in SGMapleStoreServlet: processRequest()");
@@ -478,6 +518,65 @@ public class SGMapleStoreServlet extends HttpServlet {
         return logCreationStatus;
     }
     
+    private boolean createItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        boolean itemCreationStatus = false;
+        // Create path components to save the file
+        String appPath = request.getServletContext().getRealPath("");
+        String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+        String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + "uploads" + File.separator +
+                    "images" + File.separator + "Items";
+        final Part imagePart = request.getPart("itemImage");
+        final String fileName = imagePart.getSubmittedFileName();
+ 
+        FileOutputStream out = null;
+        InputStream fileContent = null;
+        //final PrintWriter writer = response.getWriter();
+        String itemImageDirPath = "";
+        try {
+            out = new FileOutputStream(new File(imageDir + File.separator
+                    + fileName));
+            itemImageDirPath = fileName;
+            fileContent = imagePart.getInputStream();
+            
+            int bytesRead = 0;
+            final byte[] bytes = new byte[1024];
+            //read image bytes from input stream until finish.
+            while ((bytesRead = fileContent.read(bytes)) != -1) {
+                //write image bytes to output stream incrementally, until bytesRead = total file size --> means full image written.
+                out.write(bytes, 0, bytesRead);
+            }
+            //writer.println("New file " + fileName + " created at " + imageDir);
+        } catch (FileNotFoundException fne) {
+            /*writer.println("You either did not specify a file to upload or are "
+                    + "trying to upload a file to a protected or nonexistent "
+                    + "location.");
+            writer.println("<br/> ERROR: " + fne.getMessage());
+            
+            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                    new Object[]{fne.getMessage()});*/
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            if (fileContent != null) {
+                fileContent.close();
+            }
+            /*if (writer != null) {
+                writer.close();
+            }*/
+        }
+        String itemName = request.getParameter("itemName");
+        String itemSKU = request.getParameter("itemSKU");
+        String vendorID = request.getParameter("vendorID");
+        String vendorProductCode = request.getParameter("vendorProductCode");
+        String itemSellingPrice = request.getParameter("itemSellingPrice");
+        String itemQuantity = request.getParameter("itemQuantity");
+        String itemReorderLevel = request.getParameter("itemReorderLevel");
+        String itemDescription = request.getParameter("itemDescription");
+        itemCreationStatus = wtr.createItem(itemImageDirPath, itemSKU,itemName,itemDescription,itemQuantity, itemReorderLevel, itemSellingPrice, vendorID, vendorProductCode);
+        return itemCreationStatus;
+    }
+            
     private boolean createCompositeItemRecord(HttpServletRequest request){
         boolean compCreationStatus = false;
         String fileName = "";
@@ -529,12 +628,13 @@ public class SGMapleStoreServlet extends HttpServlet {
         return compCreationStatus;
     }
     
-    private String getFileName(Part part) {
+    private String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
-        System.out.println("*****partHeader :" + partHeader);
-        for (String content : part.getHeader("content-disposition").split(";")) {
+        LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
+        for (String content : partHeader.split(";")) {
             if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+                return content.substring(
+                        content.indexOf('=') + 1).trim().replace("\"", "");
             }
         }
         return null;
@@ -570,5 +670,69 @@ public class SGMapleStoreServlet extends HttpServlet {
             sCats.add(request.getParameter(variable));
         }
         wtr.modifyInventoryCategory(categoryName,updatedCategoryDesc,sCats);
+    }
+
+    private boolean editItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+        boolean itemEditionStatus = false;
+        String itemImageDirPath = "";
+        if(request.getParameter("imageReplacement").equalsIgnoreCase("yes")){
+            // Create path components to save the file
+            String appPath = request.getServletContext().getRealPath("");
+            String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+            String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + "uploads" + File.separator +
+                    "images" + File.separator + "Items";
+            final Part imagePart = request.getPart("itemImage");
+            final String fileName = imagePart.getSubmittedFileName();
+
+            FileOutputStream out = null;
+            InputStream fileContent = null;
+            final PrintWriter writer = response.getWriter();
+            try {
+                out = new FileOutputStream(new File(imageDir + File.separator
+                        + fileName));
+                itemImageDirPath = fileName;
+                fileContent = imagePart.getInputStream();
+                
+                int bytesRead = 0;
+                final byte[] bytes = new byte[1024];
+                //read image bytes from input stream until finish.
+                while ((bytesRead = fileContent.read(bytes)) != -1) {
+                    //write image bytes to output stream incrementally, until bytesRead = total file size --> means full image written.
+                    out.write(bytes, 0, bytesRead);
+                }
+                //writer.println("New file " + fileName + " created at " + imageDir);
+            } catch (FileNotFoundException fne) {
+                /*writer.println("You either did not specify a file to upload or are "
+                        + "trying to upload a file to a protected or nonexistent "
+                        + "location.");
+                writer.println("<br/> ERROR: " + fne.getMessage());
+                
+                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                        new Object[]{fne.getMessage()});*/
+            } finally {
+                if (out != null) {
+                    out.close();
+                }
+                if (fileContent != null) {
+                    fileContent.close();
+                }
+                if (writer != null) {
+                    writer.close();
+                }
+            }         
+        }else{
+            itemImageDirPath=request.getParameter("originalItemImage");
+        }
+        
+        String itemName = request.getParameter("itemName");
+        String itemSKU = request.getParameter("itemSKU");
+        String vendorID = request.getParameter("vendorID");
+        String vendorProductCode = request.getParameter("vendorProductCode");
+        String itemSellingPrice = request.getParameter("itemSellingPrice");
+        String itemQuantity = request.getParameter("itemQuantity");
+        String itemReorderLevel = request.getParameter("itemReorderLevel");
+        String itemDescription = request.getParameter("itemDescription");
+        itemEditionStatus = wtr.editItem(itemImageDirPath, itemSKU,itemName,itemDescription,itemQuantity, itemReorderLevel, itemSellingPrice, vendorID, vendorProductCode);
+        return itemEditionStatus;
     }
 }

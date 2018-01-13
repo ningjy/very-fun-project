@@ -1,4 +1,4 @@
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
 <%@page import="java.util.Vector"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -168,14 +168,7 @@
                         </tr>
                         <%
                             }
-                            else {%>
-                        <c:forEach items="${invoiceList}" var="invoiceVec">
-                            <tr tabindex="-1" class="active">
-                            <c:forEach items="${invoiceVec}" var="item">            
-                                    <td><c:out value="${item}"/></td>                                                        
-                            </c:forEach>
-                            </tr>
-                        </c:forEach>                    
+                            else {%>                    
                         <%}%>                     
                     </tbody>
                 </table>

@@ -1,10 +1,11 @@
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Item</title>
+        <title>SG MapleStore - Edit Item</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -16,14 +17,21 @@
         <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
-        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
         <script src="js/warehousetransport/webjs/NewItem.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
+        <script>
+            //if image has been replaced, set this hidden value to yes.
+            function imageReplacement(){
+                document.getElementById('imageReplacement').value = 'yes';
+                console.log("bitch i changed it");
+            }
+        </script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -113,9 +121,28 @@
             <!-- Content Space -->
             <div id="page-wrapper">
                 <div class="contentFill contentLayout">
-                    <h3>New Item</h3>
+                    <h3>Edit Item</h3>
                 </div>
                 <div class="contentFill scroll-y scrollbox">
+                    <%
+                        //Extracting field values from ArrayList passed from servlet to jsp.
+                        ArrayList itemDetails = (ArrayList)request.getAttribute("itemDetails");
+                        String itemName, itemSKU, vendorID, vendorProductCode, itemDescription, itemImageDirPath;
+                        itemName = itemSKU = vendorID = vendorProductCode = itemDescription = itemImageDirPath = "";
+                        Double itemSellingPrice, itemQuantity, itemReorderLevel;
+                        itemSellingPrice= itemQuantity= itemReorderLevel=0.0;
+                        if(!itemDetails.isEmpty()){
+                            itemName = (String)itemDetails.get(0);
+                            itemSKU = (String)itemDetails.get(1);
+                            vendorID = (String)itemDetails.get(2);
+                            vendorProductCode = (String)itemDetails.get(3);
+                            itemSellingPrice = (Double)itemDetails.get(4);
+                            itemQuantity = (Double) itemDetails.get(5);
+                            itemReorderLevel = (Double) itemDetails.get(6);
+                            itemDescription = (String) itemDetails.get(7);
+                            itemImageDirPath = (String) itemDetails.get(8);
+                        }
+                    %>
                     <%
                         String successMessage = (String)request.getAttribute("successMessage");
                         if (successMessage != null) {
@@ -140,67 +167,68 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label required">Name</label>
                                     <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="itemName" />
+                                        <input type="text" required value="<%=itemName%>" class="form-control" name="itemName" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label required">SKU</label>
                                     <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="itemSKU" />
+                                        <input type="text" required readonly value="<%=itemSKU%>" class="form-control" name="itemSKU" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label required">Vendor ID (Contact ID)</label>
                                     <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="vendorID" />
+                                        <input type="text" required value="<%=vendorID%>" class="form-control" name="vendorID" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label required">Vendor Product Code</label>
                                     <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="vendorProductCode" />
+                                        <input type="text" required value="<%=vendorProductCode%>"  class="form-control" name="vendorProductCode" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label required">Selling Price</label>
                                     <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemSellingPrice" />
+                                        <input type="number" required value="<%=itemSellingPrice%>"  class="form-control" name="itemSellingPrice" />
                                     </div>
                                     <div class="col-md-1"><br></div>
-                                    <label class="col-md-3 control-label required">Initial Stock Quantity</label>
+                                    <label class="col-md-3 control-label required">In Stock Quantity</label>
                                     <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemQuantity" />
+                                        <input type="number" required value="<%=itemQuantity.intValue()%>"  class="form-control" name="itemQuantity" />
                                     </div>
                                 </div>
                                 <div class="form-group">                                 
                                     <label class="col-md-2 control-label required">Reorder Level</label>
-                                    <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemReorderLevel" />
+                                    <div class="col-md-9">
+                                        <input type="number" required value="<%=itemReorderLevel.intValue()%>"  class="form-control" name="itemReorderLevel" />
                                     </div>
                                 </div>
                                 <div class="form-group">                                 
                                     <label class="col-md-2 control-label required">Item Description</label>
                                     <div class="col-md-9">
-                                        <input type="text" required class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
+                                        <input type="text" required value="<%=itemDescription%>"  class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="col-md-7">
                                     <div class="image-upload">
-                                        <img id="output-image" />
+                                        <img id="output-image" class="img-responsive" src="uploads/images/Items/<%= itemImageDirPath%>"/>
                                     </div>
                                     <label for="file-upload" style="margin-top: 10px; margin-left: 7px">
-                                        <button type="button" class="btn btn-warning " onclick="$('#file-upload').click();"><span class="glyphicon glyphicon-open"></span> Upload Image</button>
-                                        *Image upload is necessary
-                                    </label>                                   
-                                    <input id="file-upload" style="visibility:hidden" required name="itemImage" type="file" accept="image/*" onchange="javascript: previewImage(event)" />
+                                        <button type="button" class="btn btn-warning " onclick="$('#file-upload').click();"><span class="glyphicon glyphicon-open"></span> Replace Image</button>
+                                    </label>
+                                    <input type="hidden" id="imageReplacement" name="imageReplacement" value="no"/>
+                                    <input id="file-upload" name="itemImage" style="visibility:hidden" type="file" accept="image/*" onchange="javascript: previewImage(event); window.imageReplacement();" />
                                 </div>
                             </div>
                             <div class="col-md-8">
-                            <input type="hidden" name="pageTransit" value="createItem"/>
-                            <button type="submit" class="btn btn-primary" value="submit">Create Item</button>
-                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Cancel</button>
+                            <input type="hidden" name="originalItemImage" value="<%=itemImageDirPath%>"/>                           
+                            <input type="hidden" name="pageTransit" value="editItem"/>
+                            <button type="submit" class="btn btn-primary">Update Item</button>
+                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Go Back To Item List</button>
                         </div>
                         </div>                        
                     </form>

@@ -16,6 +16,7 @@
 !/SGMapleStoreRemoteInterface/nbproject/project.xml
 !/SGMapleStoreRemoteInterface/nbproject/project.properties
 
+/SGMapleStoreWebApp/web/uploads/
 /SGMapleStoreWebApp/build/
 /SGMapleStoreWebApp/dist/
 /SGMapleStoreWebApp/nbproject/
