@@ -762,7 +762,6 @@ public class SGMapleStoreServlet extends HttpServlet {
     
     private String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
-        LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
         for (String content : partHeader.split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(
@@ -802,69 +801,5 @@ public class SGMapleStoreServlet extends HttpServlet {
             sCats.add(request.getParameter(variable));
         }
         wtr.modifyInventoryCategory(categoryName,updatedCategoryDesc,sCats);
-    }
-
-    private boolean editItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-        boolean itemEditionStatus = false;
-        String itemImageDirPath = "";
-        if(request.getParameter("imageReplacement").equalsIgnoreCase("yes")){
-            // Create path components to save the file
-            String appPath = request.getServletContext().getRealPath("");
-            String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
-            String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + "uploads" + File.separator +
-                    "images" + File.separator + "Items";
-            final Part imagePart = request.getPart("itemImage");
-            final String fileName = imagePart.getSubmittedFileName();
-
-            FileOutputStream out = null;
-            InputStream fileContent = null;
-            final PrintWriter writer = response.getWriter();
-            try {
-                out = new FileOutputStream(new File(imageDir + File.separator
-                        + fileName));
-                itemImageDirPath = fileName;
-                fileContent = imagePart.getInputStream();
-                
-                int bytesRead = 0;
-                final byte[] bytes = new byte[1024];
-                //read image bytes from input stream until finish.
-                while ((bytesRead = fileContent.read(bytes)) != -1) {
-                    //write image bytes to output stream incrementally, until bytesRead = total file size --> means full image written.
-                    out.write(bytes, 0, bytesRead);
-                }
-                //writer.println("New file " + fileName + " created at " + imageDir);
-            } catch (FileNotFoundException fne) {
-                /*writer.println("You either did not specify a file to upload or are "
-                        + "trying to upload a file to a protected or nonexistent "
-                        + "location.");
-                writer.println("<br/> ERROR: " + fne.getMessage());
-                
-                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                        new Object[]{fne.getMessage()});*/
-            } finally {
-                if (out != null) {
-                    out.close();
-                }
-                if (fileContent != null) {
-                    fileContent.close();
-                }
-                if (writer != null) {
-                    writer.close();
-                }
-            }         
-        }else{
-            itemImageDirPath=request.getParameter("originalItemImage");
-        }
-        
-        String itemName = request.getParameter("itemName");
-        String itemSKU = request.getParameter("itemSKU");
-        String vendorID = request.getParameter("vendorID");
-        String vendorProductCode = request.getParameter("vendorProductCode");
-        String itemSellingPrice = request.getParameter("itemSellingPrice");
-        String itemQuantity = request.getParameter("itemQuantity");
-        String itemReorderLevel = request.getParameter("itemReorderLevel");
-        String itemDescription = request.getParameter("itemDescription");
-        itemEditionStatus = wtr.editItem(itemImageDirPath, itemSKU,itemName,itemDescription,itemQuantity, itemReorderLevel, itemSellingPrice, vendorID, vendorProductCode);
-        return itemEditionStatus;
     }
 }
