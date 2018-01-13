@@ -37,7 +37,9 @@
     <servlet><servlet-name>NewInventoryCategory</servlet-name><jsp-file>/webapp/warehousetransport/NewInventoryCategory.jsp</jsp-file></servlet>
     <servlet><servlet-name>ViewInventoryCategories</servlet-name><jsp-file>/webapp/warehousetransport/ViewInventoryCategories.jsp</jsp-file></servlet>
     <servlet><servlet-name>viewOneInventoryCategory</servlet-name><jsp-file>/webapp/warehousetransport/viewOneInventoryCategory.jsp</jsp-file></servlet>
-    
+    <servlet><servlet-name>ViewItem</servlet-name><jsp-file>/webapp/warehousetransport/ViewItem.jsp</jsp-file></servlet>
+    <servlet><servlet-name>EditItem</servlet-name><jsp-file>/webapp/warehousetransport/EditItem.jsp</jsp-file></servlet>
+
     <servlet-mapping>
         <servlet-name>SGMapleStore</servlet-name>
         <url-pattern>/SGMapleStore</url-pattern>
@@ -75,6 +77,8 @@
     <servlet-mapping><servlet-name>NewInventoryCategory</servlet-name><url-pattern>/webapp/warehousetransport/NewInventoryCategory</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>ViewInventoryCategories</servlet-name><url-pattern>/webapp/warehousetransport/ViewInventoryCategories</url-pattern></servlet-mapping>
     <servlet-mapping><servlet-name>viewOneInventoryCategory</servlet-name><url-pattern>/webapp/warehousetransport/viewOneInventoryCategory</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>ViewItem</servlet-name><url-pattern>/webapp/warehousetransport/ViewItem</url-pattern></servlet-mapping>
+    <servlet-mapping><servlet-name>EditItem</servlet-name><url-pattern>/webapp/warehousetransport/EditItem</url-pattern></servlet-mapping>
 
     <session-config><session-timeout>120</session-timeout></session-config>
     <welcome-file-list><welcome-file>webapp/store/Homepage.jsp</welcome-file></welcome-file-list>

@@ -29,4 +29,15 @@ public interface WarehouseTransportRemote {
     public void modifyInventoryCategory(String categoryName,String updatedCategoryDesc,ArrayList<String> sCats);
 
     public List<Vector> viewSalesOrderlist();
+
+    public boolean createItem(String itemImageDirPath, String itemSKU, String itemName, String itemDescription, String itemQuantity, String itemReorderLevel, String itemSellingPrice, String vendorID, String vendorProductCode);
+
+    public ArrayList<ArrayList> viewItemList();
+
+    public ArrayList viewItem(String itemSKU);
+
+    public void deleteItem(String itemSKU);
+    
+    public boolean editItem(String itemImageDirPath, String itemSKU, String itemName, String itemDescription, String itemQuantity, String itemReorderLevel, String itemSellingPrice, String vendorID, String vendorProductCode);
+    
 }

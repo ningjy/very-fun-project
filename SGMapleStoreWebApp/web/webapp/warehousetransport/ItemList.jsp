@@ -1,29 +1,29 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - New Item</title>
-        
+        <title>SG MapleStore - Item List</title>
+            
         <!-- Cascading Style Sheet (CSS) -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
-        <link href="css/warehousetransport/weblayout/NewCompositeItemCSS.css" rel="stylesheet" type="text/css">
-        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.css" rel="stylesheet" type="text/css">
-        <link href="css/commoninfrastructure/easy-autocomplete/easy-autocomplete.min.css" rel="stylesheet" type="text/css">
-        
+        <link href="css/warehousetransport/weblayout/ItemList.css" rel="stylesheet" type="text/css">
+            
         <!-- Java Script (JS) -->
-        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/bootstrap.min.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
-        <script src="js/warehousetransport/webjs/NewItem.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.js" type="text/javascript"></script>
-        <script src="js/commoninfrastructure/easy-autocomplete/jquery.easy-autocomplete.min.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/ItemList.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -31,7 +31,7 @@
                 <a class="navbar-brand" href="SGMapleStore?pageTransit=goToDashboard">
                     SG MapleStore
                 </a>
-                
+                    
                 <!-- Top Navigation -->
                 <div id="pageAnnouncement">
                     <div class="ccr-last-update">
@@ -54,7 +54,7 @@
                     <li class="divider"></li>
                     <li><a href="SGMapleStore?pageTransit=goToLogout"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout</a></li>
                 </ul>
-            
+                    
                 <!-- Left Navigation -->
                 <div class="navbar-default sidebar">
                     <div class="sidebar-nav navbar-collapse">
@@ -97,7 +97,7 @@
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <li>&nbsp;</li>
+                            <li><br><br></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
@@ -109,101 +109,95 @@
                     </div>
                 </div>
             </nav>
-
             <!-- Content Space -->
             <div id="page-wrapper">
-                <div class="contentFill contentLayout">
-                    <h3>New Item</h3>
+                <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
+                    <h3 style="display: inline;">Item List</h3>
+                    <button class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewItem'">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;New Item
+                    </button>
                 </div>
-                <div class="contentFill scroll-y scrollbox">
-                    <%
-                        String successMessage = (String)request.getAttribute("successMessage");
-                        if (successMessage != null) {
-                    %>
-                    <div class="alert alert-success" id="successPanel" style="margin: 20px 20px 0 0;">
-                        <button type="button" class="close" id="closeSuccess">&times;</button>
-                        <%= successMessage %>
-                    </div>
-                    <%  } %>
-                    <%
-                        String errorMessage = (String)request.getAttribute("errorMessage");
-                        if (errorMessage != null) {
-                    %>
-                    <div class="alert alert-danger" id="errorPanel" style="margin: 20px 20px 0 0;">
-                        <button type="button" class="close" id="closeError">&times;</button>
-                        <%= errorMessage %>
-                    </div>
-                    <%  } %>
-                    <form action="SGMapleStore" method="POST" class="form-horizontal zi-txn-form" enctype="multipart/form-data">
-                        <div class="zi-txn-form">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label required">Name</label>
-                                    <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="itemName" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label required">SKU</label>
-                                    <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="itemSKU" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label required">Vendor ID (Contact ID)</label>
-                                    <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="vendorID" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label required">Vendor Product Code</label>
-                                    <div class="col-md-5">
-                                        <input type="text" required class="form-control" name="vendorProductCode" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label required">Selling Price</label>
-                                    <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemSellingPrice" />
-                                    </div>
-                                    <div class="col-md-1"><br></div>
-                                    <label class="col-md-3 control-label required">Initial Stock Quantity</label>
-                                    <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemQuantity" />
-                                    </div>
-                                </div>
-                                <div class="form-group">                                 
-                                    <label class="col-md-2 control-label required">Reorder Level</label>
-                                    <div class="col-md-2">
-                                        <input type="number" required class="form-control" name="itemReorderLevel" />
-                                    </div>
-                                </div>
-                                <div class="form-group">                                 
-                                    <label class="col-md-2 control-label required">Item Description</label>
-                                    <div class="col-md-9">
-                                        <input type="text" required class="form-control input-lg" placeholder="Insert description of item" name="itemDescription"/>
+                <div class="table-wrapper">			
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="show-entries">
+                                    <span>Show</span>
+                                    <select>
+                                        <option>5</option>
+                                        <option>10</option>
+                                        <option>15</option>
+                                        <option>20</option>
+                                    </select>
+                                    <span>entries</span>
+                                </div>						
+                            </div>
+                            <div class="col-sm-4 pull-right">
+                                <div class="search-box">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+                                        <input type="text" id="txtSearch" class="form-control" placeholder="Search&hellip;">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="col-md-7">
-                                    <div class="image-upload">
-                                        <img id="output-image" />
-                                    </div>
-                                    <label for="file-upload" style="margin-top: 10px; margin-left: 7px">
-                                        <button type="button" class="btn btn-warning " onclick="$('#file-upload').click();"><span class="glyphicon glyphicon-open"></span> Upload Image</button>
-                                        *Image upload is necessary
-                                    </label>                                   
-                                    <input id="file-upload" style="visibility:hidden" required name="itemImage" type="file" accept="image/*" onchange="javascript: previewImage(event)" />
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                            <input type="hidden" name="pageTransit" value="createItem"/>
-                            <button type="submit" class="btn btn-primary" value="submit">Create Item</button>
-                            <button type="button" class="btn btn-default" onclick="location.href='SGMapleStore?pageTransit=goToItemList'">Cancel</button>
                         </div>
-                        </div>                        
-                    </form>
+                    </div>
+                    <table id="tblTarget" class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name <i class="fa fa-sort"></i></th>
+                                <th>SKU <i class="fa fa-sort"></i></th>
+                                <th>Selling Price <i class="fa fa-sort"></i></th>
+                                <th>In-Stock Quantity <i class="fa fa-sort"></i></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                ArrayList itemList = (ArrayList) request.getAttribute("itemList");
+                                if(!itemList.isEmpty()){
+                                    for(Object o: itemList){//outer arraylist
+                                        ArrayList item = (ArrayList) o;//inner arraylist
+                                        String itemImageDirPath = (String)item.get(0);
+                                        String itemName = (String) item.get(1);
+                                        String itemSKU = (String) item.get(2);
+                                        Double itemSellingPrice = (Double) item.get(3);
+                                        Double itemQuantity = (Double) item.get(4);                                    
+                            %>
+                            <tr>
+                                <td style="padding-left: 20px;"><img src="uploads/images/Items/<%= itemImageDirPath %>" style="max-width: 70px; max-height: 70px;" /></td>
+                                <td><%=itemName%></td>
+                                <td><%=itemSKU%></td>
+                                <td><%=itemSellingPrice%></td>
+                                <td><%=itemQuantity.intValue()%></td>                               
+                                <td>
+                                    <a href='SGMapleStore?pageTransit=goToViewItem&itemSKU=<%=itemSKU%>' class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                    <a href='SGMapleStore?pageTransit=goToEditItem&itemSKU=<%=itemSKU%>' class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                    <a onclick="return confirm_delete()" href="SGMapleStore?pageTransit=deleteItem&itemSKU=<%=itemSKU%>" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                            <%}%>
+                            <%}else{%>
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">There are no item records available.</td>
+                                </tr>       
+                            <%}%>                                
+                        </tbody>
+                    </table>
+                    <script type="text/javascript">new TableSearch('txtSearch', 'tblTarget', { noResultsText: 'Nothing found!' }).init();</script> 
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

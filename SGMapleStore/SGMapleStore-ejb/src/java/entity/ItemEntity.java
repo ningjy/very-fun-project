@@ -2,15 +2,12 @@ package entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity(name = "Item")
 public class ItemEntity implements Serializable {
-
-    @ManyToOne
-    private SalesOrderEntity salesOrder;
     @Id
     private String itemSKU;
     private String itemName;
@@ -23,6 +20,21 @@ public class ItemEntity implements Serializable {
     private String vendorProductCode;
     private boolean activeStatus;
     private ArrayList<String> subCategories;
+    
+    public ItemEntity(){ this.activeStatus=true;}
+
+    public ItemEntity(String itemSKU, String itemName, String itemDescription, Double itemQuantity, Double itemReorderLevel, Double itemSellingPrice, String itemImageDirPath, String vendorID, String vendorProductCode) {
+        this.activeStatus=true;
+        this.itemSKU = itemSKU;
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+        this.itemQuantity = itemQuantity;
+        this.itemReorderLevel = itemReorderLevel;
+        this.itemSellingPrice = itemSellingPrice;
+        this.itemImageDirPath = itemImageDirPath;
+        this.vendorID = vendorID;
+        this.vendorProductCode = vendorProductCode;
+    }
     
     public ArrayList<String> getSubCategories() { return subCategories; }
     public void setSubCategories(ArrayList<String> subCategories) { this.subCategories = subCategories; }
