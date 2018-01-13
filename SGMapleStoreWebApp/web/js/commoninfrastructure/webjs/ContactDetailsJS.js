@@ -19,3 +19,13 @@ $(document).ready(function() {
         $(target_tab_selector).addClass('active');
     });
 });
+
+function deactivateCheck() {
+    if(confirm("Confirm deactivate this contact account?")) { document.forms[0].submit(); }
+    else { return false; }
+}
+
+function activateCheck() {
+    if(confirm("Confirm activate this contact account?")) { document.forms[0].submit(); }
+    else { return false; }
+}

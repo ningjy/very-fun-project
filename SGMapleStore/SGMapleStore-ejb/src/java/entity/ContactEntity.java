@@ -6,14 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity(name = "Contact")
 public class ContactEntity implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long contactID;
@@ -47,15 +45,19 @@ public class ContactEntity implements Serializable {
     private String suppCompanyName;
     private String suppBillAccNo;
     private String contactNotes;
+    private Boolean contactActiveStatus;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date contactCreationDate;
     
     @PrePersist
     public void creationDate() {
         this.contactCreationDate = new Date();
     }
-  
+    
+    /* DEFAULT CONSTRUCTOR */
+    public ContactEntity() { contactActiveStatus = true; }
+    
     /* MISCELLANEOUS METHODS */
     public void createContact(String contactSalutation, String contactFirstName, String contactLastName, String contactEmail, 
             String contactPhone, String contactType, String contactBillingAttn, String contactBillingAddress, String contactBillingCity, 
@@ -122,6 +124,7 @@ public class ContactEntity implements Serializable {
     public String getSuppCompanyName() { return suppCompanyName; }
     public String getSuppBillAccNo() { return suppBillAccNo; }
     public String getContactNotes() { return contactNotes; }
+    public Boolean getContactActiveStatus() { return contactActiveStatus; }
     public Date getContactCreationDate() { return contactCreationDate; }
     
     /* SETTER METHODS */
@@ -153,5 +156,6 @@ public class ContactEntity implements Serializable {
     public void setSuppCompanyName(String suppCompanyName) { this.suppCompanyName = suppCompanyName; }
     public void setSuppBillAccNo(String suppBillAccNo) { this.suppBillAccNo = suppBillAccNo; }
     public void setContactNotes(String contactNotes) { this.contactNotes = contactNotes; }
+    public void setContactActiveStatus(Boolean contactActiveStatus) { this.contactActiveStatus = contactActiveStatus; }
     public void setContactCreationDate(Date contactCreationDate) { this.contactCreationDate = contactCreationDate; }
 }

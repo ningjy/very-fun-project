@@ -1,4 +1,5 @@
 var rowEmail;
+
 $(document).ready(function() {
     $('#employeeList tbody').on('click', 'tr', function(event) {
         var $cell= $(event.target).closest('td');
@@ -35,4 +36,7 @@ $(document).ready(function() {
             $('input:checkbox').attr('checked', false);
         }
     });
+    $('.empCheck').on('change', function() {
+        $('#deactivateEmp').prop('disabled', !$('.empCheck').filter(':checked').length);
+    }).trigger('change');
 });

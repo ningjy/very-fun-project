@@ -88,21 +88,16 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <li><br><br></li>
-                            <li>
-                                <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Categories<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToViewCategories"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;View Categories</a></li>
-                                    <li><a href="SGMapleStore?pageTransit=goToNewInventoryCategory"><i class="fa fa fa-cube fa-fw"></i>&nbsp;&nbsp;Create New Category</a></li>
-                                </ul>
-                            </li>
+                            <li>&nbsp;</li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -151,7 +146,7 @@
                             if (categories.isEmpty()) {
                         %>
                         <tr>
-                            <td colspan="3" style="text-align: center;">There are no categories available.</td>
+                            <td colspan="4" style="text-align: center;">There are no categories available.</td>
                         </tr>
                         <%
                         } else {

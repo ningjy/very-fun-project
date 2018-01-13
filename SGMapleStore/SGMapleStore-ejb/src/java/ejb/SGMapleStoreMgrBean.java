@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Vector;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
 
 @Stateless
 public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, WarehouseTransportRemote {
@@ -36,6 +34,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     private ContactEntity cEntity;
     private InventoryLogEntity ilEntity;
     private CompositeItemEntity ciEntity;
+    private ItemEntity iEntity;
     private InvoiceEntity invoice;
     
     @Override
@@ -76,6 +75,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             contactVec.add(contactE.getContactPhone());
             contactVec.add(contactE.getContactType());
             contactVec.add(contactE.getSuppCompanyName());
+            contactVec.add(contactE.getContactActiveStatus());
             contactList.add(contactVec);
         }
         return contactList;
@@ -92,6 +92,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             contactInfoVec.add(cEntity.getContactFirstName());
             contactInfoVec.add(cEntity.getContactLastName());
             contactInfoVec.add(cEntity.getContactEmail());
+            contactInfoVec.add(cEntity.getContactActiveStatus());
             contactInfoVec.add(df.format(cEntity.getContactCreationDate()));
             
             return contactInfoVec;
@@ -100,31 +101,42 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
-    public boolean deleteMultipleContact(String[] contactEmailListArr) {
+    public boolean deactivateMultipleContact(String[] contactEmailListArr) {
         boolean contactDeletionStatus = true;
         for (String contactEmail : contactEmailListArr) {
             if (lookupContact(contactEmail) == null) {
                 contactDeletionStatus = false;
             } else {
                 cEntity = lookupContact(contactEmail);
-                em.remove(cEntity);
-                em.flush();
-                em.clear();
+                cEntity.setContactActiveStatus(false);
+                em.merge(cEntity);
             }
         }
         return contactDeletionStatus;
     }
     
     @Override
-    public boolean deleteAContact(String hiddenContactEmail) {
+    public boolean deactivateAContact(String hiddenContactEmail) {
         boolean contactDeletionStatus = true;
         if (lookupContact(hiddenContactEmail) == null) {
             contactDeletionStatus = false;
         } else {
             cEntity = lookupContact(hiddenContactEmail);
-            em.remove(cEntity);
-            em.flush();
-            em.clear();
+            cEntity.setContactActiveStatus(false);
+            em.merge(cEntity);
+        }
+        return contactDeletionStatus;
+    }
+    
+    @Override
+    public boolean activateAContact(String hiddenContactEmail) {
+        boolean contactDeletionStatus = true;
+        if (lookupContact(hiddenContactEmail) == null) {
+            contactDeletionStatus = false;
+        } else {
+            cEntity = lookupContact(hiddenContactEmail);
+            cEntity.setContactActiveStatus(true);
+            em.merge(cEntity);
         }
         return contactDeletionStatus;
     }
@@ -162,6 +174,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             employeeVec.add(employeeE.getEmpPhone());
             employeeVec.add(employeeE.getEmpJobDepartment());
             employeeVec.add(employeeE.getEmpJobDesignation());
+            employeeVec.add(employeeE.getEmpActiveStatus());
             employeeList.add(employeeVec);
         }
         return employeeList;
@@ -178,6 +191,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             employeeInfoVec.add(eEntity.getEmpFirstName());
             employeeInfoVec.add(eEntity.getEmpLastName());
             employeeInfoVec.add(eEntity.getEmpEmail());
+            employeeInfoVec.add(eEntity.getEmpActiveStatus());
             employeeInfoVec.add(df.format(eEntity.getEmpCreationDate()));
             
             return employeeInfoVec;
@@ -186,31 +200,42 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     }
     
     @Override
-    public boolean deleteMultipleEmployee(String[] empEmailListArr) {
+    public boolean deactivateMultipleEmployee(String[] empEmailListArr) {
         boolean empDeletionStatus = true;
         for (String empEmail : empEmailListArr) {
             if (lookupEmployee(empEmail) == null) {
                 empDeletionStatus = false;
             } else {
                 eEntity = lookupEmployee(empEmail);
-                em.remove(eEntity);
-                em.flush();
-                em.clear();
+                eEntity.setEmpActiveStatus(false);
+                em.merge(eEntity);
             }
         }
         return empDeletionStatus;
     }
     
     @Override
-    public boolean deleteAnEmployee(String hiddenEmpEmail) {
+    public boolean deactivateAnEmployee(String hiddenEmpEmail) {
         boolean empDeletionStatus = true;
         if (lookupEmployee(hiddenEmpEmail) == null) {
             empDeletionStatus = false;
         } else {
             eEntity = lookupEmployee(hiddenEmpEmail);
-            em.remove(eEntity);
-            em.flush();
-            em.clear();
+            eEntity.setEmpActiveStatus(false);
+            em.merge(eEntity);
+        }
+        return empDeletionStatus;
+    }
+    
+    @Override
+    public boolean activateAnEmployee(String hiddenEmpEmail) {
+        boolean empDeletionStatus = true;
+        if (lookupEmployee(hiddenEmpEmail) == null) {
+            empDeletionStatus = false;
+        } else {
+            eEntity = lookupEmployee(hiddenEmpEmail);
+            eEntity.setEmpActiveStatus(true);
+            em.merge(eEntity);
         }
         return empDeletionStatus;
     }
@@ -285,7 +310,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         return logList;
     }
     
-     public boolean createInventoryCategory(String newCategoryName,String newCategoryDesc,ArrayList<String> sCats){
+    public boolean createInventoryCategory(String newCategoryName,String newCategoryDesc,ArrayList<String> sCats){
         CategoryEntity newInventoryCategory = new CategoryEntity();
         newInventoryCategory.setName(newCategoryName);
         newInventoryCategory.setDescription(newCategoryDesc);
@@ -335,17 +360,20 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             String compositeRebundleLvl, String compositeDescription, String fileName, String[] itemNameArr, String[] itemSKUArr, 
             String[] itemQtyRequiredArr) {
         ciEntity = new CompositeItemEntity();
+        Vector itemInventotySKUVec = new Vector();
         
         List<Vector> packageItemList = new ArrayList<Vector>();
         for(int i = 0; i < itemNameArr.length; i++) {
             Vector packageItemVec = new Vector();
             packageItemVec.add(itemNameArr[i]);
             packageItemVec.add(itemSKUArr[i]);
+            itemInventotySKUVec.add(itemSKUArr[i]);
             packageItemVec.add(itemQtyRequiredArr[i]);
             packageItemList.add(packageItemVec);
         }
         ciEntity.createCompositeItem(compositeName, compositeSKU, Double.parseDouble(compositeSellPrice), 
-                Double.parseDouble(compositeRebundleLvl), compositeDescription, fileName, packageItemList);
+                Double.parseDouble(compositeRebundleLvl), compositeDescription, fileName, packageItemList, 
+                itemInventotySKUVec);
         em.persist(ciEntity);
         return true;
     }
@@ -368,6 +396,41 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             compItemList.add(compVec);
         }
         return compItemList;
+    }
+    
+    @Override
+    public Vector getCompositeItemInfo(String compositeIdentifier) {
+        ciEntity = lookupCompositeItem(compositeIdentifier);
+        Vector compositeInfoVec = new Vector();
+        
+        if (eEntity != null) {
+            compositeInfoVec.add(ciEntity.getCompositeImagePath());
+            compositeInfoVec.add(ciEntity.getCompositeName());
+            compositeInfoVec.add(ciEntity.getCompositeDescription());
+            compositeInfoVec.add(ciEntity.getCompositeSellPrice());
+            compositeInfoVec.add(ciEntity.getCompositeQuantity());
+            compositeInfoVec.add(ciEntity.getCompositeArrList());
+            return compositeInfoVec;
+        }
+        return null;
+    }
+    
+    @Override
+    public List<Vector> getAssocCompItemInventoryInfo(String compositeIdentifier) {
+        ciEntity = lookupCompositeItem(compositeIdentifier);
+        List<Vector> assocItemInventoryList = new ArrayList<Vector>();
+        
+        for(int i = 0; i < ciEntity.getItemInventorySKUVec().size(); i++) {
+            iEntity = lookupItem((String)ciEntity.getItemInventorySKUVec().get(i));
+            Vector assocItemInventoryVec = new Vector();
+            assocItemInventoryVec.add(iEntity.getItemImageDirPath());
+            assocItemInventoryVec.add(iEntity.getItemName());
+            assocItemInventoryVec.add(iEntity.getItemSKU());
+            assocItemInventoryVec.add(iEntity.getItemQuantity());
+            assocItemInventoryVec.add(iEntity.getItemSellingPrice());
+            assocItemInventoryList.add(assocItemInventoryVec);
+        }
+        return assocItemInventoryList;
     }
     
     @Override
@@ -399,6 +462,7 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     public ArrayList<ArrayList> viewItemList(){
         ArrayList<ArrayList> itemList = new ArrayList<>();
         Query q = em.createQuery("SELECT i FROM Item i WHERE i.activeStatus=true");
+        
         for(Object o: q.getResultList()){
             ItemEntity item = (ItemEntity) o;
             ArrayList itemArr = new ArrayList();
@@ -416,8 +480,8 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
     public boolean createItem(String itemImageDirPath, String itemSKU, String itemName, String itemDescription, String itemQuantity, String itemReorderLevel, String itemSellingPrice, String vendorID, String vendorProductCode) {
         try{
             ItemEntity item = new ItemEntity(itemSKU, itemName, itemDescription, Double.parseDouble(itemQuantity), Double.parseDouble(itemReorderLevel), Double.parseDouble(itemSellingPrice), itemImageDirPath, vendorID, vendorProductCode);
-        em.persist(item);
-        return true;
+            em.persist(item);
+            return true;
         }catch(Exception e){
             System.out.println("***NEW ITEM COULD NOT BE CREATED***");
             return false;
@@ -433,7 +497,8 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         //below may throw no result exception or non unique result exception
         if(resultList.isEmpty()){
            System.out.println("**WMS VIEW ITEM: There is no such item in the database!**");
-        }else{
+        }
+        else{
             ItemEntity result = (ItemEntity)resultList.get(0);
       
             itemDetails.add(result.getItemName());
@@ -584,6 +649,46 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
         return ee;
     }
     
+    public CompositeItemEntity lookupCompositeItem(String compositeIdentifier){
+        CompositeItemEntity ci = new CompositeItemEntity();
+        try{
+            Query q = em.createQuery("SELECT c FROM CompositeItem c WHERE c.compositeSKU = :compositeIdentifier");
+            q.setParameter("compositeIdentifier", compositeIdentifier);
+            ci = (CompositeItemEntity)q.getSingleResult();
+        }
+        catch(EntityNotFoundException enfe){
+            System.out.println("ERROR: Composite Item cannot be found. " + enfe.getMessage());
+            em.remove(ci);
+            ci = null;
+        }
+        catch(NoResultException nre){
+            System.out.println("ERROR: Composite Item does not exist. " + nre.getMessage());
+            em.remove(ci);
+            ci = null;
+        }
+        return ci;
+    }
+    
+    public ItemEntity lookupItem(String itemInventorySKU){
+        ItemEntity i = new ItemEntity();
+        try{
+            Query q = em.createQuery("SELECT i FROM Item i WHERE i.itemSKU = :itemInventorySKU");
+            q.setParameter("itemInventorySKU", itemInventorySKU);
+            i = (ItemEntity)q.getSingleResult();
+        }
+        catch(EntityNotFoundException enfe){
+            System.out.println("ERROR: Item cannot be found. " + enfe.getMessage());
+            em.remove(i);
+            i = null;
+        }
+        catch(NoResultException nre){
+            System.out.println("ERROR: Item does not exist. " + nre.getMessage());
+            em.remove(i);
+            i = null;
+        }
+        return i;
+    }
+    
     public String encodePassword(String password) throws NoSuchAlgorithmException {
         String hashedValue = "";
         
@@ -597,5 +702,5 @@ public class SGMapleStoreMgrBean implements CommonInfrastructureRemote, Warehous
             hashedValue = sb.toString();
         }      
         return hashedValue;
-    }   
+    }
 }

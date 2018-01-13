@@ -91,7 +91,8 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
@@ -99,7 +100,7 @@
                             <li>&nbsp;</li>
                             <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -111,12 +112,12 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm delete the selected contact(s)?');">
+                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm deactivate the selected contact(s)?');">
                     <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
                         <h3 style="display: inline;">Contact List</h3>
-                        <input type="hidden" name="pageTransit" value="deleteMultipleContact"/>
-                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;">
-                            <i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete Contact
+                        <input type="hidden" name="pageTransit" value="deactivateMultipleContact"/>
+                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;" id="deactivateContact" disabled>
+                            <i class="fa fa-ban"></i>&nbsp;&nbsp;Deactivate Contact
                         </button>
                         <button type="button" class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewContact'">
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;New Contact
@@ -146,7 +147,7 @@
                         <thead>
                             <tr>
                                 <th class="bulk-selection-cell"><input type="checkbox" class="selectAll"/></th>
-                                <th style="width: 19%;" class="sortable text-left">
+                                <th style="width: 17%;" class="sortable text-left">
                                     <div class="placeholder-container">
                                         <div class="pull-left over-flow">Name</div>
                                     </div>
@@ -156,19 +157,19 @@
                                         <div class="pull-left over-flow">Email</div>
                                     </div>
                                 </th>
-                                <th style="width: 18%;" class="sortable text-left">
+                                <th style="width: 17%;" class="sortable text-left">
                                     <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Contact Number</div>
+                                        <div class="pull-left over-flow">Contact No.</div>
                                     </div>
                                 </th>
-                                <th style="width: 16%;" class="sortable text-left">
+                                <th style="width: 22%;" class="sortable text-left">
                                     <div class="placeholder-container">
                                         <div class="pull-left over-flow">Contact Type</div>
                                     </div>
                                 </th>
-                                <th style="width: 20%;" class="sortable text-left">
+                                <th style="width: 17%;" class="sortable text-left">
                                     <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Supplier Company Name</div>
+                                        <div class="pull-left over-flow">Active Status</div>
                                     </div>
                                 </th>
                             </tr>
@@ -176,6 +177,7 @@
                         <tbody>
                             <%
                                 ArrayList<Vector> contactList = (ArrayList) request.getAttribute("contactList");
+                                String dpActiveStatus = "";
                                 if(contactList.isEmpty()){
                             %>
                             <tr>
@@ -193,14 +195,17 @@
                                         String contactPhone = String.valueOf(v.get(4));
                                         String contactType = String.valueOf(v.get(5));
                                         String suppCompanyName = String.valueOf(v.get(6));
+                                        String contactActiveStatus = String.valueOf(v.get(7));
+                                        if(contactActiveStatus.equals("false")) { dpActiveStatus = "Inactive"; }
+                                        else if (contactActiveStatus.equals("true")) { dpActiveStatus = "Active"; }
                             %>
                             <tr tabindex="-1" class="active">
-                                <td class="bulk-selection-cell"><input type="checkbox" name="contactEmailList" value="<%= contactEmail %>" /></td>
+                                <td class="bulk-selection-cell"><input type="checkbox" class="contactCheck" name="contactEmailList" value="<%= contactEmail %>" /></td>
                                 <td><%= contactSalutation %>&nbsp;<%= contactFirstName %>&nbsp;<%= contactLastName %></td>
                                 <td><%= contactEmail %></td>
                                 <td><%= contactPhone %></td>
-                                <td><%= contactType %></td>
-                                <td><%= suppCompanyName %></td>
+                                <td><%= contactType %><br/>(<%= suppCompanyName %>)</td>
+                                <td><%= dpActiveStatus %></td>
                                 <%      }   %>
                                 <%  }   %>
                             </tr>

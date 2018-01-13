@@ -17,14 +17,15 @@
     <body>
         <%
             ArrayList<String> employeeInfoArr = (ArrayList) request.getAttribute("employeeInfo");
-            String empFirstName, empLastName, empEmail, empCreationDate;
-            empFirstName = empLastName = empEmail = empCreationDate = "";
+            String empFirstName, empLastName, empEmail, empActiveStatus, empCreationDate;
+            empFirstName = empLastName = empEmail = empActiveStatus = empCreationDate = "";
 
             if (employeeInfoArr != null) {
                 empFirstName = (String)employeeInfoArr.get(0);
                 empLastName = (String)employeeInfoArr.get(1);
                 empEmail = (String)employeeInfoArr.get(2);
-                empCreationDate = (String)employeeInfoArr.get(3);
+                empActiveStatus = (String)employeeInfoArr.get(3);
+                empCreationDate = (String)employeeInfoArr.get(4);
             }
         %>
         <section class="dashboard section">
@@ -41,19 +42,35 @@
                                 <a href="user-profile.html" class="btn btn-main-sm">Edit Profile</a>
                             </div>
                             <div class="widget user-dashboard-menu">
-                                <form id="empDeleteForm" action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm delete this employee?');">
-                                    <ul class="sidebar-menu">
-                                        <li class="active"><a href="#contactAddressPane" role="tab" data-toggle="tab"><i class="fa fa-address-book"></i>&nbsp;Contact Address</a></li>
-                                        <li><a href="#transactionsPane" role="tab" data-toggle="tab"><i class="fa fa-exchange"></i>&nbsp;Transactions</a></li>
-                                        <li><a href="#recentHistoryPane" role="tab" data-toggle="tab"><i class="fa fa-history"></i>&nbsp;Recent History</a></li>
-                                        <li onclick="empDeleteForm.submit();">
+                                <ul class="sidebar-menu">
+                                    <li class="active"><a href="#contactAddressPane" role="tab" data-toggle="tab"><i class="fa fa-address-book"></i>&nbsp;Contact Address</a></li>
+                                    <li><a href="#transactionsPane" role="tab" data-toggle="tab"><i class="fa fa-exchange"></i>&nbsp;Transactions</a></li>
+                                    <li><a href="#recentHistoryPane" role="tab" data-toggle="tab"><i class="fa fa-history"></i>&nbsp;Recent History</a></li>
+                                    <%
+                                        if(empActiveStatus.equals("true")) {
+                                    %>
+                                    <form action="SGMapleStore" method="POST" target="_parent">
+                                        <li onclick="deactivateCheck();">
                                             <input type="hidden" name="hiddenEmpEmail" value="<%= empEmail %>" />
-                                            <input type="hidden" name="pageTransit" value="deleteAnEmployee" />
+                                            <input type="hidden" name="pageTransit" value="deactivateAnEmployee" />
                                             <a href="#" role="tab" data-toggle="tab">
-                                                <i class="fa fa-trash"></i>&nbsp;Delete Employee</a>
+                                                <i class="fa fa-trash"></i>&nbsp;Deactivate Employee</a>
                                         </li>
-                                    </ul>
-                                </form>
+                                    </form>
+                                    <%  } %>
+                                    <%
+                                        if(empActiveStatus.equals("false")) {
+                                    %>
+                                    <form action="SGMapleStore" method="POST" target="_parent">
+                                        <li onclick="activateCheck();">
+                                            <input type="hidden" name="hiddenEmpEmail" value="<%= empEmail %>" />
+                                            <input type="hidden" name="pageTransit" value="activateAnEmployee" />
+                                            <a href="#" role="tab" data-toggle="tab">
+                                                <i class="fa fa-trash"></i>&nbsp;Activate Employee</a>
+                                        </li>
+                                    </form>
+                                    <%  } %>
+                                </ul>
                             </div>
                         </div>
                     </div>

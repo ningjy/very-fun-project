@@ -17,14 +17,15 @@
     <body>
         <%
             ArrayList<String> contactInfoArr = (ArrayList) request.getAttribute("contactInfo");
-            String contactFirstName, contactLastName, contactEmail, contactCreationDate;
-            contactFirstName = contactLastName = contactEmail = contactCreationDate = "";
+            String contactFirstName, contactLastName, contactEmail, contactActiveStatus, contactCreationDate;
+            contactFirstName = contactLastName = contactEmail = contactActiveStatus = contactCreationDate = "";
 
             if (contactInfoArr != null) {
                 contactFirstName = (String)contactInfoArr.get(0);
                 contactLastName = (String)contactInfoArr.get(1);
                 contactEmail = (String)contactInfoArr.get(2);
-                contactCreationDate = (String)contactInfoArr.get(3);
+                contactActiveStatus = (String)contactInfoArr.get(3);
+                contactCreationDate = (String)contactInfoArr.get(4);
             }
         %>
         <section class="dashboard section">
@@ -41,20 +42,37 @@
                                 <a href="user-profile.html" class="btn btn-main-sm">Edit Profile</a>
                             </div>
                             <div class="widget user-dashboard-menu">
-                                <form id="contactDeleteForm" action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm delete this contact?');">
-                                    <ul class="sidebar-menu">
-                                        <li class="active"><a href="#contactAddressPane" role="tab" data-toggle="tab"><i class="fa fa-address-book"></i>&nbsp;Contact Address</a></li>
-                                        <li><a href="#transactionsPane" role="tab" data-toggle="tab"><i class="fa fa-exchange"></i>&nbsp;Transactions</a></li>
-                                        <li><a href="#recentHistoryPane" role="tab" data-toggle="tab"><i class="fa fa-history"></i>&nbsp;Recent History</a></li>
-                                        <li onclick="contactDeleteForm.submit();">
+                                <ul class="sidebar-menu">
+                                    <li class="active"><a href="#contactAddressPane"><i class="fa fa-address-book"></i>&nbsp;Contact Address</a></li>
+                                    <li><a href="#transactionsPane"><i class="fa fa-exchange"></i>&nbsp;Transactions</a></li>
+                                    <li><a href="#recentHistoryPane"><i class="fa fa-history"></i>&nbsp;Recent History</a></li>
+                                    <%
+                                        if(contactActiveStatus.equals("true")) {
+                                    %>
+                                    <form action="SGMapleStore" method="POST" target="_parent">
+                                        <li onclick="deactivateCheck();">
                                             <input type="hidden" name="hiddenContactEmail" value="<%= contactEmail %>" />
-                                            <input type="hidden" name="pageTransit" value="deleteAContact" />
-                                            <a href="#" role="tab" data-toggle="tab">
-                                                <i class="fa fa-trash"></i>&nbsp;Delete Contact
+                                            <input type="hidden" name="pageTransit" value="deactivateAContact" />
+                                            <a href="#">
+                                                <i class="fa fa-trash"></i>&nbsp;Deactivate Contact
                                             </a>
                                         </li>
-                                    </ul>
-                                </form>
+                                    </form>
+                                    <%  } %>
+                                    <%
+                                        if(contactActiveStatus.equals("false")) {
+                                    %>
+                                    <form action="SGMapleStore" method="POST" target="_parent">
+                                        <li onclick="activateCheck();">
+                                            <input type="hidden" name="hiddenContactEmail" value="<%= contactEmail %>" />
+                                            <input type="hidden" name="pageTransit" value="activateAContact" />
+                                            <a href="#">
+                                                <i class="fa fa-trash"></i>&nbsp;Activate Contact
+                                            </a>
+                                        </li>
+                                    </form>
+                                    <%  } %>
+                                </ul>
                             </div>
                         </div>
                     </div>

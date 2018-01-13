@@ -19,3 +19,13 @@ $(document).ready(function() {
         $(target_tab_selector).addClass('active');
     });
 });
+
+function deactivateCheck() {
+    if(confirm("Confirm deactivate this employee account?")) { document.forms[0].submit(); }
+    else { return false; }
+}
+
+function activateCheck() {
+    if(confirm("Confirm activate this employee account?")) { document.forms[0].submit(); }
+    else { return false; }
+}

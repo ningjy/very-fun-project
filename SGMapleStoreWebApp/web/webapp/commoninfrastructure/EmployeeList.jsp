@@ -91,15 +91,16 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
                             <li>&nbsp;</li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -111,12 +112,12 @@
 
             <!-- Content Space -->
             <div id="page-wrapper">
-                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm delete the selected employee(s)?');">
+                <form action="SGMapleStore" method="POST" onsubmit="return confirm('Confirm deactivate the selected employee(s)?');">
                     <div class="contentFill contentLayout" style="padding-top: 15px; height: 65px;">
                         <h3 style="display: inline;">Employee List</h3>
-                        <input type="hidden" name="pageTransit" value="deleteMultipleEmp"/>
-                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;">
-                            <i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete Employee
+                        <input type="hidden" name="pageTransit" value="deactivateMultipleEmp"/>
+                        <button type="submit" class="btn btn-primary pull-right" style="margin-right: 20px;" id="deactivateEmp" disabled>
+                            <i class="fa fa-ban"></i>&nbsp;&nbsp;Deactivate Employee
                         </button>
                         <button type="button" class="btn btn-primary pull-right" style="margin-right: 20px;" onclick="location.href='SGMapleStore?pageTransit=goToNewEmployee'">
                             <i class="fa fa-plus"></i>&nbsp;&nbsp;New Employee
@@ -146,12 +147,12 @@
                         <thead>
                             <tr>
                                 <th class="bulk-selection-cell"><input type="checkbox" class="selectAll" /></th>
-                                <th style="width: 19%;" class="sortable text-left">
+                                <th style="width: 17%;" class="sortable text-left">
                                     <div class="placeholder-container">
                                         <div class="pull-left over-flow">Name</div>
                                     </div>
                                 </th>
-                                <th style="width: 19%;" class="sortable text-left">
+                                <th style="width: 21%;" class="sortable text-left">
                                     <div class="placeholder-container">
                                         <div class="pull-left over-flow">Email</div>
                                     </div>
@@ -161,14 +162,14 @@
                                         <div class="pull-left over-flow">Contact Number</div>
                                     </div>
                                 </th>
-                                <th style="width: 18%;" class="sortable text-left">
-                                    <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Job Department</div>
-                                    </div>
-                                </th>
                                 <th style="width: 20%;" class="sortable text-left">
                                     <div class="placeholder-container">
-                                        <div class="pull-left over-flow">Job Designation</div>
+                                        <div class="pull-left over-flow">Dept (Designation)</div>
+                                    </div>
+                                </th>
+                                <th style="width: 18%;" class="sortable text-left">
+                                    <div class="placeholder-container">
+                                        <div class="pull-left over-flow">Active Status</div>
                                     </div>
                                 </th>
                             </tr>
@@ -176,6 +177,7 @@
                         <tbody>
                             <%
                                 ArrayList<Vector> employeeList = (ArrayList) request.getAttribute("employeeList");
+                                String dpActiveStatus = "";
                                 if(employeeList.isEmpty()){
                             %>
                             <tr>
@@ -192,14 +194,18 @@
                                         String empPhone = String.valueOf(v.get(3));
                                         String empJobDepartment = String.valueOf(v.get(4));
                                         String empJobDesignation = String.valueOf(v.get(5));
+                                        String empActiveStatus = String.valueOf(v.get(6));
+                                        if(empActiveStatus.equals("false")) { dpActiveStatus = "Inactive"; }
+                                        else if (empActiveStatus.equals("true")) { dpActiveStatus = "Active"; }
+                                        
                             %>
                             <tr tabindex="-1" class="active">
-                                <td class="bulk-selection-cell"><input type="checkbox" name="empEmailList" value="<%= empEmail %>"/></td>
+                                <td class="bulk-selection-cell"><input type="checkbox" class="empCheck" name="empEmailList" value="<%= empEmail %>"/></td>
                                 <td><%= empFirstName %>&nbsp;<%= empLastName %></td>
                                 <td><%= empEmail %></td>
                                 <td><%= empPhone %></td>
-                                <td><%= empJobDepartment %></td>
-                                <td><%= empJobDesignation %></td>
+                                <td><%= empJobDepartment %><br/>(<%= empJobDesignation %>)</td>
+                                <td><%= dpActiveStatus %></td>
                                 <%      }   %>
                                 <%  }   %>
                             </tr>

@@ -6,12 +6,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SG MapleStore - Inventory Log List</title>
+        <title>SG MapleStore - Composite Item List</title>
         
         <!-- Cascading Style Sheet (CSS) -->
         <link href="css/commoninfrastructure/baselayout/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/basetemplate.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/baselayout/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="css/commoninfrastructure/baselayout/iziModal.min.css" rel="stylesheet" type="text/css">
         <link href="css/commoninfrastructure/weblayout/CommonCSS.css" rel="stylesheet" type="text/css">
         
         <!-- Java Script (JS) -->
@@ -19,7 +20,9 @@
         <script src="js/commoninfrastructure/basejs/jquery.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/metisMenu.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/basejs/jquery.newsTicker.js" type="text/javascript"></script>
+        <script src="js/commoninfrastructure/basejs/iziModal.min.js" type="text/javascript"></script>
         <script src="js/commoninfrastructure/webjs/CommonJS.js" type="text/javascript"></script>
+        <script src="js/warehousetransport/webjs/CompositeItemListJS.js" type="text/javascript"></script>
     </head>
     <body onload="establishTime(); setInterval('updateTime()', 1000)">
         <div id="wrapper">
@@ -88,15 +91,16 @@
                             <li>
                                 <a href="#"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Items<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li><a href="SGMapleStore?pageTransit=goToItem"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemList"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Items</a></li>
+                                    <li><a href="SGMapleStore?pageTransit=goToItemCategoryList"><i class="fa fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Item Categories</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToCompositeItemList"><i class="fa fa-cubes fa-fw"></i>&nbsp;&nbsp;Composite Items</a></li>
                                     <li><a href="SGMapleStore?pageTransit=goToInventoryLogList"><i class="fa fa-book fa-fw"></i>&nbsp;&nbsp;Inventory Log</a></li>
                                 </ul>
                             </li>
-                            <li><br><br></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
+                            <li>&nbsp;</li>
+                            <li><a href="SGMapleStore?pageTransit=goToSalesOrderList"><i class="fa fa-shopping-cart fa-fw"></i>&nbsp;&nbsp;Sales Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-cube fa-fw"></i>&nbsp;&nbsp;Packages</a></li>
-                            <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
+                            <li><a href="SGMapleStore?pageTransit=goToInvoiceList"><i class="fa fa-file-text fa-fw"></i>&nbsp;&nbsp;Invoices</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-shopping-bag fa-fw"></i>&nbsp;&nbsp;Purchase Orders</a></li>
                             <li><a href="SGMapleStore?pageTransit=goToFirstHouse"><i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp;Bills</a></li>
                             <li>&nbsp;</li>
@@ -114,7 +118,7 @@
                         <i class="fa fa-plus"></i>&nbsp;&nbsp;New Composite Item
                     </button>
                 </div>
-                <table class="table zi-table table-hover">
+                <table class="table zi-table table-hover" id="compositeItemList">
                     <thead>
                         <tr>
                             <th style="width: 15%; padding-left: 20px;" class="sortable text-left">
@@ -151,7 +155,7 @@
                     </thead>
                     <tbody>
                         <%
-                            ArrayList<Vector> compositeItemList = (ArrayList) request.getAttribute("compositeItemList");
+                            ArrayList<Vector> compositeItemList = (ArrayList)request.getAttribute("compositeItemList");
                             if(compositeItemList.isEmpty()){
                         %>
                         <tr>
@@ -170,17 +174,18 @@
                                     String compositeRebundleLvl = String.valueOf(v.get(5));
                         %>
                         <tr tabindex="-1" class="active">
-                            <td style="padding-left: 20px;"><img src="images/<%= compositeImagePath %>" style="max-width: 70px; max-height: 70px;" /></td>
+                            <td style="padding-left: 20px;"><img src="uploads/images/CompositeItems/<%= compositeImagePath %>" style="max-width: 70px; max-height: 70px;" /></td>
                             <td><%= compositeName %></td>
                             <td><%= compositeSKU %></td>
                             <td><%= compositeQuantity %></td>
-                            <td><%= compositeSellPrice %></td>
+                            <td>$<%= compositeSellPrice %></td>
                             <td><%= compositeRebundleLvl %></td>
-                            <%      }   %>
-                            <%  }   %>
                         </tr>
+                        <%      }   %>
+                        <%  }   %>
                     </tbody>
                 </table>
+                <div id="modal-iframe"></div>
             </div>
         </div>
     </body>

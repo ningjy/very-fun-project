@@ -34,14 +34,18 @@ public class EmployeeEntity implements Serializable {
     private String empUsername;
     private String empPassword;
     private String empNotes;
+    private Boolean empActiveStatus;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date empCreationDate;
     
     @PrePersist
     public void creationDate() {
         this.empCreationDate = new Date();
     }
+    
+    /* DEFAULT CONSTRUCTOR */
+    public EmployeeEntity() { empActiveStatus = true; }
     
     /* MISCELLANEOUS METHODS */
     public void createEmployee(String empSalutation, String empFirstName, String empLastName, String empEmail, 
@@ -92,6 +96,7 @@ public class EmployeeEntity implements Serializable {
     public String getEmpUsername() { return empUsername; }
     public String getEmpPassword() { return empPassword; }
     public String getEmpNotes() { return empNotes; }
+    public Boolean getEmpActiveStatus() { return empActiveStatus; }
     public Date getEmpCreationDate() { return empCreationDate; }
     
     /* SETTER METHODS */
@@ -115,5 +120,6 @@ public class EmployeeEntity implements Serializable {
     public void setEmpUsername(String empUsername) { this.empUsername = empUsername; }
     public void setEmpPassword(String empPassword) { this.empPassword = empPassword; }
     public void setEmpNotes(String empNotes) { this.empNotes = empNotes; }
+    public void setEmpActiveStatus(Boolean empActiveStatus) { this.empActiveStatus = empActiveStatus; }
     public void setEmpCreationDate(Date empCreationDate) { this.empCreationDate = empCreationDate; }
 }
