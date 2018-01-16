@@ -381,41 +381,6 @@ public class SGMapleStoreServlet extends HttpServlet {
             else if(pageAction.equals("goToTrackOrder")) {
                 pageAction = "TrackOrder";
             }
-            else if(pageAction.equals("createItem")){
-                request.setAttribute("employeeNRIC", userNRIC);
-                if(createItem(request,response)){
-                    request.setAttribute("successMessage", "New item created successfully");
-                }else{
-                    request.setAttribute("errorMessage", "Error creating new item");
-                }
-                pageAction = "NewItem";
-            }
-            else if(pageAction.equals("goToViewItem")){
-                request.setAttribute("employeeNRIC",userNRIC);
-                request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
-                pageAction = "ViewItem";
-            }
-            else if(pageAction.equals("deleteItem")){
-                request.setAttribute("employeeNRIC",userNRIC);
-                wtr.deleteItem(request.getParameter("itemSKU"));
-                request.setAttribute("itemList", wtr.viewItemList());
-                pageAction = "ItemList";
-            }
-            else if(pageAction.equals("goToEditItem")){
-                request.setAttribute("employeeNRIC",userNRIC);
-                request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
-                pageAction = "EditItem";
-            }
-            else if(pageAction.equals("editItem")){
-                request.setAttribute("employeeNRIC",userNRIC);
-                if(editItem(request,response)){
-                    request.setAttribute("successMessage", "Item edited successfully");
-                    request.setAttribute("itemDetails",wtr.viewItem(request.getParameter("itemSKU")));
-                }else{
-                    request.setAttribute("errorMessage", "Error editing item");
-                }             
-                pageAction = "EditItem";
-            }
             dispatcher = servletContext.getNamedDispatcher(pageAction);
             dispatcher.forward(request, response);       
         }
