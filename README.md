@@ -1,5 +1,6 @@
-## This repo contains the main codebase for our 8MC project.
-### Ensure you are running NetBeans 8.1, with JDK 1.8(Java SE 8) and Glasshfish Server 4 installed. We will be using Java EE 6 for the project, but this is configured only once when a NetBeans project is created.
+# :books: EduTech :books: 
+
+### Ensure you are running NetBeans 8.1, with JDK 1.8(Java SE 8) and Glasshfish Server 4 installed.
 ### Read below on how to get these files + run them.
 ### Note: If asked about build.properties being from another netbeans installation, click "Update"!
 ### First steps:
