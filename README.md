@@ -1,5 +1,3 @@
-# :books: EduTech :books: 
-
 ### Ensure you are running NetBeans 8.1, with JDK 1.8(Java SE 8) and Glasshfish Server 4 installed.
 ### Read below on how to get these files + run them.
 ### Note: If asked about build.properties being from another netbeans installation, click "Update"!
