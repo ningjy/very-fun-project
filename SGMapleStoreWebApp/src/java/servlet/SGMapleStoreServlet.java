@@ -1,6 +1,5 @@
 package servlet;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +17,9 @@ import ejb.WarehouseTransportRemote;
 
 import java.io.IOException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.io.PrintWriter;
@@ -553,7 +550,7 @@ public class SGMapleStoreServlet extends HttpServlet {
         boolean itemCreationStatus = false;
         // Create path components to save the file
         String appPath = request.getServletContext().getRealPath("");
-        String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+        String truncatedAppPath = appPath.replace("SGMapleStore"+File.separator+"dist"+File.separator+"gfdeploy"+File.separator+"SGMapleStore"+File.separator+"SGMapleStoreWebApp_war", "");
         String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + "uploads" + File.separator +
                     "images" + File.separator + "Items";
         final Part imagePart = request.getPart("itemImage");
@@ -614,7 +611,7 @@ public class SGMapleStoreServlet extends HttpServlet {
         if(request.getParameter("imageReplacement").equalsIgnoreCase("yes")){
             // Create path components to save the file
             String appPath = request.getServletContext().getRealPath("");
-            String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+            String truncatedAppPath = appPath.replace("SGMapleStore"+File.separator+"dist"+File.separator+"gfdeploy"+File.separator+"SGMapleStore"+File.separator+"SGMapleStoreWebApp_war", "");
             String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + "uploads" + File.separator +
                     "images" + File.separator + "Items";
             final Part imagePart = request.getPart("itemImage");
@@ -681,7 +678,7 @@ public class SGMapleStoreServlet extends HttpServlet {
             fileName = (String) getFileName(filePart);
             
             String appPath = request.getServletContext().getRealPath("");
-            String truncatedAppPath = appPath.replace("SGMapleStore\\dist\\gfdeploy\\SGMapleStore\\SGMapleStoreWebApp_war", "");
+            String truncatedAppPath = appPath.replace("SGMapleStore"+File.separator+"dist"+File.separator+"gfdeploy"+File.separator+"SGMapleStore"+File.separator+"SGMapleStoreWebApp_war", "");
             String imageDir = truncatedAppPath + "SGMapleStoreWebApp" + File.separator + "web" + File.separator + 
                     "uploads" + File.separator + "images" + File.separator + "CompositeItems" + File.separator;
             
